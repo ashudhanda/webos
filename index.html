@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My WebOS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="desktop">
+
+    <div class="window" id="notepad-window">
+      <div class="titlebar">
+        <span>Notepad</span>
+        <button class="close-btn" onclick="closeWindow('notepad-window')">✕</button>
+      </div>
+      <div class="window-body">
+        <textarea placeholder="Yahan likhna shuru karo..."></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="taskbar">
+    <button id="start-btn" onclick="openWindow('notepad-window')">Start</button>
+    <div id="clock"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
