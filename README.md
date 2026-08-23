@@ -1,4 +1,4 @@
-# CanopyOS 🌲
+# CanopyOS
 
 my own little operating system that runs in the browser. it's forest 
 themed because i wanted something calm to look at while working on it 
