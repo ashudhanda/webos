@@ -1,102 +1,72 @@
 # CanopyOS 🌲
 
-A forest-themed desktop operating system that runs entirely in your browser —
-frosted glass windows, a working dock, real apps, and ambient forest sounds.
-No installs, no accounts, no backend. Just open the link and you're in the woods.
+my own little operating system that runs in the browser. it's forest 
+themed because i wanted something calm to look at while working on it 
+all day.
 
-![CanopyOS Screenshot](screenshot.png)
+## try it
 
-## 👉 Try it live
+https://ashudhanda.github.io/webos/
 
-**(GitHub Pages link goes here after deployment)**
+wait for the boot screen, click anywhere on the lock screen, and you're 
+on the desktop. there's no password or login or anything.
 
-## What is this?
+## what's inside
 
-CanopyOS is a complete desktop environment built as a single static website.
-It boots up like a real OS, greets you with a lock screen, and drops you onto
-a desktop with draggable windows, a magnifying dock, a Spotlight-style search,
-and ten working apps — all wrapped in a calm, nature-inspired glass theme.
+10 apps right now:
 
-Everything runs client-side. There is no server, no database, and no login.
-Your settings, notes, and desktop layout are saved in your browser's
-localStorage, so everything is right where you left it when you come back.
+- **Finder** — browse folders and files (fake file system)
+- **Notes** — write notes, they autosave
+- **Terminal** — my favourite one. try `help`, `forest`, `animals` or `joke`
+- **Calculator**
+- **Photos** — all the wallpapers as a gallery with a viewer
+- **Forest Sounds** — rain, wind and birds. these are NOT audio files, 
+  they're generated live with the web audio api
+- **Settings** — themes, accent colors, wallpaper picker
+- **Browser** — basic iframe browser
+- **Calendar**
+- **About**
 
-## ✨ The experience
+## stuff you can do
 
-- **Boot screen** — animated loading with the CanopyOS logo
-- **Lock screen** — huge clock over a blurred forest, click anywhere to enter (no password, ever)
-- **Glass windows** — drag them by the title bar, resize them from any edge or corner, minimize, maximize, and watch them fade and scale as they open and close
-- **Traffic lights** — red, yellow, green window controls with hover symbols, just like macOS
-- **The Dock** — icons magnify as your mouse glides across them, running apps show a dot
-- **Menubar** — working File / Edit / View / Window / Help dropdowns, a live clock, Spotlight search (Ctrl+K), and a Control Center for themes and accents
-- **Desktop** — draggable icons with grid snapping, right-click context menu (Refresh, Change Wallpaper, Toggle Theme, About), and live widgets: an analog clock and a mini calendar
-- **Themes** — Forest, Moss, Autumn, and Night Forest, plus four accent colors
-- **Wallpapers** — a built-in gallery of misty forests, deer, foxes, and waterfalls, with CSS gradient fallbacks that work offline
+- drag windows by the title bar, resize them from any side or corner
+- the red/yellow/green buttons actually work (close, minimize, maximize)
+- hover over the dock — icons grow based on how close your cursor is
+- ctrl+k opens search
+- right click the desktop for a little menu (refresh, change wallpaper, 
+  toggle theme)
+- desktop icons can be dragged around and snap to a grid. they stay 
+  where you left them even after a refresh
+- analog clock + mini calendar widgets on the desktop
+- 4 themes: forest, moss, autumn and night forest
 
-## 📱 The apps
+## running it locally
 
-| App | What it does |
-|---|---|
-| 🌲 Finder | Browse a fake file system — folders, breadcrumbs, back button, file grid |
-| 📝 Notes | Multiple notes, autosave, word count |
-| 🖥️ Terminal | A working shell with 12+ commands: `help`, `about`, `echo`, `theme`, `open`, `forest`, `animals`, `joke`... |
-| 🧮 Calculator | Full arithmetic with keyboard support |
-| 🦊 Photos | The whole wallpaper collection as a gallery, with a lightbox viewer |
-| 🎵 Forest Sounds | Rain, wind, and bird ambience **synthesized live with the Web Audio API** — zero audio files |
-| ⚙️ Settings | Theme cards, accent swatches, wallpaper picker — all persisted |
-| 🍃 Browser | An iframe-based web viewer with quick links |
-| 📅 Calendar | A real month grid with today highlighted |
-| ℹ️ About | Version info, credits, and tips |
+https://github.com/ashudhanda/webos.git
 
-## 🚀 Running it locally
+then open index.html with live server (or honestly just double click 
+it). there's no build step, no npm, nothing to install. plain html, 
+css and js.
 
-Zero setup. Seriously.
+## things that took me forever
 
-1. Clone the repo:
+- the window manager. making windows draggable AND resizable from all 
+  sides at the same time broke so many times. ended up using invisible 
+  handles on the edges and corners, and checking what you grabbed before 
+  deciding whether to drag or resize.
+- the dock magnification. i measure the distance from your mouse to each 
+  icon and scale them based on that. sounds simple, was not.
+- the bird sounds. my first version of the chirps sounded like a broken 
+  alarm clock. kept randomizing the pitch and timing until it actually 
+  felt like a forest.
+- keeping it smooth. the answer was only blurring 3 layers (menubar, 
+  windows, dock) and only animating transform and opacity.
 
-2. Open `index.html` with any static server (VS Code Live Server works great),
-   or just double-click it.
+## credits
 
-That's it. No dependencies, no build step, no npm.
+- wallpapers are from unsplash
+- built for hack club stardance (webOS 1 mission), started from their 
+  guide and went way past it
+- i used very little amount of ai tools to make plan.
 
-## ⚙️ How it works
-
-The whole thing is **handwritten in plain HTML, CSS and vanilla JavaScript** —
-no frameworks, no libraries. A few decisions I'm happy about:
-
-- **Window dragging and resizing run on Pointer Events**, so one code path
-  handles mouse and touch. Windows can be resized from all four edges and
-  corners with invisible hit zones.
-- **The dock magnification** scales each icon based on its distance from the
-  cursor — the same math macOS uses.
-- **Forest Sounds are synthesized, not played.** The rain is filtered noise,
-  the wind is slowly modulated noise, and the birds are randomized chirp
-  oscillators — all generated in your browser with the Web Audio API.
-- **Performance rule:** blur is only ever applied to three layers (menubar,
-  windows, dock) and animations only touch `transform` and `opacity`, so the
-  whole OS stays at 60fps.
-
-## 📁 Project structure
-index.html
-css/base, themes, menubar, dock, window, apps
-js/core/ (store, boot, contextmenu), wm, dock, menubar, wallpapers, main
-js/apps/ files, notepad, terminal, calculator, photos, music, settings, browser, calendar, about
-
-
-## 🗺️ Roadmap
-
-- [x] Boot + lock screen
-- [x] Window manager (drag, resize, minimize, maximize)
-- [x] 10 working apps
-- [x] Themes, accents, wallpaper gallery
-- [ ] Paint app (canvas)
-- [ ] A game or two in the dock
-- [ ] Window edge-snapping
-- [ ] More terminal easter eggs
-
-## 🙏 Credits
-
-- Built for [Hack Club Stardance](https://stardance.hackclub.com) — WebOS 1 mission
-- Started from Hack Club's [WebOS guide](https://jams.hackclub.com/batch/webOS), then went way past it
-- Wallpapers by the photographers of [Unsplash](https://unsplash.com)
-- Made by **Ashu Dhanda** ([@ashudhanda](https://github.com/ashudhanda))
+made by ashu dhanda — [@ashudhanda](https://github.com/ashudhanda)
