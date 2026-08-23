@@ -1,29 +1,137 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>My WebOS</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="desktop">
+<html lang="en" data-theme="forest" data-accent="green">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>CanopyOS — NatureOS</title>
+    <meta name="description" content="CanopyOS, a forest-themed web desktop operating system built with plain HTML, CSS and JavaScript." />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌲</text></svg>" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/themes.css" />
+    <link rel="stylesheet" href="css/menubar.css" />
+    <link rel="stylesheet" href="css/dock.css" />
+    <link rel="stylesheet" href="css/window.css" />
+    <link rel="stylesheet" href="css/apps.css" />
+  </head>
+  <body>
+    <div id="wallpaper" class="wallpaper"></div>
+    <div id="wallpaper-tint" class="wallpaper-tint"></div>
 
-    <div class="window" id="notepad-window">
-      <div class="titlebar">
-        <span>Notepad</span>
-        <button class="close-btn" onclick="closeWindow('notepad-window')">✕</button>
-      </div>
-      <div class="window-body">
-        <textarea placeholder="Yahan likhna shuru karo..."></textarea>
+    <div id="boot" class="boot">
+      <div class="boot-inner">
+        <div class="boot-logo">🌲</div>
+        <div class="boot-title">CANOPYOS</div>
+        <div class="boot-bar"><span id="boot-bar-fill"></span></div>
+        <div class="boot-status" id="boot-status">Waking the forest…</div>
       </div>
     </div>
 
-  </div>
+    <div id="lock" class="lock hidden">
+      <div class="lock-inner">
+        <div class="lock-time" id="lock-time">00:00</div>
+        <div class="lock-date" id="lock-date">—</div>
+        <div class="lock-hint">Click anywhere to enter the forest</div>
+      </div>
+    </div>
 
-  <div id="taskbar">
-    <button id="start-btn" onclick="openWindow('notepad-window')">Start</button>
-    <div id="clock"></div>
-  </div>
+    <div id="desktop" class="desktop hidden">
+      <header class="menubar" id="menubar">
+        <div class="menubar-left">
+          <button class="mb-item mb-logo" id="mb-logo" type="button">🌲</button>
+          <span class="mb-item mb-app" id="mb-appname">Finder</span>
+          <button class="mb-item mb-menu" type="button" data-menu="file">File</button>
+          <button class="mb-item mb-menu" type="button" data-menu="edit">Edit</button>
+          <button class="mb-item mb-menu" type="button" data-menu="view">View</button>
+          <button class="mb-item mb-menu" type="button" data-menu="window">Window</button>
+          <button class="mb-item mb-menu" type="button" data-menu="help">Help</button>
+        </div>
+        <div class="menubar-right">
+          <button class="mb-item" id="mb-spotlight" type="button" title="Spotlight (Ctrl+K)">🔍</button>
+          <button class="mb-item" id="mb-control" type="button" title="Control Center">🎛️</button>
+          <span class="mb-item mb-clock" id="mb-clock">—</span>
+        </div>
+      </header>
 
-  <script src="script.js"></script>
-</body>
+      <ul class="menu-dropdown hidden" id="menu-dropdown"></ul>
+
+      <div class="control-center hidden" id="control-center">
+        <div class="cc-title">Control Center</div>
+        <div class="cc-section">
+          <div class="cc-label">Theme</div>
+          <div class="cc-themes" id="cc-themes"></div>
+        </div>
+        <div class="cc-section">
+          <div class="cc-label">Accent</div>
+          <div class="cc-accents" id="cc-accents"></div>
+        </div>
+        <div class="cc-section">
+          <button class="cc-button" id="cc-shuffle" type="button">🌄 Shuffle Wallpaper</button>
+          <button class="cc-button" id="cc-lock" type="button">🔒 Lock Screen</button>
+        </div>
+      </div>
+
+      <div class="desktop-widgets" id="desktop-widgets">
+        <div class="widget widget-clock">
+          <div class="analog-clock">
+            <div class="ac-face">
+              <span class="ac-tick ac-t12"></span>
+              <span class="ac-tick ac-t3"></span>
+              <span class="ac-tick ac-t6"></span>
+              <span class="ac-tick ac-t9"></span>
+              <div class="ac-hand ac-hour" id="ac-hour"></div>
+              <div class="ac-hand ac-minute" id="ac-minute"></div>
+              <div class="ac-hand ac-second" id="ac-second"></div>
+              <div class="ac-pin"></div>
+            </div>
+          </div>
+          <div class="widget-digital" id="widget-digital">00:00:00</div>
+          <div class="widget-sub" id="widget-day">—</div>
+        </div>
+        <div class="widget widget-calendar">
+          <div class="widget-month" id="widget-month">—</div>
+          <div class="widget-grid" id="widget-grid"></div>
+        </div>
+      </div>
+
+      <div class="desktop-icons" id="desktop-icons"></div>
+
+      <main class="windows-layer" id="windows-layer"></main>
+
+      <div class="spotlight hidden" id="spotlight">
+        <div class="spotlight-box">
+          <div class="spotlight-field">
+            <span>🔍</span>
+            <input id="spotlight-input" type="text" placeholder="Search apps in the canopy…" autocomplete="off" spellcheck="false" />
+          </div>
+          <ul class="spotlight-results" id="spotlight-results"></ul>
+        </div>
+      </div>
+
+      <ul class="context-menu hidden" id="context-menu"></ul>
+
+      <div class="toasts" id="toasts"></div>
+
+      <nav class="dock" id="dock"></nav>
+    </div>
+
+    <script>window.NatureOS = {};</script>
+    <script src="js/core/store.js"></script>
+    <script src="js/wallpapers.js"></script>
+    <script src="js/wm.js"></script>
+    <script src="js/core/contextmenu.js"></script>
+    <script src="js/core/boot.js"></script>
+    <script src="js/apps/about.js"></script>
+    <script src="js/apps/files.js"></script>
+    <script src="js/apps/notepad.js"></script>
+    <script src="js/apps/terminal.js"></script>
+    <script src="js/apps/calculator.js"></script>
+    <script src="js/apps/photos.js"></script>
+    <script src="js/apps/music.js"></script>
+    <script src="js/apps/settings.js"></script>
+    <script src="js/apps/browser.js"></script>
+    <script src="js/apps/calendar.js"></script>
+    <script src="js/dock.js"></script>
+    <script src="js/menubar.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>
