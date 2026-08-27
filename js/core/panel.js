@@ -16,6 +16,9 @@ const Panel = (function() {
     const clockEl = document.getElementById('panel-clock');
     const lockTimeEl = document.getElementById('lock-time');
     const lockDateEl = document.getElementById('lock-date');
+    const dtHoursEl = document.getElementById('desktop-clock-hours');
+    const dtMinsEl = document.getElementById('desktop-clock-mins');
+    const dtDateEl = document.getElementById('desktop-clock-date');
 
     function update() {
       const now = new Date();
@@ -40,10 +43,17 @@ const Panel = (function() {
       if (lockDateEl) {
         lockDateEl.textContent = `${fullDays[now.getDay()]}, ${monthStr} ${dateNum}`;
       }
+
+      // Desktop Clock Widget: Line 1 HH:MM (24-hr), Line 2 "Thu, 27 Aug"
+      if (dtHoursEl) dtHoursEl.textContent = hours;
+      if (dtMinsEl) dtMinsEl.textContent = mins;
+      if (dtDateEl) {
+        dtDateEl.textContent = `${dayStr}, ${dateNum} ${monthStr}`;
+      }
     }
 
     update();
-    setInterval(update, 10000);
+    setInterval(update, 1000);
   }
 
   function togglePopup(popupEl, triggerBtn) {

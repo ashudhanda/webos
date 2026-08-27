@@ -289,6 +289,43 @@ button {
   pointer-events: none;
 }
 
+/* Desktop Clock Widget */
+.desktop-clock-widget {
+  position: fixed;
+  top: 96px;
+  right: 28px;
+  text-align: right;
+  z-index: 0;
+  pointer-events: none;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+.desktop-clock-time {
+  font-size: 56px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.desktop-clock-colon {
+  display: inline-block;
+  animation: clock-colon-blink 1s ease-in-out infinite;
+}
+
+@keyframes clock-colon-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
+
+.desktop-clock-date {
+  font-size: 14px;
+  color: var(--dim);
+  margin-top: 4px;
+  font-weight: 400;
+}
+
 /* Desktop Icons */
 .desktop-icons {
   position: absolute;
