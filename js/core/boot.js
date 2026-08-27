@@ -1,75 +1,178 @@
-(function () {
-"use strict";
-var formatTime = NatureOS.formatTime;
-var formatDate = NatureOS.formatDate;
-const MESSAGES = [
-  "Waking the forest…",
-  "Growing the canopy…",
-  "Loading moss drivers…",
-  "Calibrating birdsong…",
-  "Filtering morning mist…",
-  "Ready.",
-];
+// boot.js - boot sequence, login & lock screens
 
-function runBoot(duration) {
-  const total = duration || 2200;
-  const boot = document.getElementById("boot");
-  const fill = document.getElementById("boot-bar-fill");
-  const status = document.getElementById("boot-status");
-  const started = performance.now();
+const Boot = (function() {
+  const KERNEL_LINES = [
+    '[    0.000000] moonOS 1.0 booting on web',
+    '[    0.042131] moonwm: window manager started',
+    '[    0.118445] fs: mounted /home/ashu (rw)',
+    '[    0.204882] themes: loaded luna, nord, gruvbox, everforest',
+    '[    0.311509] net: connected to moon-net',
+    '[    0.402773] sandbox: all systems nominal',
+    '[    0.467001] welcome, ashu'
+  ];
 
-  return new Promise((resolve) => {
-    const step = (now) => {
-      const elapsed = now - started;
-      const progress = Math.min(1, elapsed / total);
-      fill.style.width = (progress * 100).toFixed(1) + "%";
-      const index = Math.min(MESSAGES.length - 1, Math.floor(progress * MESSAGES.length));
-      if (status.textContent !== MESSAGES[index]) status.textContent = MESSAGES[index];
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      } else {
-        boot.classList.add("fade-out");
-        setTimeout(() => {
-          boot.classList.add("hidden");
-          resolve();
-        }, 700);
-      }
-    };
-    requestAnimationFrame(step);
-  });
-}
+  let bootState = 'prompt'; // prompt -> grub -> log -> login -> desktop
+  let logInterval = null;
 
-function showLockScreen() {
-  const lock = document.getElementById("lock");
-  const timeEl = document.getElementById("lock-time");
-  const dateEl = document.getElementById("lock-date");
+  function init() {
+    setupPrompt();
+    setupGrub();
+    setupLogin();
+    setupLock();
+  }
 
-  lock.classList.remove("hidden", "fade-out");
+  function setupPrompt() {
+    const bootPrompt = document.getElementById('boot-prompt');
+    const bootScreen = document.getElementById('boot-screen');
 
-  const tick = () => {
-    const now = new Date();
-    timeEl.textContent = formatTime(now, false).replace(/\s(AM|PM)/, "");
-    dateEl.textContent = formatDate(now);
-  };
-  tick();
-  const timer = setInterval(tick, 1000);
+    function startGrub() {
+      if (bootState !== 'prompt') return;
+      bootState = 'grub';
+      bootPrompt.classList.add('hidden');
+      const grub = document.getElementById('boot-grub');
+      if (grub) grub.classList.remove('hidden');
 
-  return new Promise((resolve) => {
-    const unlock = () => {
-      lock.removeEventListener("click", unlock);
-      document.removeEventListener("keydown", onKey);
-      clearInterval(timer);
-      lock.classList.add("fade-out");
+      // auto proceed to kernel log after 1.2s or on enter
       setTimeout(() => {
-        lock.classList.add("hidden");
-        resolve();
-      }, 500);
-    };
-    const onKey = () => unlock();
-    lock.addEventListener("click", unlock);
-    document.addEventListener("keydown", onKey);
-  });
-}
-NatureOS.runBoot = runBoot;
-NatureOS.showLockScreen = showLockScreen;
+        if (bootState === 'grub') {
+          startKernelLog();
+        }
+      }, 1200);
+    }
+
+    if (bootPrompt) {
+      bootPrompt.addEventListener('click', startGrub);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (bootState === 'prompt' && e.key === 'Enter') {
+        startGrub();
+      } else if (bootState === 'grub' && e.key === 'Enter') {
+        startKernelLog();
+      } else if (bootState === 'log' && (e.key === 'Enter' || e.key === 'Escape')) {
+        skipToLogin();
+      }
+    });
+
+    if (bootScreen) {
+      bootScreen.addEventListener('click', () => {
+        if (bootState === 'log') {
+          skipToLogin();
+        }
+      });
+    }
+  }
+
+  function setupGrub() {
+    const items = document.querySelectorAll('.grub-item');
+    items.forEach((item) => {
+      item.addEventListener('click', () => {
+        items.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        setTimeout(startKernelLog, 300);
+      });
+    });
+  }
+
+  function startKernelLog() {
+    if (bootState === 'log' || bootState === 'login' || bootState === 'desktop') return;
+    bootState = 'log';
+
+    const grub = document.getElementById('boot-grub');
+    const logBox = document.getElementById('boot-log');
+    const logText = document.getElementById('boot-log-text');
+
+    if (grub) grub.classList.add('hidden');
+    if (logBox) logBox.classList.remove('hidden');
+    if (logText) logText.textContent = '';
+
+    let lineIndex = 0;
+    logInterval = setInterval(() => {
+      if (lineIndex < KERNEL_LINES.length) {
+        logText.textContent += KERNEL_LINES[lineIndex] + '\n';
+        lineIndex++;
+      } else {
+        clearInterval(logInterval);
+        setTimeout(showLogin, 400);
+      }
+    }, 45); // ~45ms per line
+  }
+
+  function skipToLogin() {
+    if (logInterval) clearInterval(logInterval);
+    showLogin();
+  }
+
+  function showLogin() {
+    bootState = 'login';
+    const bootScreen = document.getElementById('boot-screen');
+    const loginScreen = document.getElementById('login-screen');
+
+    if (bootScreen) bootScreen.classList.add('hidden');
+    if (loginScreen) {
+      loginScreen.classList.remove('hidden');
+      loginScreen.style.opacity = '1';
+    }
+  }
+
+  function setupLogin() {
+    const card = document.getElementById('login-user-card');
+    const loginScreen = document.getElementById('login-screen');
+    const desktopEnv = document.getElementById('desktop-env');
+
+    function signIn() {
+      if (bootState !== 'login') return;
+      bootState = 'desktop';
+
+      if (loginScreen) {
+        loginScreen.style.opacity = '0';
+        setTimeout(() => {
+          loginScreen.classList.add('hidden');
+        }, 300); // 300ms fade transition
+      }
+
+      if (desktopEnv) {
+        desktopEnv.classList.remove('hidden');
+      }
+
+      // open terminal by default on first boot
+      setTimeout(() => {
+        Apps.launch('terminal');
+      }, 200);
+    }
+
+    if (card) {
+      card.addEventListener('click', signIn);
+    }
+  }
+
+  function lock() {
+    const lockScreen = document.getElementById('lock-screen');
+    if (lockScreen) {
+      lockScreen.classList.remove('hidden');
+      lockScreen.style.opacity = '1';
+    }
+  }
+
+  function setupLock() {
+    const lockScreen = document.getElementById('lock-screen');
+    if (lockScreen) {
+      lockScreen.addEventListener('click', () => {
+        lockScreen.style.opacity = '0';
+        setTimeout(() => {
+          lockScreen.classList.add('hidden');
+        }, 250);
+      });
+    }
+  }
+
+  function restart() {
+    location.reload();
+  }
+
+  return {
+    init,
+    lock,
+    restart
+  };
 })();

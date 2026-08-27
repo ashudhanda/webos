@@ -1,260 +1,325 @@
-(function () {
-"use strict";
-var notify = NatureOS.notify;
-const FS = {
-  name: "Canopy",
-  icon: "🌲",
-  type: "folder",
-  children: [
-    {
-      name: "Documents",
-      icon: "📁",
-      type: "folder",
-      children: [
-        { name: "Field Notes.txt", icon: "📄", type: "file", size: "4 KB", kind: "Plain Text" },
-        { name: "Trail Map.pdf", icon: "🗺️", type: "file", size: "1.2 MB", kind: "PDF Document" },
-        { name: "Bird Census.csv", icon: "📊", type: "file", size: "22 KB", kind: "Spreadsheet" },
-        {
-          name: "Research",
-          icon: "📁",
-          type: "folder",
-          children: [
-            { name: "Moss Growth.md", icon: "📝", type: "file", size: "9 KB", kind: "Markdown" },
-            { name: "Canopy Density.md", icon: "📝", type: "file", size: "12 KB", kind: "Markdown" },
-            { name: "Soil Samples.json", icon: "🧪", type: "file", size: "38 KB", kind: "JSON" },
-          ],
-        },
-      ],
-    },
-    {
-      name: "Pictures",
-      icon: "📁",
-      type: "folder",
-      children: [
-        { name: "misty-morning.jpg", icon: "🖼️", type: "file", size: "3.4 MB", kind: "JPEG Image" },
-        { name: "red-fox.jpg", icon: "🦊", type: "file", size: "2.8 MB", kind: "JPEG Image" },
-        { name: "waterfall.jpg", icon: "🖼️", type: "file", size: "5.1 MB", kind: "JPEG Image" },
-        { name: "deer-dawn.jpg", icon: "🦌", type: "file", size: "4.2 MB", kind: "JPEG Image" },
-        {
-          name: "Seasons",
-          icon: "📁",
-          type: "folder",
-          children: [
-            { name: "spring.png", icon: "🌸", type: "file", size: "1.9 MB", kind: "PNG Image" },
-            { name: "summer.png", icon: "🌞", type: "file", size: "2.1 MB", kind: "PNG Image" },
-            { name: "autumn.png", icon: "🍂", type: "file", size: "2.4 MB", kind: "PNG Image" },
-            { name: "winter.png", icon: "❄️", type: "file", size: "1.7 MB", kind: "PNG Image" },
-          ],
-        },
-      ],
-    },
-    {
-      name: "Music",
-      icon: "📁",
-      type: "folder",
-      children: [
-        { name: "Rain On Leaves.wav", icon: "🎵", type: "file", size: "18 MB", kind: "Audio" },
-        { name: "Dawn Chorus.wav", icon: "🎵", type: "file", size: "24 MB", kind: "Audio" },
-        { name: "Distant Thunder.wav", icon: "🎵", type: "file", size: "12 MB", kind: "Audio" },
-        { name: "Wind Through Pines.wav", icon: "🎵", type: "file", size: "31 MB", kind: "Audio" },
-      ],
-    },
-    {
-      name: "Projects",
-      icon: "📁",
-      type: "folder",
-      children: [
-        {
-          name: "canopyos",
-          icon: "📁",
-          type: "folder",
-          children: [
-            { name: "index.html", icon: "🌐", type: "file", size: "6 KB", kind: "HTML" },
-            { name: "main.js", icon: "⚙️", type: "file", size: "14 KB", kind: "JavaScript" },
-            { name: "base.css", icon: "🎨", type: "file", size: "11 KB", kind: "Stylesheet" },
-            { name: "README.md", icon: "📝", type: "file", size: "3 KB", kind: "Markdown" },
-          ],
-        },
-        { name: "leafmeter", icon: "📁", type: "folder", children: [{ name: "sensor.py", icon: "🐍", type: "file", size: "7 KB", kind: "Python" }] },
-        { name: "ideas.txt", icon: "📄", type: "file", size: "2 KB", kind: "Plain Text" },
-      ],
-    },
-    { name: "Trailhead.webloc", icon: "🔗", type: "file", size: "1 KB", kind: "Web Link" },
-    { name: "Compass.app", icon: "🧭", type: "file", size: "820 KB", kind: "Application" },
-  ],
-};
+// files.js - file manager with sidebar, breadcrumbs, context menu & inline rename
 
-const SIDEBAR = ["Documents", "Pictures", "Music", "Projects"];
-
-function resolve(path) {
-  let node = FS;
-  for (const part of path) {
-    const next = (node.children || []).find((c) => c.name === part);
-    if (!next) return node;
-    node = next;
+const FilesApp = (function() {
+  function open(initialPath = '/home/ashu') {
+    WM.createWindow({
+      id: 'files',
+      title: 'Files - ' + initialPath,
+      width: 620,
+      height: 420,
+      iconSvg: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>',
+      render: (bodyEl, winObj) => {
+        initFiles(bodyEl, winObj, initialPath);
+      }
+    });
   }
-  return node;
-}
 
-const filesApp = {
-  id: "files",
-  name: "Finder",
-  icon: "🌲",
-  tagline: "Files",
-  keywords: ["finder", "files", "folders", "documents"],
-  width: 780,
-  height: 500,
-  mount(body) {
-    let path = [];
-    const history = [];
+  function initFiles(container, winObj, initialPath) {
+    let currentPath = initialPath;
+    let selectedItem = null;
 
-    const root = document.createElement("div");
-    root.className = "app";
+    container.innerHTML = `
+      <div class="files-app">
+        <div class="files-sidebar">
+          <div class="sidebar-title">Places</div>
+          <button class="sidebar-item" data-path="/home/ashu">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span>Home</span>
+          </button>
+          <button class="sidebar-item" data-path="/home/ashu/Documents">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            <span>Documents</span>
+          </button>
+          <button class="sidebar-item" data-path="/home/ashu/Pictures">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <span>Pictures</span>
+          </button>
+          <button class="sidebar-item" data-path="/home/ashu/Projects">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            <span>Projects</span>
+          </button>
+        </div>
 
-    const sidebar = document.createElement("aside");
-    sidebar.className = "sidebar";
-    const sTitle = document.createElement("div");
-    sTitle.className = "sidebar-title";
-    sTitle.textContent = "Favorites";
-    sidebar.appendChild(sTitle);
+        <div class="files-main">
+          <div class="files-toolbar">
+            <button class="files-nav-btn btn-up" title="Parent Directory">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+            </button>
+            <div class="files-breadcrumb"></div>
+          </div>
+          <div class="files-content" tabindex="0"></div>
+        </div>
+      </div>
+    `;
 
-    const homeBtn = document.createElement("button");
-    homeBtn.type = "button";
-    homeBtn.className = "sidebar-item";
-    homeBtn.textContent = "🌲 Canopy";
-    homeBtn.addEventListener("click", () => navigate([]));
-    sidebar.appendChild(homeBtn);
+    const breadcrumbEl = container.querySelector('.files-breadcrumb');
+    const contentEl = container.querySelector('.files-content');
+    const upBtn = container.querySelector('.btn-up');
+    const ctxMenu = document.getElementById('files-ctx-menu');
 
-    const sideButtons = SIDEBAR.map((name) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "sidebar-item";
-      b.textContent = "📁 " + name;
-      b.addEventListener("click", () => navigate([name]));
-      sidebar.appendChild(b);
-      return { name, el: b };
-    });
-
-    const main = document.createElement("div");
-    main.className = "app app-col";
-
-    const toolbar = document.createElement("div");
-    toolbar.className = "toolbar";
-    const back = document.createElement("button");
-    back.type = "button";
-    back.className = "icon-btn";
-    back.textContent = "‹";
-    back.title = "Back";
-    const up = document.createElement("button");
-    up.type = "button";
-    up.className = "icon-btn";
-    up.textContent = "↑";
-    up.title = "Enclosing folder";
-    const crumb = document.createElement("div");
-    crumb.className = "breadcrumb";
-    toolbar.appendChild(back);
-    toolbar.appendChild(up);
-    toolbar.appendChild(crumb);
-
-    const grid = document.createElement("div");
-    grid.className = "file-grid app-scroll";
-
-    const status = document.createElement("div");
-    status.className = "statusbar";
-    const statusLeft = document.createElement("span");
-    const statusRight = document.createElement("span");
-    status.appendChild(statusLeft);
-    status.appendChild(statusRight);
-
-    main.appendChild(toolbar);
-    main.appendChild(grid);
-    main.appendChild(status);
-    root.appendChild(sidebar);
-    root.appendChild(main);
-    body.appendChild(root);
-
-    back.addEventListener("click", () => {
-      if (!history.length) return;
-      path = history.pop();
-      render();
-    });
-    up.addEventListener("click", () => {
-      if (!path.length) return;
-      history.push([...path]);
-      path = path.slice(0, -1);
-      render();
-    });
-
-    function navigate(next) {
-      history.push([...path]);
-      path = next;
-      render();
+    function navigate(newPath) {
+      if (!FS.exists(newPath) || !FS.isDir(newPath)) return;
+      currentPath = FS.resolve(newPath, '/');
+      WM.setWindowTitle(winObj.id, 'Files - ' + currentPath);
+      renderSidebar();
+      renderBreadcrumb();
+      renderContent();
     }
 
-    function renderCrumb() {
-      crumb.innerHTML = "";
-      const parts = ["Canopy", ...path];
-      parts.forEach((p, i) => {
-        if (i > 0) {
-          const sep = document.createElement("span");
-          sep.textContent = "›";
-          crumb.appendChild(sep);
+    function renderSidebar() {
+      container.querySelectorAll('.sidebar-item').forEach((item) => {
+        const p = item.getAttribute('data-path');
+        item.classList.toggle('active', p === currentPath);
+      });
+    }
+
+    function renderBreadcrumb() {
+      breadcrumbEl.innerHTML = '';
+      const parts = currentPath.split('/').filter(Boolean);
+
+      const rootSpan = document.createElement('span');
+      rootSpan.className = 'breadcrumb-part';
+      rootSpan.textContent = 'root';
+      rootSpan.addEventListener('click', () => navigate('/'));
+      breadcrumbEl.appendChild(rootSpan);
+
+      let accumulated = '';
+      parts.forEach((part) => {
+        accumulated += '/' + part;
+        const constPath = accumulated;
+
+        const sep = document.createElement('span');
+        sep.className = 'breadcrumb-sep';
+        sep.textContent = '/';
+        breadcrumbEl.appendChild(sep);
+
+        const partSpan = document.createElement('span');
+        partSpan.className = 'breadcrumb-part';
+        partSpan.textContent = part;
+        partSpan.addEventListener('click', () => navigate(constPath));
+        breadcrumbEl.appendChild(partSpan);
+      });
+    }
+
+    function renderContent() {
+      contentEl.innerHTML = '';
+      selectedItem = null;
+
+      try {
+        const items = FS.ls(currentPath);
+
+        if (items.length === 0) {
+          contentEl.innerHTML = `
+            <div class="files-empty">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              <span>Folder is empty</span>
+            </div>
+          `;
+          return;
         }
-        const b = document.createElement("b");
-        b.textContent = p;
-        b.style.cursor = "pointer";
-        b.addEventListener("click", () => navigate(path.slice(0, i)));
-        crumb.appendChild(b);
+
+        items.forEach((item) => {
+          const card = document.createElement('div');
+          card.className = 'file-card';
+          card.setAttribute('data-name', item.name);
+          card.setAttribute('data-type', item.type);
+
+          const iconSvg = item.type === 'dir'
+            ? '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>'
+            : '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>';
+
+          card.innerHTML = `
+            <div class="file-icon">${iconSvg}</div>
+            <div class="file-name" title="${item.name}">${item.name}</div>
+          `;
+
+          // single click select
+          card.addEventListener('click', (e) => {
+            e.stopPropagation();
+            contentEl.querySelectorAll('.file-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedItem = item.name;
+          });
+
+          // double click action
+          card.addEventListener('dblclick', () => {
+            if (item.type === 'dir') {
+              navigate(currentPath + (currentPath === '/' ? '' : '/') + item.name);
+            } else {
+              Apps.launch('editor', { path: currentPath + (currentPath === '/' ? '' : '/') + item.name });
+            }
+          });
+
+          // item right click
+          card.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            contentEl.querySelectorAll('.file-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedItem = item.name;
+            showContextMenu(e.clientX, e.clientY, true);
+          });
+
+          contentEl.appendChild(card);
+        });
+      } catch (err) {
+        contentEl.innerHTML = `<div class="files-empty"><span>${err.message}</span></div>`;
+      }
+    }
+
+    // Up directory navigation
+    upBtn.addEventListener('click', () => {
+      if (currentPath === '/') return;
+      const parts = currentPath.split('/').filter(Boolean);
+      parts.pop();
+      navigate('/' + parts.join('/'));
+    });
+
+    // Sidebar navigation
+    container.querySelectorAll('.sidebar-item').forEach((item) => {
+      item.addEventListener('click', () => {
+        navigate(item.getAttribute('data-path'));
+      });
+    });
+
+    // Canvas click deselects
+    contentEl.addEventListener('click', () => {
+      contentEl.querySelectorAll('.file-card').forEach(c => c.classList.remove('selected'));
+      selectedItem = null;
+    });
+
+    // Canvas background right click
+    contentEl.addEventListener('contextmenu', (e) => {
+      if (e.target.closest('.file-card')) return;
+      e.preventDefault();
+      selectedItem = null;
+      contentEl.querySelectorAll('.file-card').forEach(c => c.classList.remove('selected'));
+      showContextMenu(e.clientX, e.clientY, false);
+    });
+
+    function showContextMenu(clientX, clientY, hasItem) {
+      if (!ctxMenu) return;
+      Panel.closeAllPopups();
+
+      const itemActions = ctxMenu.querySelectorAll('.item-action, .item-action-divider');
+      itemActions.forEach(el => {
+        el.style.display = hasItem ? 'flex' : 'none';
+      });
+
+      const x = Math.min(clientX, window.innerWidth - 170);
+      const y = Math.min(clientY, window.innerHeight - 150);
+
+      ctxMenu.style.left = `${x}px`;
+      ctxMenu.style.top = `${y}px`;
+      ctxMenu.classList.remove('hidden');
+
+      // attach current handler
+      ctxMenu.onclick = (e) => {
+        const btn = e.target.closest('.ctx-item');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+        ctxMenu.classList.add('hidden');
+
+        if (action === 'files-new-file') {
+          createNewFile();
+        } else if (action === 'files-new-folder') {
+          createNewFolder();
+        } else if (action === 'files-rename' && selectedItem) {
+          startInlineRename(selectedItem);
+        } else if (action === 'files-delete' && selectedItem) {
+          deleteItem(selectedItem);
+        }
+      };
+    }
+
+    function createNewFile() {
+      let baseName = 'untitled.txt';
+      let count = 1;
+      while (FS.exists(currentPath + '/' + baseName)) {
+        baseName = `untitled-${count}.txt`;
+        count++;
+      }
+      try {
+        FS.write(currentPath + '/' + baseName, '');
+        renderContent();
+        startInlineRename(baseName);
+      } catch (e) {
+        Notify.show(e.message, 'error');
+      }
+    }
+
+    function createNewFolder() {
+      let baseName = 'New Folder';
+      let count = 1;
+      while (FS.exists(currentPath + '/' + baseName)) {
+        baseName = `New Folder (${count})`;
+        count++;
+      }
+      try {
+        FS.mkdir(currentPath + '/' + baseName);
+        renderContent();
+        startInlineRename(baseName);
+      } catch (e) {
+        Notify.show(e.message, 'error');
+      }
+    }
+
+    function startInlineRename(oldName) {
+      const card = contentEl.querySelector(`[data-name="${CSS.escape(oldName)}"]`);
+      if (!card) return;
+
+      const nameEl = card.querySelector('.file-name');
+      if (!nameEl) return;
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'file-rename-input';
+      input.value = oldName;
+
+      nameEl.replaceWith(input);
+      input.focus();
+      input.select();
+
+      function commit() {
+        const newName = input.value.trim();
+        if (newName && newName !== oldName) {
+          try {
+            FS.rename(currentPath + '/' + oldName, newName);
+          } catch (e) {
+            Notify.show(e.message, 'error');
+          }
+        }
+        renderContent();
+      }
+
+      input.addEventListener('blur', commit);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          commit();
+        } else if (e.key === 'Escape') {
+          renderContent();
+        }
       });
     }
 
-    function render() {
-      const node = resolve(path);
-      const children = node.children || [];
-      renderCrumb();
-      back.disabled = history.length === 0;
-      up.disabled = path.length === 0;
-      sideButtons.forEach((s) => s.el.classList.toggle("active", path[0] === s.name));
-      homeBtn.classList.toggle("active", path.length === 0);
-
-      grid.innerHTML = "";
-      children.forEach((child) => {
-        const tile = document.createElement("button");
-        tile.type = "button";
-        tile.className = "file-tile";
-        const icon = document.createElement("span");
-        icon.className = "ft-icon";
-        icon.textContent = child.icon;
-        const name = document.createElement("span");
-        name.className = "ft-name";
-        name.textContent = child.name;
-        const meta = document.createElement("span");
-        meta.className = "ft-meta";
-        meta.textContent = child.type === "folder" ? (child.children || []).length + " items" : child.size;
-        tile.appendChild(icon);
-        tile.appendChild(name);
-        tile.appendChild(meta);
-
-        tile.addEventListener("click", () => {
-          grid.querySelectorAll(".file-tile").forEach((t) => t.classList.remove("selected"));
-          tile.classList.add("selected");
-          statusRight.textContent =
-            child.type === "folder" ? "Folder selected" : child.kind + " · " + child.size;
-        });
-        tile.addEventListener("dblclick", () => {
-          if (child.type === "folder") navigate([...path, child.name]);
-          else notify(child.name, "No application is bound to " + child.kind + " yet.", child.icon);
-        });
-        grid.appendChild(tile);
-      });
-
-      const folders = children.filter((c) => c.type === "folder").length;
-      statusLeft.textContent = children.length + " items · " + folders + " folders";
-      statusRight.textContent = "Canopy Volume · 128 GB free";
+    function deleteItem(name) {
+      const itemPath = currentPath + '/' + name;
+      try {
+        if (FS.isDir(itemPath)) {
+          FS.rmdir(itemPath);
+        } else {
+          FS.rm(itemPath);
+        }
+        renderContent();
+      } catch (e) {
+        Notify.show(e.message, 'error');
+      }
     }
 
-    render();
-  },
-};
-NatureOS.filesApp = filesApp;
+    navigate(initialPath);
+  }
+
+  return {
+    open
+  };
 })();

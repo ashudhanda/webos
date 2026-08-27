@@ -1,0 +1,265 @@
+/* windows.css - window manager, workspaces strip, alt+tab overlay */
+
+/* Workspaces Layout */
+.workspaces-viewport {
+  position: absolute;
+  top: var(--panel-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.workspaces-strip {
+  display: flex;
+  width: 400%;
+  height: 100%;
+  transition: transform 250ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.workspace-sheet {
+  width: 25%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.windows-container {
+  position: absolute;
+  inset: 0;
+}
+
+/* Window Frame */
+.os-window {
+  position: absolute;
+  background: var(--window);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-win);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 320px;
+  min-height: 200px;
+  animation: win-open 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+@keyframes win-open {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.os-window.closing {
+  animation: win-close 120ms ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes win-close {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+.os-window.minimized {
+  opacity: 0 !important;
+  transform: translateY(8px) scale(0.98) !important;
+  pointer-events: none !important;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.os-window.maximized {
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.os-window.active {
+  border-color: rgba(160, 180, 255, 0.22);
+}
+
+/* Titlebar */
+.win-titlebar {
+  height: 34px;
+  min-height: 34px;
+  background: rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  cursor: grab;
+  user-select: none;
+}
+
+.win-titlebar:active {
+  cursor: grabbing;
+}
+
+.win-title-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.win-icon {
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.win-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.win-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.win-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dim);
+  transition: background 100ms ease, color 100ms ease;
+}
+
+.win-btn:hover {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.win-btn.close:hover {
+  background: rgba(224, 108, 117, 0.2);
+  color: #e06c75;
+}
+
+/* Window Content Body */
+.win-body {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Corner Resize Handle */
+.win-resize-grip {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+  cursor: se-resize;
+  z-index: 100;
+}
+
+.win-resize-grip::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid var(--dim);
+  border-bottom: 1.5px solid var(--dim);
+  opacity: 0.5;
+}
+
+/* Alt+Tab Overlay */
+.alttab-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.alttab-box {
+  background: var(--window);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-win);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  padding: 16px;
+  min-width: 340px;
+  max-width: 600px;
+}
+
+.alttab-header {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.alttab-list {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.alttab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--radius-ctrl);
+  border: 1px solid transparent;
+  min-width: 80px;
+  transition: all 100ms ease;
+}
+
+.alttab-item.selected {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.alttab-item-icon {
+  color: var(--accent);
+}
+
+.alttab-item-title {
+  font-size: 11px;
+  color: var(--text);
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}

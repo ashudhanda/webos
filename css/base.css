@@ -1,3 +1,5 @@
+/* base.css - reset, core variables, utility & screen styles */
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -43,6 +45,7 @@ button {
   display: none !important;
 }
 
+/* Boot Screen Styles */
 .boot-screen {
   position: fixed;
   inset: 0;
@@ -145,8 +148,7 @@ button {
   word-break: break-all;
 }
 
-
-
+/* Login Screen Styles */
 .login-screen {
   position: fixed;
   inset: 0;
@@ -219,9 +221,7 @@ button {
   background: var(--accent-soft);
 }
 
-
-
-
+/* Lock Screen */
 .lock-screen {
   position: fixed;
   inset: 0;
@@ -272,8 +272,7 @@ button {
   display: inline-block;
 }
 
-
-
+/* Desktop Environment */
 .desktop-env {
   position: fixed;
   inset: 0;
@@ -290,9 +289,7 @@ button {
   pointer-events: none;
 }
 
-
-
-
+/* Desktop Icons */
 .desktop-icons {
   position: absolute;
   top: 14px;
@@ -349,8 +346,7 @@ button {
   text-overflow: ellipsis;
 }
 
-
-
+/* Context Menus */
 .ctx-menu {
   position: fixed;
   z-index: 9999;
@@ -393,8 +389,7 @@ button {
   margin: 4px 2px;
 }
 
-
-
+/* Notifications */
 .notifications-container {
   position: fixed;
   top: calc(var(--panel-height) + 12px);

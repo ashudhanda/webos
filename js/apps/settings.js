@@ -1,256 +1,171 @@
-(function () {
-"use strict";
-var store = NatureOS.store;
-var THEMES = NatureOS.THEMES;
-var ACCENTS = NatureOS.ACCENTS;
-var applyTheme = NatureOS.applyTheme;
-var applyAccent = NatureOS.applyAccent;
-var notify = NatureOS.notify;
-var WALLPAPERS = NatureOS.WALLPAPERS;
-var wallpaperStyle = NatureOS.wallpaperStyle;
-var applyWallpaper = NatureOS.applyWallpaper;
-var randomWallpaper = NatureOS.randomWallpaper;
-var wm = NatureOS.wm;
-var aboutApp = NatureOS.aboutApp;
-const SECTIONS = [
-  { id: "appearance", name: "Appearance", icon: "🎨" },
-  { id: "accent", name: "Accent Color", icon: "🎯" },
-  { id: "wallpaper", name: "Wallpaper", icon: "🌄" },
-  { id: "system", name: "System", icon: "⚙️" },
-];
+// settings.js - system settings app for appearance, wallpaper & system info
 
-const PREVIEW = {
-  forest: "linear-gradient(150deg, #14523a, #06180f)",
-  moss: "linear-gradient(150deg, #dff4e4, #93cfa3)",
-  autumn: "linear-gradient(150deg, #85390f, #2c1005)",
-  night: "linear-gradient(150deg, #17335f, #050c1e)",
-};
-
-const settingsApp = {
-  id: "settings",
-  name: "Settings",
-  icon: "⚙️",
-  tagline: "System",
-  keywords: ["settings", "preferences", "theme", "accent", "appearance"],
-  width: 800,
-  height: 540,
-  mount(body) {
-    let section = "appearance";
-
-    const root = document.createElement("div");
-    root.className = "app";
-
-    const sidebar = document.createElement("aside");
-    sidebar.className = "sidebar";
-    const st = document.createElement("div");
-    st.className = "sidebar-title";
-    st.textContent = "System Settings";
-    sidebar.appendChild(st);
-
-    const sideButtons = SECTIONS.map((s) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "sidebar-item";
-      b.textContent = s.icon + "  " + s.name;
-      b.addEventListener("click", () => {
-        section = s.id;
-        render();
-      });
-      sidebar.appendChild(b);
-      return { id: s.id, el: b };
+const SettingsApp = (function() {
+  function open(options = {}) {
+    const initialTab = options.tab || 'appearance';
+    WM.createWindow({
+      id: 'settings',
+      title: 'Settings',
+      width: 580,
+      height: 400,
+      iconSvg: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>',
+      render: (bodyEl) => {
+        initSettings(bodyEl, initialTab);
+      }
     });
+  }
 
-    const content = document.createElement("div");
-    content.className = "app-scroll settings-body";
+  function initSettings(container, initialTab) {
+    let activeTab = initialTab;
 
-    root.appendChild(sidebar);
-    root.appendChild(content);
-    body.appendChild(root);
+    container.innerHTML = `
+      <div class="settings-app">
+        <div class="settings-sidebar">
+          <button class="settings-tab-btn" data-tab="appearance">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a7 7 0 0 0 0 14v6"></path></svg>
+            <span>Appearance</span>
+          </button>
+          <button class="settings-tab-btn" data-tab="wallpaper">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <span>Wallpaper</span>
+          </button>
+          <button class="settings-tab-btn" data-tab="about">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span>About</span>
+          </button>
+        </div>
+        <div class="settings-content"></div>
+      </div>
+    `;
 
-    function heading(text) {
-      const h = document.createElement("div");
-      h.className = "settings-h";
-      h.textContent = text;
-      return h;
-    }
+    const contentEl = container.querySelector('.settings-content');
 
-    function themeSection() {
-      const wrap = document.createElement("div");
-      wrap.className = "settings-section";
-      wrap.appendChild(heading("Theme"));
-      const grid = document.createElement("div");
-      grid.className = "theme-cards";
-      THEMES.forEach((t) => {
-        const card = document.createElement("button");
-        card.type = "button";
-        card.className = "theme-card" + (store.get("theme") === t.id ? " active" : "");
-        const prev = document.createElement("div");
-        prev.className = "tc-preview";
-        prev.style.background = PREVIEW[t.id];
-        const bar = document.createElement("i");
-        prev.appendChild(bar);
-        const name = document.createElement("div");
-        name.className = "tc-name";
-        name.textContent = t.name;
-        card.appendChild(prev);
-        card.appendChild(name);
-        card.addEventListener("click", () => {
-          applyTheme(t.id);
-          notify("Theme changed", t.name, "🎨");
-          render();
-        });
-        grid.appendChild(card);
-      });
-      wrap.appendChild(grid);
-      return wrap;
-    }
-
-    function accentSection() {
-      const wrap = document.createElement("div");
-      wrap.className = "settings-section";
-      wrap.appendChild(heading("Accent color"));
-      const row = document.createElement("div");
-      row.style.display = "flex";
-      row.style.gap = "14px";
-      row.style.flexWrap = "wrap";
-      ACCENTS.forEach((a) => {
-        const item = document.createElement("button");
-        item.type = "button";
-        item.style.display = "grid";
-        item.style.justifyItems = "center";
-        item.style.gap = "8px";
-        const dot = document.createElement("span");
-        dot.style.width = "36px";
-        dot.style.height = "36px";
-        dot.style.borderRadius = "50%";
-        dot.style.background = a.color;
-        dot.style.border = store.get("accent") === a.id ? "3px solid var(--text)" : "3px solid transparent";
-        dot.style.boxShadow = "var(--shadow-sm)";
-        const label = document.createElement("span");
-        label.style.fontSize = "12px";
-        label.textContent = a.name;
-        item.appendChild(dot);
-        item.appendChild(label);
-        item.addEventListener("click", () => {
-          applyAccent(a.id);
-          notify("Accent updated", a.name, "🎯");
-          render();
-        });
-        row.appendChild(item);
-      });
-      wrap.appendChild(row);
-      return wrap;
-    }
-
-    function wallpaperSection() {
-      const wrap = document.createElement("div");
-      wrap.className = "settings-section";
-      wrap.appendChild(heading("Wallpaper"));
-      const grid = document.createElement("div");
-      grid.className = "wall-grid";
-      WALLPAPERS.forEach((wp) => {
-        const cell = document.createElement("button");
-        cell.type = "button";
-        cell.className = "wall-cell" + (store.get("wallpaper") === wp.id ? " active" : "");
-        cell.style.backgroundImage = wallpaperStyle(wp);
-        const span = document.createElement("span");
-        span.textContent = wp.name;
-        cell.appendChild(span);
-        cell.addEventListener("click", () => {
-          applyWallpaper(wp.id);
-          render();
-        });
-        grid.appendChild(cell);
-      });
-      wrap.appendChild(grid);
-      const shuffle = document.createElement("button");
-      shuffle.type = "button";
-      shuffle.className = "ghost-btn";
-      shuffle.style.marginTop = "12px";
-      shuffle.textContent = "🎲 Shuffle wallpaper";
-      shuffle.addEventListener("click", () => {
-        randomWallpaper();
-        render();
-      });
-      wrap.appendChild(shuffle);
-      return wrap;
-    }
-
-    function systemSection() {
-      const wrap = document.createElement("div");
-      wrap.className = "settings-section";
-      wrap.appendChild(heading("System"));
-      const info = document.createElement("div");
-      info.className = "about-stats";
-      info.style.maxWidth = "100%";
-      const rows = [
-        ["Operating system", "CanopyOS 1.0 (Evergreen)"],
-        ["Theme", THEMES.find((t) => t.id === store.get("theme")).name],
-        ["Accent", ACCENTS.find((a) => a.id === store.get("accent")).name],
-        ["Wallpapers installed", String(WALLPAPERS.length)],
-        ["Storage", "localStorage · persistent"],
-        ["Renderer", "CSS backdrop-filter compositor"],
-      ];
-      rows.forEach(([k, v]) => {
-        const r = document.createElement("div");
-        const a = document.createElement("span");
-        a.textContent = k;
-        const b = document.createElement("span");
-        b.textContent = v;
-        r.appendChild(a);
-        r.appendChild(b);
-        info.appendChild(r);
-      });
-      wrap.appendChild(info);
-
-      const actions = document.createElement("div");
-      actions.style.display = "flex";
-      actions.style.gap = "10px";
-      actions.style.marginTop = "14px";
-      actions.style.flexWrap = "wrap";
-
-      const aboutBtn = document.createElement("button");
-      aboutBtn.type = "button";
-      aboutBtn.className = "accent-btn";
-      aboutBtn.textContent = "ℹ️ About CanopyOS";
-      aboutBtn.addEventListener("click", () => wm.open(aboutApp));
-
-      const resetBtn = document.createElement("button");
-      resetBtn.type = "button";
-      resetBtn.className = "ghost-btn";
-      resetBtn.textContent = "♻️ Reset preferences";
-      resetBtn.addEventListener("click", () => {
-        store.reset();
-        applyTheme(store.get("theme"));
-        applyAccent(store.get("accent"));
-        applyWallpaper(store.get("wallpaper"), true);
-        notify("Preferences reset", "Back to a fresh forest.", "♻️");
-        render();
+    function switchTab(tabName) {
+      activeTab = tabName;
+      container.querySelectorAll('.settings-tab-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
       });
 
-      actions.appendChild(aboutBtn);
-      actions.appendChild(resetBtn);
-      wrap.appendChild(actions);
-      return wrap;
-    }
-
-    function render() {
-      sideButtons.forEach((s) => s.el.classList.toggle("active", s.id === section));
-      content.innerHTML = "";
-      if (section === "appearance") {
-        content.appendChild(themeSection());
-        content.appendChild(accentSection());
-      } else if (section === "accent") {
-        content.appendChild(accentSection());
-      } else if (section === "wallpaper") {
-        content.appendChild(wallpaperSection());
-      } else {
-        content.appendChild(systemSection());
+      if (tabName === 'appearance') {
+        renderAppearance();
+      } else if (tabName === 'wallpaper') {
+        renderWallpaper();
+      } else if (tabName === 'about') {
+        renderAbout();
       }
     }
 
-    render();
-  },
-};
-NatureOS.settingsApp = settingsApp;
+    function renderAppearance() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'luna';
+
+      const themes = [
+        { id: 'luna', name: 'Luna (Default)', bg: '#0b0e17', accent: '#9db8ff', dots: ['#9db8ff', '#dfe6f5', '#131a2b'] },
+        { id: 'nord', name: 'Nord', bg: '#242933', accent: '#88c0d0', dots: ['#88c0d0', '#eceff4', '#2e3440'] },
+        { id: 'gruvbox', name: 'Gruvbox', bg: '#1d2021', accent: '#fabd2f', dots: ['#fabd2f', '#ebdbb2', '#282828'] },
+        { id: 'everforest', name: 'Everforest', bg: '#232a2e', accent: '#a7c080', dots: ['#a7c080', '#d3c6aa', '#2d353b'] }
+      ];
+
+      contentEl.innerHTML = `
+        <div class="settings-section-title">Color Theme</div>
+        <div class="settings-section-desc">Choose your preferred desktop aesthetic palette.</div>
+        <div class="theme-grid">
+          ${themes.map(t => `
+            <div class="theme-card ${t.id === currentTheme ? 'active' : ''}" data-theme="${t.id}">
+              <div class="theme-preview" style="background: ${t.bg}">
+                <div class="theme-preview-dots">
+                  ${t.dots.map(d => `<span class="theme-dot" style="background: ${d}"></span>`).join('')}
+                </div>
+                <div style="height: 3px; width: 40%; background: ${t.accent}; border-radius: 2px;"></div>
+              </div>
+              <div class="theme-card-name">${t.name}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      contentEl.querySelectorAll('.theme-card').forEach((card) => {
+        card.addEventListener('click', () => {
+          const t = card.getAttribute('data-theme');
+          document.documentElement.setAttribute('data-theme', t);
+          try {
+            localStorage.setItem('moonos-theme', t);
+          } catch (e) {}
+          Notify.show(`Theme changed to ${t}`, 'success');
+          renderAppearance();
+        });
+      });
+    }
+
+    function renderWallpaper() {
+      const currentWp = document.documentElement.getAttribute('data-wp') || 'default';
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'luna';
+
+      const wallpapers = [
+        { id: 'default', name: 'Default Gradient' },
+        { id: 'alt1', name: 'Radial Glow Style' },
+        { id: 'alt2', name: 'Linear Dark Flow' }
+      ];
+
+      contentEl.innerHTML = `
+        <div class="settings-section-title">Wallpaper Selection</div>
+        <div class="settings-section-desc">Select a background gradient for the active theme (${currentTheme}).</div>
+        <div class="wallpaper-grid">
+          ${wallpapers.map(w => `
+            <div class="wallpaper-card ${w.id === currentWp ? 'active' : ''}" data-wp="${w.id}">
+              <div class="wallpaper-thumb" style="background: var(--wallpaper-base)"></div>
+              <div class="wallpaper-card-name">${w.name}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      contentEl.querySelectorAll('.wallpaper-card').forEach((card) => {
+        card.addEventListener('click', () => {
+          const wp = card.getAttribute('data-wp');
+          if (wp === 'default') {
+            document.documentElement.removeAttribute('data-wp');
+          } else {
+            document.documentElement.setAttribute('data-wp', wp);
+          }
+          try {
+            localStorage.setItem('moonos-wp', wp);
+          } catch (e) {}
+          Notify.show('Wallpaper updated', 'success');
+          renderWallpaper();
+        });
+      });
+    }
+
+    function renderAbout() {
+      contentEl.innerHTML = `
+        <div class="about-box">
+          <div class="about-logo">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </div>
+          <div class="about-title">moonOS 1.0</div>
+          <div class="about-sub">Handmade with care by ashu for Hack Club</div>
+          <div class="about-specs">
+            <div>Kernel: 6.9.1-moon #1 SMP x86_64</div>
+            <div>Window Manager: moonwm 1.0</div>
+            <div>Virtual Filesystem: 100% in-memory / localStorage</div>
+            <div>Zero external runtime dependencies</div>
+          </div>
+        </div>
+      `;
+    }
+
+    container.querySelectorAll('.settings-tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        switchTab(btn.getAttribute('data-tab'));
+      });
+    });
+
+    switchTab(initialTab);
+  }
+
+  return {
+    open
+  };
 })();

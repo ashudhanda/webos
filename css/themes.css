@@ -1,122 +1,90 @@
-:root {
-  --radius: 14px;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 24px 70px rgba(0, 0, 0, 0.5), 0 2px 0 rgba(255, 255, 255, 0.06) inset;
-  --blur: 24px;
+/* themes.css - switchable theme definitions */
+
+/* Luna Theme (Default) */
+html[data-theme="luna"], :root {
+  --bg-from: #0b0e17;
+  --bg-to: #131a2b;
+  --panel: rgba(15,19,32,.75);
+  --window: rgba(21,27,44,.97);
+  --border: rgba(160,180,255,.10);
+  --text: #dfe6f5;
+  --dim: #8b96b0;
+  --accent: #9db8ff;
+  --accent-soft: rgba(157,184,255,.14);
+  --wallpaper-base: linear-gradient(160deg, #0b0e17, #131a2b);
+  --wallpaper: radial-gradient(circle at 78% 18%, rgba(157,184,255,.28), transparent 45%), linear-gradient(160deg, #0b0e17, #131a2b);
 }
 
-html[data-theme="forest"] {
-  --text: #e8fff2;
-  --text-dim: rgba(232, 255, 242, 0.62);
-  --glass: rgba(10, 38, 26, 0.42);
-  --glass-strong: rgba(9, 34, 23, 0.72);
-  --glass-solid: #0b2a1d;
-  --stroke: rgba(190, 255, 220, 0.16);
-  --stroke-strong: rgba(190, 255, 220, 0.28);
-  --tint: linear-gradient(180deg, rgba(4, 26, 16, 0.42), rgba(2, 14, 9, 0.55));
-  --field: rgba(255, 255, 255, 0.08);
-  --terminal-bg: rgba(3, 16, 10, 0.86);
-  --terminal-text: #86f7b4;
+/* Nord Theme */
+html[data-theme="nord"] {
+  --bg-from: #242933;
+  --bg-to: #2e3440;
+  --panel: rgba(46,52,64,.8);
+  --window: rgba(59,66,82,.97);
+  --border: rgba(216,222,233,.08);
+  --text: #eceff4;
+  --dim: #a7aebd;
+  --accent: #88c0d0;
+  --accent-soft: rgba(136,192,208,.14);
+  --wallpaper-base: linear-gradient(160deg, #242933, #2e3440);
+  --wallpaper: linear-gradient(160deg, #242933, #2e3440);
 }
 
-html[data-theme="moss"] {
-  --text: #16281d;
-  --text-dim: rgba(22, 40, 29, 0.62);
-  --glass: rgba(233, 249, 236, 0.55);
-  --glass-strong: rgba(240, 252, 243, 0.82);
-  --glass-solid: #eaf6ec;
-  --stroke: rgba(20, 60, 38, 0.14);
-  --stroke-strong: rgba(20, 60, 38, 0.26);
-  --tint: linear-gradient(180deg, rgba(226, 245, 231, 0.36), rgba(200, 232, 209, 0.44));
-  --field: rgba(20, 60, 38, 0.07);
-  --terminal-bg: rgba(12, 34, 22, 0.92);
-  --terminal-text: #8bf5b8;
+/* Gruvbox Theme */
+html[data-theme="gruvbox"] {
+  --bg-from: #1d2021;
+  --bg-to: #282828;
+  --panel: rgba(40,40,40,.85);
+  --window: rgba(50,48,47,.97);
+  --border: rgba(235,219,178,.10);
+  --text: #ebdbb2;
+  --dim: #bdae93;
+  --accent: #fabd2f;
+  --accent-soft: rgba(250,189,47,.14);
+  --wallpaper-base: linear-gradient(160deg, #1d2021, #282828);
+  --wallpaper: linear-gradient(160deg, #1d2021, #282828);
 }
 
-html[data-theme="autumn"] {
-  --text: #fff2e2;
-  --text-dim: rgba(255, 242, 226, 0.65);
-  --glass: rgba(66, 27, 10, 0.44);
-  --glass-strong: rgba(56, 23, 9, 0.74);
-  --glass-solid: #3a1a0a;
-  --stroke: rgba(255, 214, 170, 0.18);
-  --stroke-strong: rgba(255, 214, 170, 0.3);
-  --tint: linear-gradient(180deg, rgba(60, 22, 6, 0.4), rgba(28, 10, 3, 0.56));
-  --field: rgba(255, 255, 255, 0.09);
-  --terminal-bg: rgba(24, 9, 3, 0.88);
-  --terminal-text: #ffc987;
+/* Everforest Theme */
+html[data-theme="everforest"] {
+  --bg-from: #232a2e;
+  --bg-to: #2d353b;
+  --panel: rgba(45,53,59,.85);
+  --window: rgba(52,63,68,.97);
+  --border: rgba(211,198,170,.10);
+  --text: #d3c6aa;
+  --dim: #9da9a0;
+  --accent: #a7c080;
+  --accent-soft: rgba(167,192,128,.14);
+  --wallpaper-base: linear-gradient(160deg, #232a2e, #2d353b);
+  --wallpaper: linear-gradient(160deg, #232a2e, #2d353b);
 }
 
-html[data-theme="night"] {
-  --text: #e6f0ff;
-  --text-dim: rgba(230, 240, 255, 0.6);
-  --glass: rgba(11, 22, 45, 0.5);
-  --glass-strong: rgba(9, 18, 38, 0.78);
-  --glass-solid: #0b1730;
-  --stroke: rgba(180, 210, 255, 0.16);
-  --stroke-strong: rgba(180, 210, 255, 0.28);
-  --tint: linear-gradient(180deg, rgba(5, 12, 30, 0.5), rgba(2, 6, 18, 0.66));
-  --field: rgba(255, 255, 255, 0.08);
-  --terminal-bg: rgba(3, 8, 20, 0.9);
-  --terminal-text: #8fd7ff;
+/* Wallpaper variations per theme */
+html[data-wp="alt1"][data-theme="luna"] {
+  --wallpaper: radial-gradient(circle at 20% 80%, rgba(157,184,255,.2), transparent 40%), linear-gradient(135deg, #07090e, #182035);
+}
+html[data-wp="alt2"][data-theme="luna"] {
+  --wallpaper: linear-gradient(180deg, #090c14, #121929, #1c263f);
 }
 
-html[data-accent="green"] {
-  --accent: #2fbf6b;
-  --accent-2: #1d8f4d;
-  --accent-contrast: #04180d;
+html[data-wp="alt1"][data-theme="nord"] {
+  --wallpaper: radial-gradient(circle at 80% 20%, rgba(136,192,208,.2), transparent 40%), linear-gradient(145deg, #1e222a, #3b4252);
+}
+html[data-wp="alt2"][data-theme="nord"] {
+  --wallpaper: linear-gradient(180deg, #20242c, #2e3440, #434c5e);
 }
 
-html[data-accent="lime"] {
-  --accent: #a6de37;
-  --accent-2: #7db61c;
-  --accent-contrast: #17200a;
+html[data-wp="alt1"][data-theme="gruvbox"] {
+  --wallpaper: radial-gradient(circle at 75% 25%, rgba(250,189,47,.15), transparent 45%), linear-gradient(145deg, #141617, #32302f);
+}
+html[data-wp="alt2"][data-theme="gruvbox"] {
+  --wallpaper: linear-gradient(180deg, #181a1b, #282828, #3c3836);
 }
 
-html[data-accent="teal"] {
-  --accent: #24c4c0;
-  --accent-2: #128f8c;
-  --accent-contrast: #04201f;
+html[data-wp="alt1"][data-theme="everforest"] {
+  --wallpaper: radial-gradient(circle at 75% 25%, rgba(167,192,128,.15), transparent 45%), linear-gradient(145deg, #1a2023, #343f44);
 }
-
-html[data-accent="amber"] {
-  --accent: #f0a92c;
-  --accent-2: #c07d10;
-  --accent-contrast: #241503;
-}
-
-.accent-btn {
-  background: var(--accent);
-  color: var(--accent-contrast);
-  border-radius: 10px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  transition: transform 120ms ease, filter 120ms ease;
-}
-
-.accent-btn:hover {
-  filter: brightness(1.08);
-}
-
-.accent-btn:active {
-  transform: scale(0.96);
-}
-
-.ghost-btn {
-  background: var(--field);
-  border: 1px solid var(--stroke);
-  border-radius: 10px;
-  padding: 8px 14px;
-  font-size: 13px;
-  transition: transform 120ms ease, background 120ms ease;
-}
-
-.ghost-btn:hover {
-  background: var(--stroke);
-}
-
-.ghost-btn:active {
-  transform: scale(0.96);
+html[data-wp="alt2"][data-theme="everforest"] {
+  --wallpaper: linear-gradient(180deg, #1e2326, #2d353b, #3d484d);
 }
