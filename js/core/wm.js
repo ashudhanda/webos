@@ -112,6 +112,7 @@ const WM = (function() {
       config.render(winObj.bodyEl, winObj);
     }
 
+    Sound.open();
     focusWindow(id);
     return winObj;
   }
@@ -318,6 +319,7 @@ const WM = (function() {
     }
 
     winObj.el.classList.add('closing');
+    Sound.close();
     setTimeout(() => {
       if (winObj.el.parentNode) {
         winObj.el.parentNode.removeChild(winObj.el);
