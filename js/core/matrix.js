@@ -7,6 +7,7 @@ const Matrix = (function() {
   let fontSize = 16;
   let interval = null;
   let running = false;
+  let rainColor = '#9db8ff';
 
   function start() {
     if (running) return;
@@ -25,6 +26,8 @@ const Matrix = (function() {
     for (let i = 0; i < cols; i++) {
       drops[i] = Math.floor(Math.random() * -30);
     }
+
+    rainColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#9db8ff';
 
     interval = setInterval(draw, 66);
 
@@ -56,7 +59,7 @@ const Matrix = (function() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#9db8ff';
+    ctx.fillStyle = rainColor;
     ctx.font = fontSize + 'px monospace';
 
     for (let i = 0; i < drops.length; i++) {
