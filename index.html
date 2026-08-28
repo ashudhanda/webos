@@ -8,15 +8,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/themes.css" />
-    <link rel="stylesheet" href="css/panel.css" />
-    <link rel="stylesheet" href="css/windows.css" />
-    <link rel="stylesheet" href="css/terminal.css" />
-    <link rel="stylesheet" href="css/apps.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/themes.css" />
+    <link rel="stylesheet" href="/css/panel.css" />
+    <link rel="stylesheet" href="/css/windows.css" />
+    <link rel="stylesheet" href="/css/terminal.css" />
+    <link rel="stylesheet" href="/css/apps.css" />
+    <link rel="stylesheet" href="/css/taskbar.css" />
   </head>
   <body>
-    <!-- Boot Screen -->
+    
     <div id="boot-screen" class="boot-screen">
       <div id="boot-prompt" class="boot-prompt">
         <div class="boot-logo-icon">
@@ -51,7 +52,7 @@
       </div>
     </div>
 
-    <!-- Login Screen -->
+    
     <div id="login-screen" class="login-screen hidden">
       <div class="login-backdrop"></div>
       <div class="login-box" id="login-user-card">
@@ -67,7 +68,7 @@
       </div>
     </div>
 
-    <!-- Lock Screen -->
+    
     <div id="lock-screen" class="lock-screen hidden">
       <div class="lock-backdrop"></div>
       <div class="lock-content">
@@ -77,12 +78,12 @@
       </div>
     </div>
 
-    <!-- Main Desktop Environment -->
+    
     <div id="desktop-env" class="desktop-env hidden">
-      <!-- Wallpaper Layer -->
+      
       <div id="wallpaper" class="wallpaper"></div>
 
-      <!-- Top Panel -->
+      
       <header id="top-panel" class="top-panel">
         <div class="panel-left">
           <button id="panel-menu-btn" class="panel-btn panel-brand" title="Applications">
@@ -139,7 +140,7 @@
         </div>
       </header>
 
-      <!-- App Launcher Menu Popup -->
+      
       <div id="app-menu-popup" class="panel-popup menu-popup hidden">
         <div class="menu-header">
           <span class="menu-user">ashu@moonos</span>
@@ -159,11 +160,11 @@
             <span>Text Editor</span>
           </button>
           <button class="menu-item" data-launch="calc">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01M16 18h.01"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"></path></svg>
             <span>Calculator</span>
           </button>
           <button class="menu-item" data-launch="settings">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33 2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             <span>Settings</span>
           </button>
           <button class="menu-item" data-launch="monitor">
@@ -179,7 +180,7 @@
         </div>
       </div>
 
-      <!-- Calendar Popup -->
+      
       <div id="calendar-popup" class="panel-popup calendar-popup hidden">
         <div class="cal-header">
           <button id="cal-prev" class="cal-nav">&lt;</button>
@@ -189,7 +190,7 @@
         <div class="cal-days-grid" id="cal-days-grid"></div>
       </div>
 
-      <!-- Tray Popups -->
+      
       <div id="wifi-popup" class="panel-popup tray-popup hidden">
         <div class="tray-popup-title">Network</div>
         <div class="tray-popup-row active-net">
@@ -233,17 +234,17 @@
         </button>
       </div>
 
-      <!-- Desktop Clock Widget -->
+      
       <div id="desktop-clock-widget" class="desktop-clock-widget">
         <div class="desktop-clock-time"><span id="desktop-clock-hours">12</span><span class="desktop-clock-colon">:</span><span id="desktop-clock-mins">00</span></div>
         <div class="desktop-clock-date" id="desktop-clock-date">Thu, 27 Aug</div>
       </div>
 
-      <!-- Workspaces Container (Holds all 4 workspace sheets) -->
+      
       <div id="workspaces-viewport" class="workspaces-viewport">
         <div id="workspaces-strip" class="workspaces-strip">
           <div class="workspace-sheet" data-ws-index="0">
-            <!-- Desktop Icons on Workspace 0 -->
+            
             <div class="desktop-icons" id="desktop-icons">
               <div class="desktop-icon" data-action="open-folder" data-path="/home/ashu" tabindex="0">
                 <div class="icon-glyph">
@@ -277,7 +278,7 @@
                 <span class="icon-label">Projects</span>
               </div>
             </div>
-            <!-- Windows layer for Workspace 0 -->
+            
             <div class="windows-container" id="windows-ws-0"></div>
           </div>
 
@@ -295,7 +296,7 @@
         </div>
       </div>
 
-      <!-- Alt+Tab Switcher Overlay -->
+      
       <div id="alttab-overlay" class="alttab-overlay hidden">
         <div class="alttab-box">
           <div class="alttab-header">Switch Windows</div>
@@ -303,7 +304,7 @@
         </div>
       </div>
 
-      <!-- Desktop Context Menu -->
+      
       <div id="desktop-ctx-menu" class="ctx-menu hidden">
         <button class="ctx-item" data-action="ctx-open-terminal">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
@@ -320,7 +321,7 @@
         </button>
       </div>
 
-      <!-- Files App Context Menu -->
+      
       <div id="files-ctx-menu" class="ctx-menu hidden">
         <button class="ctx-item" data-action="files-new-file">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
@@ -341,22 +342,26 @@
         </button>
       </div>
 
-      <!-- Notifications Container -->
+      
       <div id="notifications-container" class="notifications-container"></div>
     </div>
 
-    <!-- Scripts loaded in exact dependency order -->
-    <script defer src="js/core/fs.js"></script>
-    <script defer src="js/core/notify.js"></script>
-    <script defer src="js/core/wm.js"></script>
-    <script defer src="js/core/panel.js"></script>
-    <script defer src="js/core/boot.js"></script>
-    <script defer src="js/apps/terminal.js"></script>
-    <script defer src="js/apps/files.js"></script>
-    <script defer src="js/apps/editor.js"></script>
-    <script defer src="js/apps/calc.js"></script>
-    <script defer src="js/apps/settings.js"></script>
-    <script defer src="js/apps/monitor.js"></script>
-    <script defer src="js/main.js"></script>
+    
+    <div id="taskbar"></div>
+
+    
+    <script defer src="/js/core/fs.js"></script>
+    <script defer src="/js/core/notify.js"></script>
+    <script defer src="/js/core/wm.js"></script>
+    <script defer src="/js/core/panel.js"></script>
+    <script defer src="/js/core/taskbar.js"></script>
+    <script defer src="/js/core/boot.js"></script>
+    <script defer src="/js/apps/terminal.js"></script>
+    <script defer src="/js/apps/files.js"></script>
+    <script defer src="/js/apps/editor.js"></script>
+    <script defer src="/js/apps/calc.js"></script>
+    <script defer src="/js/apps/settings.js"></script>
+    <script defer src="/js/apps/monitor.js"></script>
+    <script defer src="/js/main.js"></script>
   </body>
 </html>

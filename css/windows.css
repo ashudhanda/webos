@@ -1,12 +1,9 @@
-/* windows.css - window manager, workspaces strip, alt+tab overlay */
-
-/* Workspaces Layout */
 .workspaces-viewport {
   position: absolute;
   top: var(--panel-height);
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 48px;
   overflow: hidden;
   z-index: 1;
 }
@@ -30,7 +27,7 @@
   inset: 0;
 }
 
-/* Window Frame */
+
 .os-window {
   position: absolute;
   background: var(--window);
@@ -93,7 +90,6 @@
   border-color: rgba(160, 180, 255, 0.22);
 }
 
-/* Titlebar */
 .win-titlebar {
   height: 34px;
   min-height: 34px;

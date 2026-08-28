@@ -1,4 +1,4 @@
-// main.js - bootstrap & application registry
+
 
 const Apps = (function() {
   const registry = {
@@ -30,9 +30,9 @@ const Apps = (function() {
   };
 })();
 
-// initialize everything on DOM load
+
 document.addEventListener('DOMContentLoaded', () => {
-  // restore saved theme
+
   try {
     const savedTheme = localStorage.getItem('moonos-theme') || 'luna';
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -43,12 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } catch (e) {}
 
-  // initialize subsystems
+
   WM.init();
   Panel.init();
+  if (window.Taskbar) Taskbar.init();
   Boot.init();
 
-  // setup desktop icons
+
   setupDesktopIcons();
 });
 
@@ -75,7 +76,7 @@ function setupDesktopIcons() {
     });
   });
 
-  // clear desktop icon selection when clicking desktop canvas
+
   const desktopEnv = document.getElementById('desktop-env');
   if (desktopEnv) {
     desktopEnv.addEventListener('click', (e) => {
