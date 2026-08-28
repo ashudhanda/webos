@@ -33,6 +33,7 @@ const Matrix = (function() {
 
     setTimeout(() => {
       window.addEventListener('keydown', onKey, true);
+      window.addEventListener('pointerdown', onClick, true);
     }, 300);
   }
 
@@ -44,11 +45,18 @@ const Matrix = (function() {
     }
   }
 
+  function onClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    stop();
+  }
+
   function stop() {
     if (!running) return;
     running = false;
     clearInterval(interval);
     window.removeEventListener('keydown', onKey, true);
+    window.removeEventListener('pointerdown', onClick, true);
     if (canvas && canvas.parentNode) {
       canvas.parentNode.removeChild(canvas);
     }
