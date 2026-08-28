@@ -1,63 +1,66 @@
-# MoonOS
+# moonOS
 
-my own little operating system that runs in the browser. it's moon 
-themed because i wanted something calm to look at while working on it 
-all day.
+my own little operating system that runs in the browser. linux flavored,
+moon themed. no install, no build step — open it and it boots.
 
 ## try it
 
 https://ashudhanda.github.io/webos/
 
-wait for the boot screen, click anywhere on the lock screen, and you're 
-on the desktop. there's no password or login or anything.
+press enter on the boot screen, pick an entry in grub (both boot the
+same thing, shh), click the user card and you're in. no password.
 
 ## what's inside
 
-10 apps right now:
-
-- **Terminal** — Use help too see commands
-- **Calculator**
-
-- **Settings** — themes, accent colors, wallpaper picker
-- **Calendar**
-
+- **Terminal** — the real star. a working shell with tab completion,
+  command history and a virtual file system that survives refresh.
+  `help` shows everything — ls, cd, cat, echo (yes, `>` works), mkdir,
+  touch, rm, neofetch, theme, open, sudo (try it), apt install, vim...
+- **Files** — a file manager on the same virtual fs, so a file you make
+  in the terminal shows up here instantly
+- **Text Editor** — opens files from the fs, autosaves as you type
+- **Calculator** — full keyboard support
+- **Settings** — 4 full themes (luna, nord, gruvbox, everforest) plus
+  extra wallpapers for each
+- **System Monitor** — fake but alive, htop style
 
 ## stuff you can do
 
-- drag windows by the title bar, resize them from any side or corner
-- the red/yellow/green buttons actually work (close, minimize, maximize)
-- hover over the dock — icons grow based on how close your cursor is
-- ctrl+k opens search
-- right click the desktop for a little menu (refresh, change wallpaper, 
-  toggle theme)
-- desktop icons can be dragged around and snap to a grid. they stay 
-  where you left them even after a refresh
-- time and calander on top
-- theme: moon
+- drag windows by the titlebar, resize from the bottom-right corner,
+  double-click the titlebar to maximize
+- 4 workspaces — ctrl+alt+left/right, or the dots in the top panel
+- alt+tab actually works
+- the bottom taskbar has a start menu and a working search (try "term")
+- right click the desktop for a small menu
+- super+L (or ctrl+alt+L) locks the screen. typing `exit` in the
+  terminal does too, like a real os
 
 ## running it locally
 
-https://github.com/ashudhanda/webos.git
-
-then open index.html with live server (or honestly just double click 
-it). there's no build step, no npm, nothing to install. plain html, 
-css and js.
+clone the repo, open index.html with live server. that's it. plain html,
+css and js — no npm, no bundler, nothing to install.
 
 ## things that took me forever
 
-- the window manager. making windows draggable AND resizable from all 
-  sides at the same time broke so many times. ended up using invisible 
-  handles on the edges and corners, and checking what you grabbed before 
-  deciding whether to drag or resize.
-- the dock magnification. i measure the distance from your mouse to each 
-  icon and scale them based on that. sounds simple, was not.
-- the moon theme gave a clam space and help to focus on work
-
+- the window manager. making a window draggable AND resizable without
+  the two fighting each other broke so many times. pointer capture
+  saved me.
+- tab completion in the terminal — finding the longest common prefix of
+  the matches sounds easy until you're doing it at 1am.
+- workspaces. one giant 400% wide strip that slides with translateX, and
+  every window has to remember which workspace it lives on.
+- github pages. everything worked locally, then completely broke on
+  pages because my asset paths started with "/". pages serves the site
+  from /webos/ so every css and js file 404'd. relative paths fixed it.
+- the taskbar couldn't find the window manager at all — turned out a
+  top level `const` never attaches to `window`, so `window.WM` was just
+  undefined. two lines fixed an entire evening of confusion.
 
 ## credits
 
-- built for hack club stardance (webOS 1 mission), started from their 
+- built for hack club stardance (webOS mission) — started from their
   guide and went way past it
-- i used very little amount of ai tools to make plan.
+- used little amount of ai too understand error and debugging 
+- icons are hand-placed inline svg, fonts are inter + jetbrains mono
 
 made by ashu dhanda — [@ashudhanda](https://github.com/ashudhanda)
