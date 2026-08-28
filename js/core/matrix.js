@@ -1,13 +1,11 @@
 const Matrix = (function() {
   const chars = 'アイウエオカキクケコサシスセソ0123456789'.split('');
-  const IDLE_AFTER = 60000;
 
   let canvas = null;
   let ctx = null;
   let drops = [];
   let fontSize = 16;
   let interval = null;
-  let idleTimer = null;
   let running = false;
 
   function start() {
@@ -29,12 +27,25 @@ const Matrix = (function() {
     }
 
     interval = setInterval(draw, 66);
+
+    setTimeout(() => {
+      window.addEventListener('keydown', onKey, true);
+    }, 300);
+  }
+
+  function onKey(e) {
+    if (e.key === 'Escape' || e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
+      stop();
+    }
   }
 
   function stop() {
     if (!running) return;
     running = false;
     clearInterval(interval);
+    window.removeEventListener('keydown', onKey, true);
     if (canvas && canvas.parentNode) {
       canvas.parentNode.removeChild(canvas);
     }
@@ -59,32 +70,8 @@ const Matrix = (function() {
     }
   }
 
-  function resetIdle() {
-    clearTimeout(idleTimer);
-    idleTimer = setTimeout(() => {
-      const desktopHidden = document.getElementById('desktop-env').classList.contains('hidden');
-      const lockShown = !document.getElementById('lock-screen').classList.contains('hidden');
-      if (!desktopHidden && !lockShown) {
-        start();
-      }
-    }, IDLE_AFTER);
-  }
-
-  function init() {
-    ['mousemove', 'keydown', 'pointerdown'].forEach((evt) => {
-      window.addEventListener(evt, () => {
-        if (running) {
-          stop();
-        }
-        resetIdle();
-      });
-    });
-    resetIdle();
-  }
-
   return {
     start,
-    stop,
-    init
+    stop
   };
 })();

@@ -488,7 +488,7 @@ const TerminalApp = (function() {
         }
 
         case 'matrix': {
-          print('entering the matrix. click anywhere or press any key to exit.');
+          print('entering the matrix. press esc or enter to exit.');
           Matrix.start();
           break;
         }
