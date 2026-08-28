@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
   Panel.init();
   if (window.Taskbar) Taskbar.init();
   Boot.init();
-  Matrix.init();
 
 
   setupDesktopIcons();
