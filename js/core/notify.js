@@ -24,6 +24,8 @@ const Notify = (function() {
 
     container.appendChild(toast);
 
+    Sound.notify();
+
     // trigger slide in on next frame
     requestAnimationFrame(() => {
       toast.classList.add('show');
