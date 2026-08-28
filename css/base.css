@@ -474,4 +474,7 @@ button {
   word-break: break-word;
 }
 
-
+.desktop-icon.dragging {
+  cursor: grabbing;
+  z-index: 50;
+}
