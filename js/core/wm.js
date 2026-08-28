@@ -501,3 +501,6 @@ const WM = (function() {
     getCurrentWorkspace: () => currentWorkspace
   };
 })();
+
+// const alone doesn't attach to window — taskbar.js checks window.WM
+window.WM = WM;

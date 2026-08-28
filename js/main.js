@@ -30,6 +30,9 @@ const Apps = (function() {
   };
 })();
 
+// taskbar.js checks window.Apps — const alone doesn't attach
+window.Apps = Apps;
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
