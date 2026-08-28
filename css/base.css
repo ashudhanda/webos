@@ -474,7 +474,11 @@ button {
   word-break: break-word;
 }
 
-.desktop-icon.dragging {
-  cursor: grabbing;
-  z-index: 50;
+
+#matrix-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #000;
+  cursor: pointer;
 }
