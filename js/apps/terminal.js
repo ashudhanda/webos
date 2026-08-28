@@ -4,7 +4,7 @@ const TerminalApp = (function() {
   const COMMANDS = [
     'help', 'ls', 'cd', 'pwd', 'cat', 'echo', 'touch', 'mkdir', 'rm',
     'clear', 'whoami', 'hostname', 'date', 'uname', 'history', 'neofetch',
-    'theme', 'open', 'sudo', 'apt', 'vim', 'exit'
+    'theme', 'open', 'sudo', 'apt', 'vim', 'exit', 'matrix'
   ];
 
   function open() {
@@ -201,6 +201,7 @@ const TerminalApp = (function() {
   <div class="help-cmd">sudo &lt;cmd&gt;</div><div class="help-desc">execute command as root</div>
   <div class="help-cmd">vim</div><div class="help-desc">open the text editor</div>
   <div class="help-cmd">exit</div><div class="help-desc">lock the desktop session</div>
+  <div class="help-cmd">matrix</div><div class="help-desc">matrix rain screensaver</div>
 </div>
           `, true);
           break;
@@ -483,6 +484,12 @@ const TerminalApp = (function() {
 
         case 'exit': {
           Boot.lock();
+          break;
+        }
+
+        case 'matrix': {
+          print('entering the matrix. click anywhere or press any key to exit.');
+          Matrix.start();
           break;
         }
 
