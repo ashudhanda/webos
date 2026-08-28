@@ -135,6 +135,8 @@ const Boot = (function() {
         desktopEnv.classList.remove('hidden');
       }
 
+      Sound.boot();
+
       // open terminal by default on first boot
       setTimeout(() => {
         Apps.launch('terminal');
