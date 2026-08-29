@@ -7,7 +7,8 @@ const Apps = (function() {
     editor: EditorApp,
     calc: CalcApp,
     settings: SettingsApp,
-    monitor: MonitorApp
+    monitor: MonitorApp,
+    notes: NotesApp
   };
 
   function launch(appName, options) {
@@ -30,7 +31,6 @@ const Apps = (function() {
   };
 })();
 
-// taskbar.js checks window.Apps — const alone doesn't attach
 window.Apps = Apps;
 
 
@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   Panel.init();
   if (window.Taskbar) Taskbar.init();
   Boot.init();
+  NotesApp.init();
 
 
   setupDesktopIcons();

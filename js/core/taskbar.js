@@ -35,6 +35,12 @@ const Taskbar = (function() {
       name: 'System Monitor',
       aliases: ['monitor', 'tasks', 'top', 'htop', 'process', 'cpu', 'ram'],
       icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line><polyline points="6 10 9 13 12 7 15 11 18 8"></polyline></svg>'
+    },
+    {
+      id: 'notes',
+      name: 'Sticky Notes',
+      aliases: ['notes', 'note', 'sticky', 'todo', 'reminder'],
+      icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="16" height="18" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>`
     }
   ];
 

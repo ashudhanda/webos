@@ -4,17 +4,21 @@ const Sound = (function() {
   function ctx() {
     if (!actx) {
       actx = new (window.AudioContext || window.webkitAudioContext)();
+
     }
     if (actx.state === 'suspended') {
       actx.resume();
+    
     }
     return actx;
   }
 
   function vol() {
+
     const slider = document.getElementById('volume-slider');
     if (!slider) return 0.5;
     return slider.value / 100;
+
   }
 
   function tone(freq, dur, gainVal, slideTo) {
