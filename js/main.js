@@ -1,5 +1,10 @@
 
 
+// main.js - entry point: app launcher registry, boot sequence, desktop icons.
+
+// Apps: single registry mapping app names to their app modules. launch()
+// routes to each app's open(); files/editor/settings accept options so
+// desktop icons and search can deep-link (e.g. open a file by path).
 const Apps = (function() {
   const registry = {
     terminal: TerminalApp,
@@ -57,6 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
   setupDesktopIcons();
 });
 
+// setupDesktopIcons: restores icon positions saved in localStorage, then makes
+// every desktop icon draggable with snap-to-grid (GRID px) and double-click to
+// open. freezeIcons() converts the CSS flow layout to absolute coordinates on
+// first drag so icons don't reflow while being moved; positions are only
+// persisted after an actual drag (pointerup with moved=true), plain clicks
+// just select.
 function setupDesktopIcons() {
   const icons = document.querySelectorAll('.desktop-icon');
   const GRID = 84;
