@@ -34,19 +34,40 @@ const EditorApp = (function() {
 
     container.innerHTML = `
       <div class="editor-app">
-        <textarea class="editor-textarea" spellcheck="false" placeholder="Start typing..."></textarea>
+        <div class="editor-main">
+          <div class="editor-gutter" aria-hidden="true"></div>
+          <textarea class="editor-textarea" spellcheck="false" placeholder="Start typing..."></textarea>
+        </div>
         <div class="editor-statusbar">
           <span class="editor-stat-info">Ln 1, Col 1</span>
+          <span class="editor-stat-words">0 words</span>
           <span class="editor-status-state editor-status-saved">Saved</span>
         </div>
       </div>
     `;
 
     const textarea = container.querySelector('.editor-textarea');
+    const gutter = container.querySelector('.editor-gutter');
     const statInfo = container.querySelector('.editor-stat-info');
+    const statWords = container.querySelector('.editor-stat-words');
     const stateEl = container.querySelector('.editor-status-state');
 
     textarea.value = initialContent;
+
+    function updateGutter() {
+      const lineCount = textarea.value.split('\n').length;
+      let html = '';
+      for (let i = 1; i <= lineCount; i++) {
+        html += '<div>' + i + '</div>';
+      }
+      gutter.innerHTML = html;
+      gutter.scrollTop = textarea.scrollTop;
+    }
+
+    function updateWordCount() {
+      const words = textarea.value.trim().split(/\s+/).filter(Boolean).length;
+      statWords.textContent = words + (words === 1 ? ' word' : ' words');
+    }
 
     function updateCursorInfo() {
       const pos = textarea.selectionStart;
@@ -79,7 +100,13 @@ const EditorApp = (function() {
 
     textarea.addEventListener('input', () => {
       updateCursorInfo();
+      updateGutter();
+      updateWordCount();
       scheduleAutosave();
+    });
+
+    textarea.addEventListener('scroll', () => {
+      gutter.scrollTop = textarea.scrollTop;
     });
 
     textarea.addEventListener('click', updateCursorInfo);
@@ -93,9 +120,14 @@ const EditorApp = (function() {
         const end = textarea.selectionEnd;
         textarea.value = textarea.value.substring(0, start) + '  ' + textarea.value.substring(end);
         textarea.selectionStart = textarea.selectionEnd = start + 2;
+        updateGutter();
+        updateWordCount();
         scheduleAutosave();
       }
     });
+
+    updateGutter();
+    updateWordCount();
 
     setTimeout(() => {
       textarea.focus();
