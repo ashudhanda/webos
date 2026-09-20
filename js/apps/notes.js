@@ -74,6 +74,10 @@ const NotesApp = (function() {
     let origY = 0;
 
     grip.addEventListener('pointerdown', (e) => {
+      // The delete button lives inside the grip. If the press started on it,
+      // don't hijack the pointer — setPointerCapture would retarget the click
+      // to the grip and the button's click handler would never fire.
+      if (e.target.closest('.note-del')) return;
       dragging = true;
       grip.setPointerCapture(e.pointerId);
       startX = e.clientX;
