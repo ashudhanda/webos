@@ -23,6 +23,7 @@ same thing, shh), click the user card and you're in. no password.
 - **Settings** — 4 full themes (luna, nord, gruvbox, everforest) plus
   extra wallpapers for each
 - **System Monitor** — fake but alive, htop style
+- **Sticky Notes** — quick sticky notes on the desktop, autosaved as you type
 
 ## stuff you can do
 
