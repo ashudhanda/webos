@@ -1,19 +1,25 @@
 
 .taskbar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 48px;
-  background: var(--panel);
-  border-top: 1px solid var(--border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  bottom: 10px;
+  left: 12px;
+  right: 12px;
+  height: 52px;
+  background: rgba(10, 15, 26, 0.60);
+  border: 1px solid rgba(140, 180, 255, 0.16);
+  border-radius: 16px;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 32px rgba(130, 184, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
   z-index: 4500;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 0 8px;
+  padding: 0 12px;
   user-select: none;
 }
 
@@ -127,7 +133,7 @@
 .taskbar-app-btn::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: 44px;
+  bottom: 48px;
   left: 50%;
   transform: translateX(-50%) translateY(4px);
   background: rgba(10, 14, 24, 0.92);
@@ -152,8 +158,8 @@
 
 .start-menu {
   position: fixed;
-  bottom: 56px;
-  left: 8px;
+  bottom: 74px;
+  left: 12px;
   width: 260px;
   background: var(--window);
   border: 1px solid var(--border);
@@ -211,8 +217,8 @@
 
 .taskbar-search-results {
   position: fixed;
-  bottom: 56px;
-  left: 56px;
+  bottom: 74px;
+  left: 60px;
   width: min(420px, 40vw);
   background: var(--window);
   border: 1px solid var(--border);
