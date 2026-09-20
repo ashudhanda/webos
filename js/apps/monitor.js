@@ -20,9 +20,6 @@ const MonitorApp = (function() {
   }
 
   function initMonitor(container) {
-    let cpuVal = 34;
-    let ramVal = 42;
-
     const processes = [
       { pid: 104, name: 'moonwm', cpu: 4.2, mem: '34 MB' },
       { pid: 142, name: 'panel', cpu: 1.8, mem: '18 MB' },
@@ -37,26 +34,35 @@ const MonitorApp = (function() {
         <div class="monitor-metrics">
           <div class="metric-card">
             <div class="metric-header">
-              <span class="metric-label">CPU Usage</span>
-              <span class="metric-value" id="cpu-val-text">34%</span>
+              <span class="metric-label">CPU Cores (real)</span>
+              <span class="metric-value" id="cores-val-text">—</span>
             </div>
             <div class="metric-bar-bg">
-              <div class="metric-bar-fill" id="cpu-bar-fill" style="width: 34%"></div>
+              <div class="metric-bar-fill" id="cores-bar-fill" style="width: 0%"></div>
             </div>
           </div>
           <div class="metric-card">
             <div class="metric-header">
-              <span class="metric-label">Memory Usage</span>
-              <span class="metric-value" id="ram-val-text">1.68 / 4.00 GB (42%)</span>
+              <span class="metric-label">Device Memory (real)</span>
+              <span class="metric-value" id="mem-val-text">—</span>
             </div>
             <div class="metric-bar-bg">
-              <div class="metric-bar-fill" id="ram-bar-fill" style="width: 42%"></div>
+              <div class="metric-bar-fill" id="mem-bar-fill" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">JS Heap (live)</span>
+              <span class="metric-value" id="heap-val-text">—</span>
+            </div>
+            <div class="metric-bar-bg">
+              <div class="metric-bar-fill" id="heap-bar-fill" style="width: 0%"></div>
             </div>
           </div>
         </div>
 
         <div class="monitor-table-wrapper">
-          <div class="monitor-table-title">Active System Processes</div>
+          <div class="monitor-table-title">moonOS Processes</div>
           <table class="process-table">
             <thead>
               <tr>
@@ -72,10 +78,12 @@ const MonitorApp = (function() {
       </div>
     `;
 
-    const cpuText = container.querySelector('#cpu-val-text');
-    const cpuBar = container.querySelector('#cpu-bar-fill');
-    const ramText = container.querySelector('#ram-val-text');
-    const ramBar = container.querySelector('#ram-bar-fill');
+    const coresText = container.querySelector('#cores-val-text');
+    const coresBar = container.querySelector('#cores-bar-fill');
+    const memText = container.querySelector('#mem-val-text');
+    const memBar = container.querySelector('#mem-bar-fill');
+    const heapText = container.querySelector('#heap-val-text');
+    const heapBar = container.querySelector('#heap-bar-fill');
     const tbody = container.querySelector('#proc-tbody');
 
     function renderProcesses() {
@@ -90,22 +98,24 @@ const MonitorApp = (function() {
     }
 
     function tick() {
-      // random walk between 20% and 60%
-      const cpuDelta = (Math.random() * 8) - 4;
-      cpuVal = Math.min(62, Math.max(18, Math.round(cpuVal + cpuDelta)));
+      // real CPU core count (static per device)
+      const cores = navigator.hardwareConcurrency || 0;
+      coresText.textContent = cores ? cores + ' cores' : 'n/a';
+      coresBar.style.width = cores ? Math.min(100, (cores / 16) * 100) + '%' : '0%';
 
-      // ram hovering around 42% +/- 3
-      const ramDelta = (Math.random() * 2) - 1;
-      ramVal = Math.min(45, Math.max(39, Math.round(ramVal + ramDelta)));
-      const ramGb = ((ramVal / 100) * 4).toFixed(2);
+      // real device memory (Chromium-based browsers)
+      const devMem = navigator.deviceMemory || 0;
+      memText.textContent = devMem ? devMem + ' GB' : 'n/a';
+      memBar.style.width = devMem ? Math.min(100, (devMem / 16) * 100) + '%' : '0%';
 
-      cpuText.textContent = `${cpuVal}%`;
-      cpuBar.style.width = `${cpuVal}%`;
+      // live JS heap of this tab (Chromium)
+      const heapMB = (performance.memory && performance.memory.usedJSHeapSize)
+        ? performance.memory.usedJSHeapSize / 1048576
+        : 0;
+      heapText.textContent = heapMB ? heapMB.toFixed(1) + ' MB' : 'n/a';
+      heapBar.style.width = heapMB ? Math.min(100, (heapMB / 512) * 100) + '%' : '0%';
 
-      ramText.textContent = `${ramGb} / 4.00 GB (${ramVal}%)`;
-      ramBar.style.width = `${ramVal}%`;
-
-      // slight fluctuations in process cpu
+      // moonOS process table keeps its gentle simulated activity
       processes.forEach(p => {
         const delta = (Math.random() * 0.8) - 0.4;
         p.cpu = Math.max(0.1, p.cpu + delta);
