@@ -83,29 +83,77 @@ const TerminalApp = (function() {
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
-    // Tab Completion
+    // Shell-like tokenizer: respects single/double quotes and backslash
+    // escapes, and splits > / >> into operators (so echo "a > b" > f works).
+    function tokenize(input) {
+      const tokens = [];
+      let cur = '';
+      let quote = null;
+      const push = () => { if (cur !== '') { tokens.push(cur); cur = ''; } };
+      for (let i = 0; i < input.length; i++) {
+        const ch = input[i];
+        if (quote) {
+          if (ch === '\\' && i + 1 < input.length) { cur += input[++i]; continue; }
+          if (ch === quote) { quote = null; continue; }
+          cur += ch;
+          continue;
+        }
+        if (ch === '"' || ch === "'") { quote = ch; continue; }
+        if (ch === '\\' && i + 1 < input.length) { cur += input[++i]; continue; }
+        if (ch === '>') {
+          push();
+          if (input[i + 1] === '>') { tokens.push('>>'); i++; }
+          else { tokens.push('>'); }
+          continue;
+        }
+        if (/\s/.test(ch)) { push(); continue; }
+        cur += ch;
+      }
+      push();
+      return tokens;
+    }
+
+    // Quote-aware word detection for tab completion.
+    // Returns { head, word }: head is raw text before the word (incl. any opening quote).
+    function currentWord(textBefore) {
+      let quote = null;
+      let wordStart = 0;
+      for (let i = 0; i < textBefore.length; i++) {
+        const ch = textBefore[i];
+        if (quote) {
+          if (ch === '\\') { i++; continue; }
+          if (ch === quote) { quote = null; wordStart = i + 1; }
+          continue;
+        }
+        if (ch === '"' || ch === "'") { quote = ch; wordStart = i + 1; continue; }
+        if (/\s/.test(ch) || ch === '>') { wordStart = i + 1; continue; }
+      }
+      return { head: textBefore.slice(0, wordStart), word: textBefore.slice(wordStart) };
+    }
+
+    // Tab Completion (quote-aware)
     function handleTab() {
       const val = inputEl.value;
       const cursor = inputEl.selectionStart;
       const textBefore = val.slice(0, cursor);
-      const parts = textBefore.split(' ');
+      const after = val.slice(cursor);
+      const { head, word } = currentWord(textBefore);
 
       let candidates = [];
+      const isFirstWord = head.trim() === '';
 
-      if (parts.length === 1) {
+      if (isFirstWord) {
         // complete command names
-        const prefix = parts[0];
-        candidates = COMMANDS.filter(c => c.startsWith(prefix));
+        candidates = COMMANDS.filter(c => c.startsWith(word));
       } else {
         // complete file or directory paths
-        const lastPart = parts[parts.length - 1];
         let searchDir = cwd;
-        let filePrefix = lastPart;
+        let filePrefix = word;
 
-        if (lastPart.includes('/')) {
-          const slashIdx = lastPart.lastIndexOf('/');
-          const dirPart = lastPart.slice(0, slashIdx) || '/';
-          filePrefix = lastPart.slice(slashIdx + 1);
+        const slashIdx = word.lastIndexOf('/');
+        if (slashIdx !== -1) {
+          const dirPart = word.slice(0, slashIdx) || '/';
+          filePrefix = word.slice(slashIdx + 1);
           searchDir = FS.resolve(dirPart, cwd);
         }
 
@@ -124,21 +172,22 @@ const TerminalApp = (function() {
       if (candidates.length === 1) {
         // complete single match
         const match = candidates[0];
-        const lastWord = parts[parts.length - 1];
-        const completed = val.slice(0, cursor - lastWord.length) + match + (match.endsWith('/') ? '' : ' ') + val.slice(cursor);
-        inputEl.value = completed;
+        const suffix = match.endsWith('/') ? '' : ' ';
+        const completed = head + match + suffix;
+        inputEl.value = completed + after;
+        inputEl.selectionStart = inputEl.selectionEnd = completed.length;
       } else if (candidates.length > 1) {
         // find longest common prefix
         const lcp = getLCP(candidates);
-        const lastWord = parts[parts.length - 1];
-
-        if (lcp.length > lastWord.length) {
-          inputEl.value = val.slice(0, cursor - lastWord.length) + lcp + val.slice(cursor);
+        if (lcp.length > word.length) {
+          const completed = head + lcp;
+          inputEl.value = completed + after;
+          inputEl.selectionStart = inputEl.selectionEnd = completed.length;
         } else {
           // double tab prints options
           const now = Date.now();
           if (now - lastTabTime < 500) {
-            printPromptEcho(inputEl.value);
+            printPromptEcho(val);
             print(candidates.join('  '));
           }
         }
@@ -171,7 +220,7 @@ const TerminalApp = (function() {
       history.push(raw);
       historyIdx = history.length;
 
-      const tokens = trimmed.split(' ').filter(Boolean);
+      const tokens = tokenize(trimmed);
       const cmd = tokens[0];
       const args = tokens.slice(1);
 
@@ -262,28 +311,36 @@ const TerminalApp = (function() {
         }
 
         case 'echo': {
-          const fullText = args.join(' ');
-          // check for simple redirect like echo "hi" > file.txt
-          if (fullText.includes('>')) {
-            const isAppend = fullText.includes('>>');
-            const parts = isAppend ? fullText.split('>>') : fullText.split('>');
-            const textToSave = parts[0].trim().replace(/^["']|["']$/g, '');
-            const targetFile = parts[1].trim();
-
-            if (targetFile) {
+          // token-level redirect: echo hello > file.txt (quotes respected,
+          // so echo "a > b" > file.txt writes "a > b")
+          let redirIdx = -1;
+          let append = false;
+          for (let i = 0; i < args.length; i++) {
+            if (args[i] === '>' || args[i] === '>>') {
+              redirIdx = i;
+              append = args[i] === '>>';
+              break;
+            }
+          }
+          if (redirIdx !== -1) {
+            const textToSave = args.slice(0, redirIdx).join(' ');
+            const targetFile = args[redirIdx + 1];
+            if (!targetFile) {
+              print('<span class="term-error">echo: missing redirect target</span>', true);
+            } else {
               try {
                 let finalContent = textToSave;
-                if (isAppend && FS.exists(targetFile, cwd)) {
+                if (append && FS.exists(targetFile, cwd)) {
                   finalContent = FS.read(targetFile, cwd) + '\n' + textToSave;
                 }
                 FS.write(targetFile, finalContent, cwd);
               } catch (err) {
                 print(`<span class="term-error">echo: ${err.message}</span>`, true);
               }
-              break;
             }
+            break;
           }
-          print(fullText.replace(/^["']|["']$/g, ''));
+          print(args.join(' '));
           break;
         }
 
