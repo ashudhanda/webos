@@ -60,7 +60,7 @@ css and js — no npm, no bundler, nothing to install.
 
 - built for hack club stardance (webOS mission) — started from their
   guide and went way past it
-- used little amount of ai too understand error and debugging 
+- used a little AI to understand errors and debugging 
 - icons are hand-placed inline svg, fonts are inter + jetbrains mono
 
 made by ashu dhanda — [@ashudhanda](https://github.com/ashudhanda)
