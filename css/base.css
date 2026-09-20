@@ -287,6 +287,50 @@ button {
   background: var(--wallpaper);
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
+}
+
+/* Twinkling star field (pure CSS) */
+.wallpaper-stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, rgba(255,255,255,.9), transparent 60%),
+    radial-gradient(1px 1px at 28% 68%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(1.5px 1.5px at 42% 12%, rgba(255,255,255,.7), transparent 60%),
+    radial-gradient(1px 1px at 55% 42%, rgba(255,255,255,.45), transparent 60%),
+    radial-gradient(2px 2px at 66% 78%, rgba(200,220,255,.8), transparent 60%),
+    radial-gradient(1px 1px at 74% 32%, rgba(255,255,255,.55), transparent 60%),
+    radial-gradient(1.5px 1.5px at 86% 58%, rgba(255,255,255,.75), transparent 60%),
+    radial-gradient(1px 1px at 8% 82%, rgba(255,255,255,.4), transparent 60%),
+    radial-gradient(1px 1px at 34% 88%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(1.5px 1.5px at 92% 12%, rgba(200,220,255,.65), transparent 60%),
+    radial-gradient(1px 1px at 48% 55%, rgba(255,255,255,.35), transparent 60%),
+    radial-gradient(1px 1px at 20% 45%, rgba(255,255,255,.45), transparent 60%);
+  animation: stars-twinkle 5s ease-in-out infinite alternate;
+}
+
+@keyframes stars-twinkle {
+  from { opacity: 0.65; }
+  to { opacity: 1; }
+}
+
+/* Glowing crescent moon centerpiece */
+.wallpaper-moon {
+  position: absolute;
+  top: 44%;
+  left: 56%;
+  width: min(50vmin, 440px);
+  height: min(50vmin, 440px);
+  transform: translate(-50%, -58%);
+  filter: drop-shadow(0 0 46px rgba(140, 190, 255, 0.5)) drop-shadow(0 0 120px rgba(150, 120, 255, 0.25));
+  opacity: 0.9;
+  animation: moon-float 9s ease-in-out infinite;
+}
+
+@keyframes moon-float {
+  0%, 100% { transform: translate(-50%, -58%); }
+  50% { transform: translate(-50%, -56%); }
 }
 
 /* Desktop Clock Widget */
@@ -354,7 +398,12 @@ button {
 }
 
 .desktop-icon:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(130, 184, 255, 0.08);
+}
+
+.desktop-icon:hover .icon-glyph {
+  filter: drop-shadow(0 0 10px rgba(130, 184, 255, 0.65));
+  color: #a9ccff;
 }
 
 .desktop-icon.selected, .desktop-icon:focus {
@@ -388,13 +437,13 @@ button {
   position: fixed;
   z-index: 9999;
   background: var(--window);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(140, 180, 255, 0.20);
   border-radius: var(--radius-ctrl);
-  box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.5), 0 0 28px rgba(130, 184, 255, 0.08);
   padding: 4px;
   min-width: 160px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
 }
 
 .ctx-item {
