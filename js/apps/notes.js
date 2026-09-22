@@ -1,3 +1,7 @@
+// notes.js - sticky notes app: draggable notes pinned to a dedicated desktop
+// layer. Each note's text and position persist to localStorage and autosave
+// on every keystroke; main.js calls init() once at boot to restore them.
+
 const NotesApp = (function() {
   const STORAGE_KEY = 'moonos-notes';
   let notes = [];
