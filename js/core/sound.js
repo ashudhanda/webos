@@ -10,22 +10,18 @@ const Sound = (function() {
   function ctx() {
     if (!actx) {
       actx = new (window.AudioContext || window.webkitAudioContext)();
-
     }
     if (actx.state === 'suspended') {
       actx.resume();
-
     }
     return actx;
   }
 
   // vol: current volume from the settings slider (0..1); defaults to 0.5.
   function vol() {
-
     const slider = document.getElementById('volume-slider');
     if (!slider) return 0.5;
     return slider.value / 100;
-
   }
 
   // tone: play a sine blip at `freq` Hz for `dur` seconds at gain `gainVal`,
