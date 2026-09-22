@@ -1,6 +1,12 @@
+// sound.js - tiny WebAudio synth for UI sounds: a shared lazily-created
+// AudioContext plus one tone() helper for sine blips with an optional pitch
+// slide. Volume follows the settings panel slider (0 = silent).
+
 const Sound = (function() {
   let actx = null;
 
+  // ctx: lazily create the shared AudioContext and resume it if the browser
+  // suspended it (autoplay policy) so the first boot sound always plays.
   function ctx() {
     if (!actx) {
       actx = new (window.AudioContext || window.webkitAudioContext)();
@@ -8,11 +14,12 @@ const Sound = (function() {
     }
     if (actx.state === 'suspended') {
       actx.resume();
-    
+
     }
     return actx;
   }
 
+  // vol: current volume from the settings slider (0..1); defaults to 0.5.
   function vol() {
 
     const slider = document.getElementById('volume-slider');
@@ -21,6 +28,8 @@ const Sound = (function() {
 
   }
 
+  // tone: play a sine blip at `freq` Hz for `dur` seconds at gain `gainVal`,
+  // optionally sliding the pitch to `slideTo` Hz. Short-circuits when muted.
   function tone(freq, dur, gainVal, slideTo) {
     if (vol() === 0) return;
     const a = ctx();
