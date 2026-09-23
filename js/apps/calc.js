@@ -123,6 +123,10 @@ const CalcApp = (function() {
       updateDisplay();
     }
 
+    // evaluate: the expression on screen uses pretty unicode symbols
+    // (× ÷ −) — swap them back to js operators, then whitelist the charset
+    // so only numbers and operators ever reach Function. anything else
+    // (or a non-finite result like 1/0) shows 'error' instead.
     function evaluate() {
       try {
         let expr = prevExpr + ' ' + currentInput;
