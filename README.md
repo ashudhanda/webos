@@ -41,6 +41,17 @@ same thing, shh), click the user card and you're in. no password.
 clone the repo, open index.html with live server. that's it. plain html,
 css and js — no npm, no bundler, nothing to install.
 
+## project structure
+
+- index.html — boot screen, login/lock screens, desktop shell markup
+- css/ — one stylesheet per layer: base, themes, panel, windows,
+  taskbar, terminal, apps
+- js/main.js — boot glue, wires every module together at startup
+- js/core/ — the guts: wm (window manager), fs (virtual fs), boot,
+  panel, taskbar, sound, notify, matrix
+- js/apps/ — one module per app: terminal, files, editor, calc,
+  settings, monitor, notes
+
 ## things that took me forever
 
 - the window manager. making a window draggable AND resizable without
