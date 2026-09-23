@@ -3,6 +3,9 @@
 const Notify = (function() {
   const container = document.getElementById('notifications-container');
 
+  // show: pop a toast notification. message is html-inserted into the
+  // toast body; type picks the icon ('info' | 'success' | 'error').
+  // slides in on the next animation frame, auto dismisses after 3s.
   function show(message, type = 'info') {
     if (!container) return;
 
