@@ -102,7 +102,10 @@ const FS = (function() {
     return '/' + resolved.join('/');
   }
 
-  // traverse tree down to target node
+  // traverse the tree down to a target node.
+  // returns { node, parent, name, path } or null if the path doesn't exist.
+  // write/mkdir/rm/rmdir/rename all resolve first, then mutate through
+  // the returned parent + name — that's why getNode hands both back.
   function getNode(pathStr, cwd = HOME_PATH) {
     const absPath = resolve(pathStr, cwd);
     if (absPath === '/') return { node: root, parent: null, name: '', path: '/' };
