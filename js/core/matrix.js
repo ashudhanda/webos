@@ -1,3 +1,7 @@
+// matrix.js - matrix-rain easter egg: a full-screen katakana rain overlay
+// rendered on a canvas at ~15fps. Any key or click dismisses it; the rain
+// color reads the theme's --accent so it matches the active theme.
+
 const Matrix = (function() {
   const chars = 'アイウエオカキクケコサシスセソ0123456789'.split('');
 
@@ -9,6 +13,12 @@ const Matrix = (function() {
   let running = false;
   let rainColor = '#9db8ff';
 
+  // start: build the canvas, seed one "drop" per text column at a random
+  // negative row so columns begin at staggered heights, then tick draw()
+  // every 66ms. The dismiss listeners attach 300ms late on purpose — if they
+  // were added synchronously, the very keypress or click that triggered
+  // start() would hit the capture-phase handlers and stop() the rain
+  // instantly.
   function start() {
     if (running) return;
     running = true;
@@ -37,6 +47,8 @@ const Matrix = (function() {
     }, 300);
   }
 
+  // onKey: Enter or Escape dismisses the rain. capture phase + stopPropagation
+  // so the press doesn't leak into the desktop behind it.
   function onKey(e) {
     if (e.key === 'Escape' || e.key === 'Enter') {
       e.preventDefault();
@@ -45,12 +57,15 @@ const Matrix = (function() {
     }
   }
 
+  // onClick: any pointer press dismisses the rain.
   function onClick(e) {
     e.preventDefault();
     e.stopPropagation();
     stop();
   }
 
+  // stop: tear down the rain — clear the frame timer, detach the dismiss
+  // listeners, and remove the canvas from the page.
   function stop() {
     if (!running) return;
     running = false;
@@ -63,6 +78,11 @@ const Matrix = (function() {
     canvas = null;
   }
 
+  // draw: one frame of rain. Painting translucent black over the whole canvas
+  // fades old glyphs instead of erasing them, which is what makes the trails.
+  // Each column draws one random glyph and falls; when a drop passes the
+  // bottom it has a ~2.5% chance per frame to reset to the top, so columns
+  // restart at different times.
   function draw() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
