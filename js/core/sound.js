@@ -49,19 +49,23 @@ const Sound = (function() {
     osc.stop(a.currentTime + dur);
   }
 
+  // boot: two-note startup chime, played right after sign-in.
   function boot() {
     tone(392, 0.35, 0.08);
     setTimeout(() => tone(587, 0.5, 0.08), 180);
   }
 
+  // open: short rising blip when a window opens.
   function open() {
     tone(500, 0.09, 0.05, 760);
   }
 
+  // close: short falling blip when a window closes.
   function close() {
     tone(480, 0.09, 0.05, 300);
   }
 
+  // notify: single high ping whenever a toast notification appears.
   function notify() {
     tone(880, 0.16, 0.05);
   }
