@@ -98,6 +98,9 @@ const Boot = (function() {
     }, 45); // ~45ms per line
   }
 
+  // skipToLogin: jump straight to the login screen (Enter/Esc pressed or
+  // click during the kernel log). clearInterval first so the 45ms line ticker
+  // can't keep appending lines to the now-hidden log after the screen changes.
   function skipToLogin() {
     if (logInterval) clearInterval(logInterval);
     showLogin();
@@ -168,6 +171,7 @@ const Boot = (function() {
     }
   }
 
+  // restart: full reboot — reload the page so the boot sequence replays.
   function restart() {
     location.reload();
   }
