@@ -14,6 +14,8 @@ const Boot = (function() {
   let bootState = 'prompt'; // prompt -> grub -> log -> login -> desktop
   let logInterval = null;
 
+  // init: wire up the whole boot flow — prompt, grub menu, login card and
+  // the lock screen — so main.js only has to call Boot.init().
   function init() {
     setupPrompt();
     setupGrub();
@@ -63,6 +65,8 @@ const Boot = (function() {
     }
   }
 
+  // setupGrub: the grub menu is fake — both entries boot the same OS.
+  // clicking an entry just highlights it and rolls into the kernel log.
   function setupGrub() {
     const items = document.querySelectorAll('.grub-item');
     items.forEach((item) => {
@@ -74,6 +78,9 @@ const Boot = (function() {
     });
   }
 
+  // startKernelLog: type the canned KERNEL_LINES one at a time (~45ms
+  // each), then hand off to the login screen. The state guard makes the
+  // auto-timer, enter key and grub click all idempotent.
   function startKernelLog() {
     if (bootState === 'log' || bootState === 'login' || bootState === 'desktop') return;
     bootState = 'log';
@@ -106,6 +113,7 @@ const Boot = (function() {
     showLogin();
   }
 
+  // showLogin: hide the boot screen and fade in the login card.
   function showLogin() {
     bootState = 'login';
     const bootScreen = document.getElementById('boot-screen');
@@ -118,6 +126,9 @@ const Boot = (function() {
     }
   }
 
+  // setupLogin: clicking the user card signs in — fades the login screen
+  // out, reveals the desktop, plays the boot chime and opens a terminal
+  // so there's something to do on first arrival.
   function setupLogin() {
     const card = document.getElementById('login-user-card');
     const loginScreen = document.getElementById('login-screen');
@@ -151,6 +162,8 @@ const Boot = (function() {
     }
   }
 
+  // lock: drop the lock screen over the desktop (called by super+L and
+  // the terminal's exit command); any click dismisses it via setupLock.
   function lock() {
     const lockScreen = document.getElementById('lock-screen');
     if (lockScreen) {
