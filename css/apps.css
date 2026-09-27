@@ -584,41 +584,6 @@
   left: 22px;
 }
 
-/* Wallpaper choices */
-.wallpaper-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-}
-
-.wallpaper-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-win);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 120ms ease;
-  background: rgba(0, 0, 0, 0.15);
-}
-
-.wallpaper-card:hover {
-  border-color: var(--dim);
-}
-
-.wallpaper-card.active {
-  border-color: var(--accent);
-}
-
-.wallpaper-thumb {
-  height: 70px;
-  width: 100%;
-}
-
-.wallpaper-card-name {
-  font-size: 11px;
-  padding: 6px 8px;
-  color: var(--text);
-}
-
 /* About Tab */
 .about-box {
   border: 1px solid var(--border);

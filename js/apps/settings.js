@@ -1,4 +1,4 @@
-// settings.js - system settings app for appearance, wallpaper & system info
+// settings.js - system settings app for appearance (planet themes) & system info
 
 const SettingsApp = (function() {
   function open(options = {}) {
@@ -25,10 +25,6 @@ const SettingsApp = (function() {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a7 7 0 0 0 0 14v6"></path></svg>
             <span>Appearance</span>
           </button>
-          <button class="settings-tab-btn" data-tab="wallpaper">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-            <span>Wallpaper</span>
-          </button>
           <button class="settings-tab-btn" data-tab="about">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             <span>About</span>
@@ -48,8 +44,6 @@ const SettingsApp = (function() {
 
       if (tabName === 'appearance') {
         renderAppearance();
-      } else if (tabName === 'wallpaper') {
-        renderWallpaper();
       } else if (tabName === 'about') {
         renderAbout();
       }
@@ -113,46 +107,6 @@ const SettingsApp = (function() {
           Notify.show(on ? 'Ambient sound on' : 'Ambient sound off', 'success');
         });
       }
-    }
-
-    function renderWallpaper() {
-      const currentWp = document.documentElement.getAttribute('data-wp') || 'default';
-      const currentTheme = document.documentElement.getAttribute('data-theme') || 'moon';
-
-      const wallpapers = [
-        { id: 'default', name: 'Default Gradient' },
-        { id: 'alt1', name: 'Radial Glow Style' },
-        { id: 'alt2', name: 'Linear Dark Flow' }
-      ];
-
-      contentEl.innerHTML = `
-        <div class="settings-section-title">Wallpaper Selection</div>
-        <div class="settings-section-desc">Select a background gradient for the active theme (${currentTheme}).</div>
-        <div class="wallpaper-grid">
-          ${wallpapers.map(w => `
-            <div class="wallpaper-card ${w.id === currentWp ? 'active' : ''}" data-wp="${w.id}">
-              <div class="wallpaper-thumb" style="background: var(--wallpaper-base)"></div>
-              <div class="wallpaper-card-name">${w.name}</div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-
-      contentEl.querySelectorAll('.wallpaper-card').forEach((card) => {
-        card.addEventListener('click', () => {
-          const wp = card.getAttribute('data-wp');
-          if (wp === 'default') {
-            document.documentElement.removeAttribute('data-wp');
-          } else {
-            document.documentElement.setAttribute('data-wp', wp);
-          }
-          try {
-            localStorage.setItem('moonos-wp', wp);
-          } catch (e) {}
-          Notify.show('Wallpaper updated', 'success');
-          renderWallpaper();
-        });
-      });
     }
 
     function renderAbout() {

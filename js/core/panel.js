@@ -270,20 +270,18 @@ const Panel = (function() {
     }
   }
 
-  // cycleWallpaper: instantly rotate to the next wallpaper without opening settings
-  function cycleWallpaper() {
-    const wallpapers = ['default', 'alt1', 'alt2'];
-    const cur = document.documentElement.getAttribute('data-wp') || 'default';
-    const next = wallpapers[(wallpapers.indexOf(cur) + 1) % wallpapers.length];
-    if (next === 'default') {
-      document.documentElement.removeAttribute('data-wp');
-    } else {
-      document.documentElement.setAttribute('data-wp', next);
-    }
+  // cycleTheme: instantly rotate to the next planet theme without opening settings.
+  // Mirrors the settings theme-card handler: data-theme + persistence, then ThemeFX.apply for canvas + sound.
+  function cycleTheme() {
+    const themes = ['moon', 'mars', 'earth', 'saturn'];
+    const cur = document.documentElement.getAttribute('data-theme') || 'moon';
+    const next = themes[(themes.indexOf(cur) + 1) % themes.length];
+    document.documentElement.setAttribute('data-theme', next);
     try {
-      localStorage.setItem('moonos-wp', next);
+      localStorage.setItem('moonos-theme', next);
     } catch (e) {}
-    if (window.Notify) Notify.show('Wallpaper changed', 'success');
+    if (window.ThemeFX) window.ThemeFX.apply(next);
+    if (window.Notify) Notify.show('Theme: ' + next.charAt(0).toUpperCase() + next.slice(1), 'success');
   }
 
   // arrangeDesktopIcons: drop saved icon positions so icons snap back to the grid
@@ -328,10 +326,10 @@ const Panel = (function() {
 
         if (action === 'ctx-open-terminal') {
           Apps.launch('terminal');
-        } else if (action === 'ctx-change-wallpaper') {
-          Apps.launch('settings', { tab: 'wallpaper' });
-        } else if (action === 'ctx-next-wallpaper') {
-          cycleWallpaper();
+        } else if (action === 'ctx-change-theme') {
+          Apps.launch('settings', { tab: 'appearance' });
+        } else if (action === 'ctx-next-theme') {
+          cycleTheme();
         } else if (action === 'ctx-arrange-icons') {
           arrangeDesktopIcons();
         } else if (action === 'ctx-about') {

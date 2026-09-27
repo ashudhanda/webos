@@ -290,17 +290,17 @@ button {
   overflow: hidden;
 }
 
-/* Animated planet video wallpaper (per theme) */
-.wallpaper-video {
+/* Procedural animated planet wallpaper (canvas, no video) */
+.wallpaper-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   z-index: 0;
+  pointer-events: none;
 }
 
-/* Planet themes use the video wallpaper; hide the CSS star/moon art */
+/* Planet themes use the canvas wallpaper; hide the CSS star/moon art */
 html[data-theme="moon"] .wallpaper-stars,
 html[data-theme="mars"] .wallpaper-stars,
 html[data-theme="earth"] .wallpaper-stars,

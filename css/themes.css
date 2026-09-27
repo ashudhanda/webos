@@ -80,47 +80,4 @@ html[data-theme="saturn"] {
     linear-gradient(165deg, #0b0803 0%, #191207 55%, #221a0c 100%);
 }
 
-/* Wallpaper variations per theme */
-html[data-wp="alt1"][data-theme="moon"] {
-  --wallpaper:
-    radial-gradient(700px 460px at 50% 0%, rgba(150, 170, 255, 0.14), transparent 60%),
-    linear-gradient(180deg, #04060d, #0a1120, #101a30);
-}
-html[data-wp="alt2"][data-theme="moon"] {
-  --wallpaper:
-    radial-gradient(700px 460px at 50% 100%, rgba(120, 140, 255, 0.10), transparent 60%),
-    linear-gradient(180deg, #04060d, #0c1425, #14203a);
-}
-
-html[data-wp="alt1"][data-theme="mars"] {
-  --wallpaper:
-    radial-gradient(700px 460px at 50% 0%, rgba(255, 130, 80, 0.14), transparent 60%),
-    linear-gradient(180deg, #0d0505, #1c0d07, #2e1409);
-}
-html[data-wp="alt2"][data-theme="mars"] {
-  --wallpaper:
-    radial-gradient(700px 460px at 50% 100%, rgba(255, 110, 70, 0.10), transparent 60%),
-    linear-gradient(180deg, #0d0505, #200f08, #33170b);
-}
-
-html[data-wp="alt1"][data-theme="earth"] {
-  --wallpaper:
-    radial-gradient(700px 460px at 50% 0%, rgba(100, 200, 255, 0.14), transparent 60%),
-    linear-gradient(180deg, #030b0d, #08161a, #0e2a33);
-}
-html[data-wp="alt2"][data-theme="earth"] {
-  --wallpaper:
-    radial-gradient(700px 460px at 50% 100%, rgba(95, 214, 184, 0.10), transparent 60%),
-    linear-gradient(180deg, #030b0d, #0a1a1e, #10302b);
-}
-
-html[data-wp="alt1"][data-theme="saturn"] {
-  --wallpaper:
-    radial-gradient(700px 460px at 50% 0%, rgba(240, 200, 120, 0.14), transparent 60%),
-    linear-gradient(180deg, #0b0803, #191207, #2b2010);
-}
-html[data-wp="alt2"][data-theme="saturn"] {
-  --wallpaper:
-    radial-gradient(700px 460px at 50% 100%, rgba(232, 168, 107, 0.10), transparent 60%),
-    linear-gradient(180deg, #0b0803, #1c1408, #332612);
-}
+/* Planet themes (moon/mars/earth/saturn) use the procedural canvas wallpaper */

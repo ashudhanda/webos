@@ -63,73 +63,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (!['moon', 'mars', 'earth', 'saturn'].includes(savedTheme)) savedTheme = 'moon';
     document.documentElement.setAttribute('data-theme', savedTheme);
-
-    const savedWp = localStorage.getItem('moonos-wp');
-    if (savedWp && savedWp !== 'default') {
-      document.documentElement.setAttribute('data-wp', savedWp);
-    }
   } catch (e) {}
 
   // Animated planet wallpapers + ambient sounds per theme
   window.ThemeFX = (() => {
-    let userGestured = false;
-
-    function isSoundOn() {
-      try { return localStorage.getItem('moonos-theme-sound') !== 'off'; }
-      catch (e) { return true; }
+    function setScene(theme) {
+      if (window.WallpaperFX) WallpaperFX.setTheme(theme);
     }
 
-    function setVideo(theme) {
-      const video = document.getElementById('wallpaper-video');
-      if (!video) return;
-      const file = 'assets/themes/' + theme + '.mp4';
-      if (video.getAttribute('src') !== file) {
-        video.poster = 'assets/themes/' + theme + '.jpg';
-        video.setAttribute('src', file);
-        video.load();
-      }
-      const p = video.play();
-      if (p && p.catch) p.catch(() => {});
-    }
-
-    function setSound(theme, force) {
-      const audio = document.getElementById('theme-ambience');
-      if (!audio) return;
-      const file = 'assets/themes/' + theme + '.mp3';
-      if (audio.getAttribute('src') !== file) {
-        audio.setAttribute('src', file);
-        audio.load();
-      }
-      if (isSoundOn() && (force || userGestured)) {
-        const p = audio.play();
-        if (p && p.catch) p.catch(() => {});
-      }
+    function setSound(theme) {
+      if (window.Ambience) Ambience.setTheme(theme);
     }
 
     function apply(theme) {
       if (!['moon', 'mars', 'earth', 'saturn'].includes(theme)) theme = 'moon';
-      setVideo(theme);
-      setSound(theme, false);
+      setScene(theme);
+      setSound(theme);
     }
 
     function setSoundEnabled(on) {
-      try { localStorage.setItem('moonos-theme-sound', on ? 'on' : 'off'); } catch (e) {}
-      const audio = document.getElementById('theme-ambience');
-      if (!audio) return;
-      if (!on) {
-        audio.pause();
-      } else if (userGestured) {
-        const p = audio.play();
-        if (p && p.catch) p.catch(() => {});
-      }
+      if (window.Ambience) Ambience.setEnabled(on);
+    }
+
+    function isSoundOn() {
+      return window.Ambience ? Ambience.isOn() : true;
     }
 
     function unlock() {
-      userGestured = true;
-      setSound(document.documentElement.getAttribute('data-theme') || 'moon', true);
+      if (window.Ambience) Ambience.unlock();
     }
-    document.addEventListener('pointerdown', unlock, { once: true });
-    document.addEventListener('keydown', unlock, { once: true });
 
     return { apply, setSoundEnabled, isSoundOn, unlock };
   })();
