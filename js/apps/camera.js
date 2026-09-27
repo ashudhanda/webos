@@ -4,6 +4,31 @@
 // Shows a friendly message if permission is denied or no camera exists.
 
 const CameraApp = (function() {
+  // set by the currently open camera window; used by capturePhoto()
+  let activeCapture = null;
+  let activeReady = null;
+
+  // Open the camera (if needed), wait for the stream, capture one photo.
+  // Resolves true when a photo was captured, false otherwise.
+  function capturePhoto() {
+    return new Promise((resolve) => {
+      if (!window.Apps || !window.WM) { resolve(false); return; }
+      Apps.launch('camera');
+      const t0 = Date.now();
+      const timer = setInterval(() => {
+        const ready = activeReady && activeReady();
+        if (ready && activeCapture) {
+          clearInterval(timer);
+          try { activeCapture(); } catch (e) { resolve(false); return; }
+          resolve(true);
+        } else if (Date.now() - t0 > 10000 || !WM.getWindow('camera')) {
+          clearInterval(timer);
+          resolve(false);
+        }
+      }, 250);
+    });
+  }
+
   function open() {
     let cleanupFn = null;
     WM.createWindow({
@@ -103,15 +128,21 @@ const CameraApp = (function() {
 
     start();
 
+    // expose capture to voice assistant / external callers
+    activeCapture = () => { captureBtn.click(); };
+    activeReady = () => !!stream && !captureBtn.disabled;
+
     return function cleanup() {
       if (stream) {
         stream.getTracks().forEach(t => { try { t.stop(); } catch (e) {} });
         stream = null;
       }
+      activeCapture = null;
+      activeReady = null;
     };
   }
 
-  return { open };
+  return { open, capturePhoto };
 })();
 
 window.CameraApp = CameraApp;

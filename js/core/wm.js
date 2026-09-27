@@ -383,6 +383,7 @@ const WM = (function() {
         focusWindow(visible[visible.length - 1].id);
       }
     }
+    updateFullscreenState();
   }
 
   function unminimizeWindow(id) {
@@ -391,6 +392,18 @@ const WM = (function() {
     winObj.minimized = false;
     winObj.el.classList.remove('minimized');
     focusWindow(id);
+    updateFullscreenState();
+  }
+
+  // True-fullscreen bookkeeping: while any non-minimized window is
+  // maximized, the taskbar auto-hides (revealed via the bottom edge).
+  function updateFullscreenState() {
+    let anyMax = false;
+    windows.forEach((w) => {
+      if (w.maximized && !w.minimized) anyMax = true;
+    });
+    document.body.classList.toggle('has-maximized', anyMax);
+    if (!anyMax) document.body.classList.remove('taskbar-peek');
   }
 
   function toggleMaximize(id) {
@@ -422,6 +435,7 @@ const WM = (function() {
       }
       winObj.maximized = false;
     }
+    updateFullscreenState();
   }
 
   function closeWindow(id) {
@@ -447,6 +461,7 @@ const WM = (function() {
           focusWindow(visible[visible.length - 1].id);
         }
       }
+      updateFullscreenState();
     }, 120);
   }
 

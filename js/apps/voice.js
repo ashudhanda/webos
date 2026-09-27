@@ -85,7 +85,7 @@ const VoiceApp = (function() {
           <input class="voice-text-input" type="text" placeholder="or type a command, e.g. open snake" />
           <button class="voice-send-btn">Send</button>
         </div>
-        <div class="voice-hint">Try: "open music", "what time is it", "tell me a joke"</div>
+        <div class="voice-hint">Try: "open music", "close music", "take a photo", "sum of 9 and 5"</div>
       </div>
     `;
 
@@ -110,6 +110,109 @@ const VoiceApp = (function() {
       statusEl.textContent = t;
     }
 
+    function findApp(want) {
+      w = want.toLowerCase().trim();
+      for (const [id, names] of Object.entries(APP_NAMES)) {
+        if (names.some(n => w === n || w.includes(n) || n.includes(w))) {
+          return id;
+        }
+      }
+      return null;
+    }
+
+    function appLabel(id) {
+      const names = APP_NAMES[id];
+      return names ? names[0] : id;
+    }
+
+    // Ask the camera app to capture a photo; resolves true on success.
+    function takePhoto() {
+      return new Promise((resolve) => {
+        try {
+          if (window.CameraApp && typeof CameraApp.capturePhoto === 'function') {
+            CameraApp.capturePhoto().then(resolve).catch(() => resolve(false));
+          } else {
+            resolve(false);
+          }
+        } catch (e) {
+          resolve(false);
+        }
+        setTimeout(() => resolve(false), 15000);
+      }).then((ok) => !!ok);
+    }
+
+    const WORD_NUMS = {
+      zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7,
+      eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13,
+      fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18,
+      nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50,
+      sixty: 60, seventy: 70, eighty: 80, ninety: 90, hundred: 100
+    };
+
+    // Parse spoken math like "sum of 9 and 5", "9 plus 5", "what is 12 * 3".
+    // Returns a reply string, or null when the command is not math.
+    function parseMath(cmd) {
+      let c = cmd.toLowerCase();
+      // strip common wrappers
+      c = c.replace(/^(what is|whats|what's|calculate|compute|solve|tell me|please)\s+/, '');
+      c = c.replace(/\?$/, '').trim();
+
+      // "sum of X and Y" / "add X and Y" / "product of X and Y" ...
+      let m = c.match(/^(sum|add|addition|product|multiply)\s+of\s+(.+?)\s+and\s+(.+)$/);
+      let op = null, aStr, bStr;
+      if (m) {
+        op = (m[1] === 'sum' || m[1] === 'add' || m[1] === 'addition') ? '+' : '*';
+        aStr = m[2]; bStr = m[3];
+      } else {
+        // "X plus Y", "X minus Y", "X times Y", "X divided by Y", symbol forms
+        m = c.match(/^(.+?)\s+(plus|add|minus|subtract|times|multiplied by|multiply by|multiplied|multiply|divided by|divide by|divide|over|mod|modulo)\s+(.+)$/);
+        if (!m) {
+          m = c.match(/^(.+?)\s*([+\-*/x×÷])\s*(.+)$/);
+          if (!m) return null;
+          aStr = m[1]; bStr = m[3];
+          op = ({ '+': '+', '-': '-', '*': '*', '/': '/', 'x': '*', '×': '*', '÷': '/' })[m[2]];
+        } else {
+          aStr = m[1]; bStr = m[3];
+          const w = m[2];
+          if (/plus|add/.test(w)) op = '+';
+          else if (/minus|subtract/.test(w)) op = '-';
+          else if (/times|multipl/.test(w)) op = '*';
+          else if (/divid|divide|over/.test(w)) op = '/';
+          else if (/mod/.test(w)) op = '%';
+        }
+      }
+
+      const a = wordToNum(aStr.trim());
+      const b = wordToNum(bStr.trim());
+      if (a === null || b === null || !op) return null;
+      if (op === '/' && b === 0) return 'Cannot divide by zero.';
+
+      let result;
+      try {
+        result = Function('"use strict"; return (' + a + op + b + ')')();
+      } catch (e) {
+        return null;
+      }
+      if (typeof result !== 'number' || !isFinite(result)) return null;
+      const pretty = Math.round(result * 1e10) / 1e10;
+      const opWord = { '+': 'plus', '-': 'minus', '*': 'times', '/': 'divided by', '%': 'mod' }[op];
+      return `${a} ${opWord} ${b} is ${pretty}.`;
+    }
+
+    function wordToNum(s) {
+      s = s.toLowerCase().trim();
+      if (/^-?\d+(\.\d+)?$/.test(s)) return parseFloat(s);
+      if (WORD_NUMS[s] !== undefined) return WORD_NUMS[s];
+      // "twenty one" style
+      const parts = s.split(/[\s-]+/);
+      let total = 0, ok = true;
+      for (const p of parts) {
+        if (WORD_NUMS[p] === undefined) { ok = false; break; }
+        total += WORD_NUMS[p];
+      }
+      return ok && parts.length ? total : null;
+    }
+
     function handleCommand(raw) {
       const cmd = raw.toLowerCase().trim();
       if (!cmd) return;
@@ -120,20 +223,42 @@ const VoiceApp = (function() {
       const openMatch = cmd.match(/^(open|launch|start)\s+(.+)$/);
       if (openMatch) {
         const want = openMatch[2].trim();
-        let found = null;
-        for (const [id, names] of Object.entries(APP_NAMES)) {
-          if (names.some(n => want === n || want.includes(n) || n.includes(want))) {
-            found = id;
-            break;
-          }
-        }
+        const found = findApp(want);
         if (found) {
           Apps.launch(found);
-          reply = `Opening ${found}.`;
+          reply = `Opening ${appLabel(found)}.`;
         } else {
           reply = `I could not find an app called ${want}.`;
         }
-      } else if (/\btime\b/.test(cmd)) {
+      } else if (/^(close|quit|exit|kill)\s+(.+)$/.test(cmd)) {
+        // close <app>
+        const want = cmd.match(/^(close|quit|exit|kill)\s+(.+)$/)[2].trim();
+        const found = findApp(want);
+        if (!found) {
+          reply = `I could not find an app called ${want}.`;
+        } else if (window.WM && WM.getWindow(found)) {
+          WM.closeWindow(found);
+          reply = `Closing ${appLabel(found)}.`;
+        } else {
+          reply = `${appLabel(found)} is not open.`;
+        }
+      } else if (/\b(take|capture|click|snap)\b.*\b(photo|picture|selfie|shot)\b/.test(cmd) ||
+                 /\b(photo|picture|selfie)\b.*\b(take|capture|click|snap)\b/.test(cmd)) {
+        // take a photo / capture photo
+        reply = 'Opening the camera to take your photo.';
+        addMsg('bot', reply);
+        speak(reply);
+        takePhoto().then((ok) => {
+          const done = ok ? 'Photo captured! You can save it from the camera gallery.' : 'Could not take the photo. Please allow camera access and try again.';
+          addMsg('bot', done);
+          speak(done);
+        });
+        return;
+      } else {
+        const math = parseMath(cmd);
+        if (math !== null) {
+          reply = math;
+        } else if (/\btime\b/.test(cmd)) {
         const t = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
         reply = `It is ${t}.`;
       } else if (/\b(date|day|today)\b/.test(cmd)) {
@@ -142,7 +267,7 @@ const VoiceApp = (function() {
       } else if (/\bjoke\b/.test(cmd)) {
         reply = JOKES[Math.floor(Math.random() * JOKES.length)];
       } else if (/what can you do|help|commands/.test(cmd)) {
-        reply = 'I can open any app for you, tell the time and date, or tell a joke. Just say "open snake", for example.';
+        reply = 'I can open and close apps ("open snake", "close music"), take a photo, do quick math like "sum of 9 and 5", tell the time and date, or tell a joke.';
       } else if (/^(hi|hello|hey)\b/.test(cmd)) {
         reply = 'Hello! How can I help?';
       } else if (/who are you|your name/.test(cmd)) {
@@ -152,6 +277,7 @@ const VoiceApp = (function() {
         stopListening();
       } else {
         reply = `Sorry, I did not understand "${raw}". Try "what can you do".`;
+      }
       }
 
       addMsg('bot', reply);

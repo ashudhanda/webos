@@ -188,12 +188,42 @@ const Taskbar = (function() {
       </div>
 
       <div id="taskbar-search-results" class="taskbar-search-results"></div>
+
+      <div id="taskbar-reveal-zone"></div>
     `;
 
     setupEvents();
+    setupRevealZone();
     updateRunningDots();
 
     setInterval(updateRunningDots, 300);
+  }
+
+  // Bottom-edge reveal for the auto-hidden taskbar during fullscreen.
+  function setupRevealZone() {
+    const zone = document.getElementById('taskbar-reveal-zone');
+    const taskbarEl = document.querySelector('#taskbar .taskbar');
+    if (!zone || !taskbarEl) return;
+
+    zone.addEventListener('mouseenter', () => {
+      if (document.body.classList.contains('has-maximized')) {
+        document.body.classList.add('taskbar-peek');
+      }
+    });
+    zone.addEventListener('mouseleave', () => {
+      document.body.classList.remove('taskbar-peek');
+    });
+
+    taskbarEl.addEventListener('mouseleave', (e) => {
+      if (!document.body.classList.contains('has-maximized')) return;
+      // moving down onto the reveal strip keeps it visible; moving
+      // anywhere else (or while the start menu is open) hides it
+      const to = e.relatedTarget;
+      if (to && (to.id === 'taskbar-reveal-zone' || to.closest('#taskbar-reveal-zone'))) return;
+      if (document.getElementById('start-menu').classList.contains('open')) return;
+      if (document.activeElement && document.activeElement.id === 'taskbar-search-input') return;
+      document.body.classList.remove('taskbar-peek');
+    });
   }
 
   function launchOrFocusApp(id) {
@@ -244,6 +274,14 @@ const Taskbar = (function() {
     function closeStartMenu() {
       startMenu.classList.remove('open');
       startBtn.classList.remove('active');
+      // in fullscreen auto-hide mode, drop the peek unless the pointer
+      // is currently over the taskbar or the reveal strip
+      if (document.body.classList.contains('has-maximized')) {
+        const tb = document.querySelector('#taskbar .taskbar');
+        if (tb && !tb.matches(':hover')) {
+          document.body.classList.remove('taskbar-peek');
+        }
+      }
     }
 
     function closeSearch() {

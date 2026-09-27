@@ -91,6 +91,12 @@
   border: none !important;
 }
 
+/* true fullscreen: when a window is maximized the workspace viewport fills
+   the whole screen behind the (auto-hidden) taskbar */
+body.has-maximized .workspaces-viewport {
+  bottom: 0;
+}
+
 /* aero snap halves */
 .os-window.snapped-left {
   top: 0 !important;
