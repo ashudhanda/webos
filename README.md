@@ -24,6 +24,17 @@ same thing, shh), click the user card and you're in. no password.
   extra wallpapers for each
 - **System Monitor** — fake but alive, htop style
 - **Sticky Notes** — quick sticky notes on the desktop, autosaved as you type
+- **Snake** — the classic, arrows/wasd to steer, high score saved
+- **Minesweeper** — three difficulties, first click is always safe,
+  right-click to flag, chord clicks work
+- **Music Studio** — a playable synth piano (Web Audio): click the keys
+  or type, switch waveforms and octaves, or hit ▶ for a demo tune
+- **Calendar** — month view with events you add yourself, saved locally
+- **Tasks** — a todo list with filters, survives refresh
+- **Clock** — world clock, stopwatch with laps, and a countdown timer
+  that beeps when it finishes
+- **Password Generator** — secure random passwords (crypto-grade),
+  strength meter, click to copy
 
 ## stuff you can do
 

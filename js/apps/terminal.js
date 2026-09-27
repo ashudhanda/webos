@@ -484,11 +484,11 @@ const TerminalApp = (function() {
 
         case 'open': {
           if (!args[0]) {
-            print('<span class="term-error">open: specify an app or file (terminal, files, editor, calc, settings, monitor)</span>', true);
+            print('<span class="term-error">open: specify an app or file (terminal, files, editor, calc, settings, monitor, notes, snake, mines, music, calendar, tasks, clock, passgen)</span>', true);
             break;
           }
           const target = args[0].toLowerCase();
-          if (['terminal', 'files', 'editor', 'calc', 'settings', 'monitor'].includes(target)) {
+          if (['terminal', 'files', 'editor', 'calc', 'settings', 'monitor', 'notes', 'snake', 'mines', 'music', 'calendar', 'tasks', 'clock', 'passgen'].includes(target)) {
             Apps.launch(target);
           } else {
             // check if it's a file

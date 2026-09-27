@@ -13,7 +13,14 @@ const Apps = (function() {
     calc: CalcApp,
     settings: SettingsApp,
     monitor: MonitorApp,
-    notes: NotesApp
+    notes: NotesApp,
+    snake: SnakeApp,
+    mines: MinesApp,
+    music: MusicApp,
+    calendar: CalendarApp,
+    tasks: TasksApp,
+    clock: ClockApp,
+    passgen: PassgenApp
   };
 
   function launch(appName, options) {
