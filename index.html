@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/terminal.css" />
     <link rel="stylesheet" href="css/apps.css" />
     <link rel="stylesheet" href="css/taskbar.css" />
+    <link rel="stylesheet" href="css/login.css" />
   </head>
   <body>
 
@@ -55,17 +56,51 @@
 
 
     <div id="login-screen" class="login-screen hidden">
-      <div class="login-backdrop"></div>
+      <div class="login-aurora" aria-hidden="true">
+        <div class="aurora-blob b1"></div>
+        <div class="aurora-blob b2"></div>
+        <div class="aurora-blob b3"></div>
+      </div>
+      <canvas id="login-stars" aria-hidden="true"></canvas>
+
+      <div class="login-top">
+        <div class="login-clock" id="login-clock">00:00</div>
+        <div class="login-date" id="login-date">loading…</div>
+      </div>
+
       <div class="login-box" id="login-user-card" role="button" tabindex="0" aria-label="Sign in as ashu">
-        <div class="login-avatar">
-          <svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
+        <div class="login-avatar-ring">
+          <div class="login-avatar">
+            <svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
         </div>
         <div class="login-name">ashu</div>
-        <div class="login-sub">moonOS 1.0</div>
-        <div class="login-action">Click to sign in</div>
+        <button class="login-hold" id="login-hold-btn" aria-label="Press and hold to sign in">
+          <svg class="hold-track" viewBox="0 0 76 76" aria-hidden="true">
+            <defs>
+              <linearGradient id="holdGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#7da0ff"></stop>
+                <stop offset="100%" stop-color="#b48cff"></stop>
+              </linearGradient>
+            </defs>
+            <circle class="track" cx="38" cy="38" r="32"></circle>
+            <circle class="fill" cx="38" cy="38" r="32"></circle>
+          </svg>
+          <span class="hold-core">
+            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </span>
+          <span class="hold-label">hold to sign in</span>
+        </button>
+      </div>
+
+      <div class="login-foot">
+        <span>press <kbd>Enter</kbd> to sign in</span>
+        <span>moonOS 1.0</span>
       </div>
     </div>
 
@@ -444,6 +479,7 @@
     <script defer src="js/core/wm.js"></script>
     <script defer src="js/core/panel.js"></script>
     <script defer src="js/core/taskbar.js"></script>
+    <script defer src="js/core/loginfx.js"></script>
     <script defer src="js/core/boot.js"></script>
     <script defer src="js/core/matrix.js"></script>
     <script defer src="js/core/sound.js"></script>

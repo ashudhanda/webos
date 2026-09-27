@@ -131,9 +131,15 @@ const Taskbar = (function() {
   let selectedResultIndex = 0;
   let currentSearchResults = [];
 
+  // only these apps get a permanent taskbar icon — everything else stays
+  // reachable via start menu / search / terminal so the bar never overflows
+  const PINNED_IDS = ['terminal', 'files', 'editor', 'notes', 'aichat', 'settings'];
+
   function init() {
     const mountEl = document.getElementById('taskbar');
     if (!mountEl) return;
+
+    const pinnedApps = apps.filter((a) => PINNED_IDS.includes(a.id));
 
     mountEl.innerHTML = `
       <div class="taskbar">
@@ -154,7 +160,7 @@ const Taskbar = (function() {
         </div>
 
         <div class="taskbar-pinned-apps">
-          ${apps.map(app => `
+          ${pinnedApps.map(app => `
             <button class="taskbar-app-btn" data-app="${app.id}" data-tooltip="${app.name}">
               ${app.icon}
               <span class="taskbar-app-dot"></span>

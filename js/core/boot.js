@@ -123,6 +123,7 @@ const Boot = (function() {
     if (loginScreen) {
       loginScreen.classList.remove('hidden');
       loginScreen.style.opacity = '1';
+      if (window.LoginFX) LoginFX.init();
     }
   }
 
@@ -138,11 +139,16 @@ const Boot = (function() {
       if (bootState !== 'login') return;
       bootState = 'desktop';
 
+      if (window.LoginFX) LoginFX.teardown();
+
       if (loginScreen) {
-        loginScreen.style.opacity = '0';
+        // blur-zoom exit animation (see css/login.css), then hide
+        loginScreen.classList.add('signing-in');
         setTimeout(() => {
           loginScreen.classList.add('hidden');
-        }, 300); // 300ms fade transition
+          loginScreen.classList.remove('signing-in');
+          loginScreen.style.opacity = '1';
+        }, 620);
       }
 
       if (desktopEnv) {

@@ -21,6 +21,9 @@
   gap: 8px;
   padding: 0 12px;
   user-select: none;
+  overflow: hidden;
+  max-width: calc(100vw - 24px);
+  box-sizing: border-box;
 }
 
 .taskbar-start-btn {
@@ -48,8 +51,9 @@
 .taskbar-search-wrap {
   position: relative;
   width: min(420px, 40vw);
+  min-width: 120px;
   height: 32px;
-  flex-shrink: 0;
+  flex-shrink: 1;
 }
 
 .taskbar-search-icon {
@@ -91,6 +95,15 @@
   align-items: center;
   gap: 6px;
   margin-left: 2px;
+  min-width: 0;
+  flex-shrink: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.taskbar-pinned-apps::-webkit-scrollbar {
+  display: none;
 }
 
 .taskbar-app-btn {
@@ -161,6 +174,14 @@
   bottom: 74px;
   left: 12px;
   width: 260px;
+  max-width: calc(100vw - 24px);
+  max-height: min(560px, calc(100vh - 170px));
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
   background: var(--window);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -177,6 +198,16 @@
   pointer-events: none;
   transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1), opacity 150ms ease;
 }
+.start-menu::-webkit-scrollbar {
+  width: 6px;
+}
+.start-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+.start-menu::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
 
 .start-menu.open {
   transform: translateY(0);
@@ -186,6 +217,7 @@
 
 .start-menu-item {
   height: 34px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 10px;
