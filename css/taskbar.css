@@ -261,6 +261,9 @@ body.has-maximized #taskbar-reveal-zone {
   text-align: left;
   width: 100%;
   transition: background 100ms ease, color 100ms ease;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .start-menu-item:hover,

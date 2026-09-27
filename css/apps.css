@@ -1493,30 +1493,3 @@
 .paint-undo:hover, .paint-clear:hover, .paint-save:hover { border-color:var(--accent); }
 .paint-canvas-wrap { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:12px; background:rgba(0,0,0,.18); }
 .paint-canvas { max-width:100%; max-height:100%; background:#fff; border-radius:6px; cursor:crosshair; touch-action:none; box-shadow:0 4px 20px rgba(0,0,0,.3); }
-
-/* ================= 2048 ================= */
-.g2048-app { width:100%; height:100%; padding:14px; display:flex; flex-direction:column; gap:12px; background:var(--window); box-sizing:border-box; color:var(--text); overflow:auto; outline:none; }
-.g2048-head { display:flex; align-items:center; justify-content:space-between; }
-.g2048-scores { display:flex; gap:8px; }
-.g2048-score { background:var(--accent-soft); border:1px solid var(--border); border-radius:10px; padding:6px 14px; text-align:center; min-width:70px; }
-.g2048-score span { display:block; font-size:10px; color:var(--dim); text-transform:uppercase; }
-.g2048-score b { font-size:18px; }
-.g2048-new { background:var(--accent); color:#fff; border:none; border-radius:var(--radius-ctrl); padding:9px 16px; font-size:13px; cursor:pointer; }
-.g2048-board-wrap { position:relative; width:100%; max-width:340px; margin:0 auto; aspect-ratio:1; }
-.g2048-board { position:absolute; inset:0; display:grid; grid-template-columns:repeat(4, 1fr); grid-template-rows:repeat(4, 1fr); gap:8px; background:rgba(0,0,0,.25); border-radius:12px; padding:8px; }
-.g2048-tile { display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:24px; font-weight:700; background:rgba(255,255,255,.06); color:var(--text); }
-.g2048-tile.t2 { background:#3b4a63; } .g2048-tile.t4 { background:#4a5d80; }
-.g2048-tile.t8 { background:#e08a3c; color:#fff; } .g2048-tile.t16 { background:#e07a2e; color:#fff; }
-.g2048-tile.t32 { background:#e0634f; color:#fff; } .g2048-tile.t64 { background:#e04f3c; color:#fff; }
-.g2048-tile.t128 { background:#f0cf6e; color:#5a4a1a; } .g2048-tile.t256 { background:#f0c94f; color:#5a4a1a; }
-.g2048-tile.t512 { background:#eec22e; color:#fff; } .g2048-tile.t1024 { background:#edc22e; color:#fff; font-size:20px; }
-.g2048-tile.t2048 { background:#edc22e; color:#fff; font-size:20px; box-shadow:0 0 24px rgba(237,194,46,.7); }
-.g2048-overlay { position:absolute; inset:0; background:rgba(0,0,0,.65); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; z-index:2; }
-.g2048-overlay.hidden { display:none; }
-.g2048-overlay-text { font-size:26px; font-weight:700; }
-.g2048-again { background:var(--accent); color:#fff; border:none; border-radius:var(--radius-ctrl); padding:10px 22px; font-size:14px; cursor:pointer; }
-.g2048-pad { display:flex; flex-direction:column; align-items:center; gap:6px; }
-.g2048-pad button { width:52px; height:44px; border-radius:10px; border:1px solid var(--border); background:var(--accent-soft); color:var(--text); font-size:16px; cursor:pointer; }
-.g2048-pad button:active { background:var(--accent); }
-.g2048-pad > div { display:flex; gap:6px; }
-.g2048-hint { font-size:11px; color:var(--dim); text-align:center; }

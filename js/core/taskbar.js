@@ -119,12 +119,6 @@ const Taskbar = (function() {
       name: 'Paint',
       aliases: ['paint', 'draw', 'drawing', 'canvas'],
       icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><circle cx="11" cy="11" r="2"></circle></svg>'
-    },
-    {
-      id: 'game2048',
-      name: '2048',
-      aliases: ['2048', 'game', 'puzzle', 'tiles'],
-      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="8" height="8" rx="1"></rect><rect x="13" y="3" width="8" height="8" rx="1"></rect><rect x="3" y="13" width="8" height="8" rx="1"></rect><rect x="13" y="13" width="8" height="8" rx="1"></rect></svg>'
     }
   ];
 

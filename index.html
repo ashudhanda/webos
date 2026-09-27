@@ -9,14 +9,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/base.css?v=3" />
-    <link rel="stylesheet" href="css/themes.css?v=3" />
-    <link rel="stylesheet" href="css/panel.css?v=3" />
-    <link rel="stylesheet" href="css/windows.css?v=3" />
-    <link rel="stylesheet" href="css/terminal.css?v=3" />
-    <link rel="stylesheet" href="css/apps.css?v=3" />
-    <link rel="stylesheet" href="css/taskbar.css?v=3" />
-    <link rel="stylesheet" href="css/login.css?v=3" />
+    <link rel="stylesheet" href="css/base.css?v=4" />
+    <link rel="stylesheet" href="css/themes.css?v=4" />
+    <link rel="stylesheet" href="css/panel.css?v=4" />
+    <link rel="stylesheet" href="css/windows.css?v=4" />
+    <link rel="stylesheet" href="css/terminal.css?v=4" />
+    <link rel="stylesheet" href="css/apps.css?v=4" />
+    <link rel="stylesheet" href="css/taskbar.css?v=4" />
+    <link rel="stylesheet" href="css/login.css?v=4" />
   </head>
   <body>
 
@@ -290,10 +290,6 @@
           <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><circle cx="11" cy="11" r="2"></circle></svg>
           <span>Paint</span>
         </button>
-        <button class="menu-item" data-launch="game2048">
-          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="8" height="8" rx="1"></rect><rect x="13" y="3" width="8" height="8" rx="1"></rect><rect x="3" y="13" width="8" height="8" rx="1"></rect><rect x="13" y="13" width="8" height="8" rx="1"></rect></svg>
-          <span>2048</span>
-        </button>
       </div>
 
 
@@ -446,6 +442,17 @@
       </div>
 
 
+      <div id="icon-ctx-menu" class="ctx-menu hidden">
+        <button class="ctx-item" data-action="icon-open">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          <span>Open</span>
+        </button>
+        <button class="ctx-item danger" data-action="icon-delete">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <span>Delete</span>
+        </button>
+      </div>
+
       <div id="files-ctx-menu" class="ctx-menu hidden">
         <button class="ctx-item" data-action="files-new-file">
           <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
@@ -474,36 +481,35 @@
     <div id="taskbar"></div>
 
 
-    <script defer src="js/core/fs.js?v=3"></script>
-    <script defer src="js/core/notify.js?v=3"></script>
-    <script defer src="js/core/wm.js?v=3"></script>
-    <script defer src="js/core/panel.js?v=3"></script>
-    <script defer src="js/core/taskbar.js?v=3"></script>
-    <script defer src="js/core/loginfx.js?v=3"></script>
-    <script defer src="js/core/boot.js?v=3"></script>
-    <script defer src="js/core/matrix.js?v=3"></script>
-    <script defer src="js/core/sound.js?v=3"></script>
-    <script defer src="js/apps/terminal.js?v=3"></script>
-    <script defer src="js/apps/files.js?v=3"></script>
-    <script defer src="js/apps/editor.js?v=3"></script>
-    <script defer src="js/apps/calc.js?v=3"></script>
-    <script defer src="js/apps/settings.js?v=3"></script>
-    <script defer src="js/apps/monitor.js?v=3"></script>
-    <script defer src="js/apps/notes.js?v=3"></script>
-    <script defer src="js/apps/snake.js?v=3"></script>
-    <script defer src="js/apps/mines.js?v=3"></script>
-    <script defer src="js/apps/music.js?v=3"></script>
-    <script defer src="js/apps/calendar.js?v=3"></script>
-    <script defer src="js/apps/tasks.js?v=3"></script>
-    <script defer src="js/apps/clock.js?v=3"></script>
-    <script defer src="js/apps/passgen.js?v=3"></script>
-    <script defer src="js/apps/voice.js?v=3"></script>
-    <script defer src="js/apps/aichat.js?v=3"></script>
-    <script defer src="js/apps/weather.js?v=3"></script>
-    <script defer src="js/apps/camera.js?v=3"></script>
-    <script defer src="js/apps/recorder.js?v=3"></script>
-    <script defer src="js/apps/paint.js?v=3"></script>
-    <script defer src="js/apps/game2048.js?v=3"></script>
-    <script defer src="js/main.js?v=3"></script>
+    <script defer src="js/core/fs.js?v=4"></script>
+    <script defer src="js/core/notify.js?v=4"></script>
+    <script defer src="js/core/wm.js?v=4"></script>
+    <script defer src="js/core/panel.js?v=4"></script>
+    <script defer src="js/core/taskbar.js?v=4"></script>
+    <script defer src="js/core/loginfx.js?v=4"></script>
+    <script defer src="js/core/boot.js?v=4"></script>
+    <script defer src="js/core/matrix.js?v=4"></script>
+    <script defer src="js/core/sound.js?v=4"></script>
+    <script defer src="js/apps/terminal.js?v=4"></script>
+    <script defer src="js/apps/files.js?v=4"></script>
+    <script defer src="js/apps/editor.js?v=4"></script>
+    <script defer src="js/apps/calc.js?v=4"></script>
+    <script defer src="js/apps/settings.js?v=4"></script>
+    <script defer src="js/apps/monitor.js?v=4"></script>
+    <script defer src="js/apps/notes.js?v=4"></script>
+    <script defer src="js/apps/snake.js?v=4"></script>
+    <script defer src="js/apps/mines.js?v=4"></script>
+    <script defer src="js/apps/music.js?v=4"></script>
+    <script defer src="js/apps/calendar.js?v=4"></script>
+    <script defer src="js/apps/tasks.js?v=4"></script>
+    <script defer src="js/apps/clock.js?v=4"></script>
+    <script defer src="js/apps/passgen.js?v=4"></script>
+    <script defer src="js/apps/voice.js?v=4"></script>
+    <script defer src="js/apps/aichat.js?v=4"></script>
+    <script defer src="js/apps/weather.js?v=4"></script>
+    <script defer src="js/apps/camera.js?v=4"></script>
+    <script defer src="js/apps/recorder.js?v=4"></script>
+    <script defer src="js/apps/paint.js?v=4"></script>
+    <script defer src="js/main.js?v=4"></script>
   </body>
 </html>

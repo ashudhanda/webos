@@ -126,7 +126,32 @@
 .menu-popup {
   left: 8px;
   width: 220px;
+  max-width: calc(100vw - 16px);
   padding: 6px;
+  max-height: min(340px, calc(100vh - 60px));
+  max-height: min(340px, calc(100dvh - 60px));
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  display: flex;
+  flex-direction: column;
+}
+.menu-popup::-webkit-scrollbar {
+  width: 6px;
+}
+.menu-popup::-webkit-scrollbar-track {
+  background: transparent;
+}
+.menu-popup::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+.menu-header,
+.menu-footer {
+  flex-shrink: 0;
 }
 
 .menu-header {
@@ -167,6 +192,9 @@
   color: var(--text);
   text-align: left;
   transition: background 100ms ease;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .menu-item:hover {

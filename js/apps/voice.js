@@ -25,8 +25,7 @@ const VoiceApp = (function() {
     weather: ['weather'],
     camera: ['camera'],
     recorder: ['sound recorder', 'recorder', 'voice recorder'],
-    paint: ['paint', 'drawing'],
-    game2048: ['2048', 'twenty forty eight']
+    paint: ['paint', 'drawing']
   };
 
   const JOKES = [
@@ -111,7 +110,7 @@ const VoiceApp = (function() {
     }
 
     function findApp(want) {
-      w = want.toLowerCase().trim();
+      const w = want.toLowerCase().trim();
       for (const [id, names] of Object.entries(APP_NAMES)) {
         if (names.some(n => w === n || w.includes(n) || n.includes(w))) {
           return id;
