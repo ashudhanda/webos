@@ -93,12 +93,27 @@ function setupDesktopIcons() {
     }
   });
 
+  // Two-pass freeze: FIRST snapshot every icon's position, THEN switch them
+  // to absolute. (Doing it in one pass is a bug: making icon N absolute
+  // removes it from the grid flow, so icon N+1 reflows into its slot and
+  // gets frozen at the wrong, overlapping position.)
   function freezeIcons() {
+    const container = icons[0] ? icons[0].parentElement : null;
+    const crect = container ? container.getBoundingClientRect() : null;
+    const snapshots = [];
     icons.forEach((icon) => {
       if (icon.style.position === 'absolute') return;
+      const r = icon.getBoundingClientRect();
+      snapshots.push({
+        icon,
+        left: r.left - (crect ? crect.left : 0),
+        top: r.top - (crect ? crect.top : 0)
+      });
+    });
+    snapshots.forEach(({ icon, left, top }) => {
       icon.style.position = 'absolute';
-      icon.style.left = icon.offsetLeft + 'px';
-      icon.style.top = icon.offsetTop + 'px';
+      icon.style.left = left + 'px';
+      icon.style.top = top + 'px';
     });
   }
 
