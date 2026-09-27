@@ -53,6 +53,9 @@ const FS = (function() {
 
   let root = null;
 
+  // load: restore the tree from localStorage. Seeds from defaultTree on
+  // first run (or when saved data is corrupt/full) and persists the seed
+  // immediately so refresh is stable even before any write happens.
   function load() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -68,6 +71,9 @@ const FS = (function() {
     }
   }
 
+  // save: serialize the whole tree to localStorage after every mutation
+  // (write/mkdir/rm/rmdir/rename). Quota errors are ignored so the OS
+  // keeps working in-memory when storage is unavailable.
   function save() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(root));
@@ -125,15 +131,20 @@ const FS = (function() {
     return { node: curr, parent: parent, name: parts[parts.length - 1], path: absPath };
   }
 
+  // exists: true when the path resolves to any node in the tree.
   function exists(pathStr, cwd = HOME_PATH) {
     return getNode(pathStr, cwd) !== null;
   }
 
+  // isDir: true only when the path resolves and that node is a directory.
   function isDir(pathStr, cwd = HOME_PATH) {
     const item = getNode(pathStr, cwd);
     return item ? item.node.type === 'dir' : false;
   }
 
+  // ls: list a directory's children as { name, type }, sorted with
+  // folders first then alphabetical. On a file path it returns just
+  // the file's own name, mimicking real ls behaviour.
   function ls(pathStr = '.', cwd = HOME_PATH) {
     const item = getNode(pathStr, cwd);
     if (!item) throw new Error('no such file or directory');
@@ -154,6 +165,8 @@ const FS = (function() {
     });
   }
 
+  // read: return a file's text content. Throws when the path is missing
+  // or points at a directory — callers (cat, editor) map the error to UI.
   function read(pathStr, cwd = HOME_PATH) {
     const item = getNode(pathStr, cwd);
     if (!item) throw new Error('no such file or directory');
