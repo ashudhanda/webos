@@ -12,6 +12,87 @@ const WM = (function() {
   let altTabSelectedIndex = 0;
   let altTabOrder = [];
 
+  // aero snap preview element (shared, moved into the active workspace container)
+  let snapPreviewEl = null;
+
+  function ensureSnapPreview(container) {
+    if (!snapPreviewEl || snapPreviewEl.parentNode !== container) {
+      if (snapPreviewEl && snapPreviewEl.parentNode) {
+        snapPreviewEl.parentNode.removeChild(snapPreviewEl);
+      }
+      snapPreviewEl = document.createElement('div');
+      snapPreviewEl.className = 'snap-preview hidden';
+      container.appendChild(snapPreviewEl);
+    }
+    return snapPreviewEl;
+  }
+
+  function showSnapPreview(container, zone) {
+    const el = ensureSnapPreview(container);
+    el.classList.remove('hidden');
+    if (zone === 'left') {
+      el.style.left = '6px';
+      el.style.top = '6px';
+      el.style.width = 'calc(50% - 10px)';
+      el.style.height = 'calc(100% - 12px)';
+    } else if (zone === 'right') {
+      el.style.left = 'calc(50% + 4px)';
+      el.style.top = '6px';
+      el.style.width = 'calc(50% - 10px)';
+      el.style.height = 'calc(100% - 12px)';
+    } else if (zone === 'max') {
+      el.style.left = '6px';
+      el.style.top = '6px';
+      el.style.width = 'calc(100% - 12px)';
+      el.style.height = 'calc(100% - 12px)';
+    }
+  }
+
+  function hideSnapPreview() {
+    if (snapPreviewEl) snapPreviewEl.classList.add('hidden');
+  }
+
+  function applySnap(id, zone) {
+    if (!windows.has(id)) return;
+    const winObj = windows.get(id);
+    const { el } = winObj;
+
+    if (zone === 'max') {
+      if (!winObj.maximized) toggleMaximize(id);
+      return;
+    }
+
+    // save pre-snap geometry (skip if already snapped/maximized - prevRect holds the true restore point)
+    if (!winObj.snapped && !winObj.maximized) {
+      winObj.prevRect = {
+        left: el.style.left,
+        top: el.style.top,
+        width: el.style.width,
+        height: el.style.height
+      };
+    }
+    el.classList.remove('maximized', 'snapped-left', 'snapped-right');
+    winObj.maximized = false;
+    el.classList.add(zone === 'left' ? 'snapped-left' : 'snapped-right');
+    winObj.snapped = zone;
+    focusWindow(id);
+  }
+
+  function unsnapWindow(id) {
+    if (!windows.has(id)) return;
+    const winObj = windows.get(id);
+    if (!winObj.snapped) return;
+    const { el } = winObj;
+    el.classList.remove('snapped-left', 'snapped-right');
+    winObj.snapped = null;
+    if (winObj.prevRect) {
+      el.style.left = winObj.prevRect.left;
+      el.style.top = winObj.prevRect.top;
+      el.style.width = winObj.prevRect.width;
+      el.style.height = winObj.prevRect.height;
+    }
+  }
+
   function init() {
     setupGlobalShortcuts();
     setupWorkspaceDots();
@@ -99,7 +180,8 @@ const WM = (function() {
       prevRect: null,
       onClose: config.onClose,
       minW: config.minWidth || 320,
-      minH: config.minHeight || 200
+      minH: config.minHeight || 200,
+      snapped: null
     };
 
     windows.set(id, winObj);
@@ -157,12 +239,19 @@ const WM = (function() {
     let dragStartY = 0;
     let winStartX = 0;
     let winStartY = 0;
+    let pendingSnap = null; // aero snap zone while dragging: 'left' | 'right' | 'max' | null
 
     titlebar.addEventListener('pointerdown', (e) => {
       if (e.target.closest('.win-btn')) return;
       if (winObj.maximized) return;
 
+      // dragging a snapped window restores it first (standard aero behavior)
+      if (winObj.snapped) {
+        unsnapWindow(id);
+      }
+
       isDragging = true;
+      pendingSnap = null;
       titlebar.setPointerCapture(e.pointerId);
 
       dragStartX = e.clientX;
@@ -185,11 +274,32 @@ const WM = (function() {
 
       el.style.left = `${nextX}px`;
       el.style.top = `${nextY}px`;
+
+      // aero snap: detect screen edges during drag
+      const container = el.parentNode;
+      if (container) {
+        const rect = container.getBoundingClientRect();
+        const EDGE = 12;
+        const px = e.clientX - rect.left;
+        const py = e.clientY - rect.top;
+        let zone = null;
+        if (px <= EDGE) zone = 'left';
+        else if (px >= rect.width - EDGE) zone = 'right';
+        else if (py <= EDGE) zone = 'max';
+        pendingSnap = zone;
+        if (zone) showSnapPreview(container, zone);
+        else hideSnapPreview();
+      }
     });
 
     function stopDrag(e) {
       if (!isDragging) return;
       isDragging = false;
+      hideSnapPreview();
+      if (pendingSnap) {
+        applySnap(id, pendingSnap);
+        pendingSnap = null;
+      }
       try {
         titlebar.releasePointerCapture(e.pointerId);
       } catch (err) {
@@ -289,13 +399,17 @@ const WM = (function() {
     const { el } = winObj;
 
     if (!winObj.maximized) {
-      // save previous rect
-      winObj.prevRect = {
-        left: el.style.left,
-        top: el.style.top,
-        width: el.style.width,
-        height: el.style.height
-      };
+      // save previous rect (skip when snapped - prevRect already holds the pre-snap rect)
+      if (!winObj.snapped) {
+        winObj.prevRect = {
+          left: el.style.left,
+          top: el.style.top,
+          width: el.style.width,
+          height: el.style.height
+        };
+      }
+      el.classList.remove('snapped-left', 'snapped-right');
+      winObj.snapped = null;
       el.classList.add('maximized');
       winObj.maximized = true;
     } else {

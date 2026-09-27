@@ -20,7 +20,14 @@ const Apps = (function() {
     calendar: CalendarApp,
     tasks: TasksApp,
     clock: ClockApp,
-    passgen: PassgenApp
+    passgen: PassgenApp,
+    voice: VoiceApp,
+    aichat: AIChatApp,
+    weather: WeatherApp,
+    camera: CameraApp,
+    recorder: RecorderApp,
+    paint: PaintApp,
+    game2048: Game2048App
   };
 
   function launch(appName, options) {

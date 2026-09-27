@@ -270,8 +270,36 @@ const Panel = (function() {
     }
   }
 
-  function setupDesktopContextMenu() {
-    const desktopEnv = document.getElementById('desktop-env');
+  // cycleWallpaper: instantly rotate to the next wallpaper without opening settings
+  function cycleWallpaper() {
+    const wallpapers = ['default', 'alt1', 'alt2'];
+    const cur = document.documentElement.getAttribute('data-wp') || 'default';
+    const next = wallpapers[(wallpapers.indexOf(cur) + 1) % wallpapers.length];
+    if (next === 'default') {
+      document.documentElement.removeAttribute('data-wp');
+    } else {
+      document.documentElement.setAttribute('data-wp', next);
+    }
+    try {
+      localStorage.setItem('moonos-wp', next);
+    } catch (e) {}
+    if (window.Notify) Notify.show('Wallpaper changed', 'success');
+  }
+
+  // arrangeDesktopIcons: drop saved icon positions so icons snap back to the grid
+  function arrangeDesktopIcons() {
+    try {
+      localStorage.removeItem('moonos-icon-pos');
+    } catch (e) {}
+    document.querySelectorAll('.desktop-icon').forEach((ic) => {
+      ic.style.position = '';
+      ic.style.left = '';
+      ic.style.top = '';
+    });
+    if (window.Notify) Notify.show('Icons arranged', 'success');
+  }
+
+  function setupDesktopContextMenu() {    const desktopEnv = document.getElementById('desktop-env');
     const ctxMenu = document.getElementById('desktop-ctx-menu');
 
     if (!desktopEnv || !ctxMenu) return;
@@ -302,6 +330,10 @@ const Panel = (function() {
           Apps.launch('terminal');
         } else if (action === 'ctx-change-wallpaper') {
           Apps.launch('settings', { tab: 'wallpaper' });
+        } else if (action === 'ctx-next-wallpaper') {
+          cycleWallpaper();
+        } else if (action === 'ctx-arrange-icons') {
+          arrangeDesktopIcons();
         } else if (action === 'ctx-about') {
           Apps.launch('settings', { tab: 'about' });
         }

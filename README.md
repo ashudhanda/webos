@@ -35,11 +35,24 @@ same thing, shh), click the user card and you're in. no password.
   that beeps when it finishes
 - **Password Generator** — secure random passwords (crypto-grade),
   strength meter, click to copy
+- **Voice Assistant** — speak commands ("open snake", "what time is it")
+  or type them; replies out loud
+- **AI Chat** — a free AI chatbot inside the OS, conversation history saved
+- **Weather** — live conditions + 7-day forecast for any city you search
+- **Camera** — webcam preview with photo capture and PNG download
+- **Sound Recorder** — record from the mic, play back, save or delete clips
+- **Paint** — brush, eraser, shapes, colors, undo, export as PNG
+- **2048** — the sliding-tile puzzle, arrows/wasd or on-screen pad,
+  best score saved
 
 ## stuff you can do
 
 - drag windows by the titlebar, resize from the bottom-right corner,
   double-click the titlebar to maximize
+- **aero snap** — drag a window to the left/right edge to snap it to half
+  the screen, or to the top edge to maximize
+- **right-click the desktop** for a context menu: open terminal,
+  change/next wallpaper, arrange icons, about
 - 4 workspaces — ctrl+alt+left/right, or the dots in the top panel
 - alt+tab actually works
 - the bottom taskbar has a start menu and a working search (try "term")

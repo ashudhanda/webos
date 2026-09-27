@@ -91,6 +91,38 @@
   border: none !important;
 }
 
+/* aero snap halves */
+.os-window.snapped-left {
+  top: 0 !important;
+  left: 0 !important;
+  width: 50% !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+}
+
+.os-window.snapped-right {
+  top: 0 !important;
+  left: 50% !important;
+  width: 50% !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+}
+
+/* aero snap drop preview */
+.snap-preview {
+  position: absolute;
+  background: rgba(130, 184, 255, 0.16);
+  border: 2px solid rgba(130, 184, 255, 0.55);
+  border-radius: 14px;
+  pointer-events: none;
+  z-index: 5;
+  transition: left 120ms ease, top 120ms ease, width 120ms ease, height 120ms ease;
+}
+
+.snap-preview.hidden {
+  display: none;
+}
+
 .os-window.active {
   border-color: rgba(150, 195, 255, 0.55);
   box-shadow:

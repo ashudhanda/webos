@@ -83,6 +83,48 @@ const Taskbar = (function() {
       name: 'Password Generator',
       aliases: ['password', 'passgen', 'generator', 'pass'],
       icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path><circle cx="12" cy="16" r="1.5" fill="currentColor"></circle></svg>'
+    },
+    {
+      id: 'voice',
+      name: 'Voice Assistant',
+      aliases: ['voice', 'assistant', 'mic', 'microphone', 'speak'],
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 10a7 7 0 0 0 14 0"></path><line x1="12" y1="17" x2="12" y2="22"></line></svg>'
+    },
+    {
+      id: 'aichat',
+      name: 'AI Chat',
+      aliases: ['ai', 'chat', 'assistant', 'gpt', 'bot'],
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>'
+    },
+    {
+      id: 'weather',
+      name: 'Weather',
+      aliases: ['weather', 'forecast', 'temperature', 'rain'],
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>'
+    },
+    {
+      id: 'camera',
+      name: 'Camera',
+      aliases: ['camera', 'webcam', 'photo', 'picture'],
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>'
+    },
+    {
+      id: 'recorder',
+      name: 'Sound Recorder',
+      aliases: ['recorder', 'record', 'audio', 'sound', 'mic'],
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>'
+    },
+    {
+      id: 'paint',
+      name: 'Paint',
+      aliases: ['paint', 'draw', 'drawing', 'canvas'],
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><circle cx="11" cy="11" r="2"></circle></svg>'
+    },
+    {
+      id: 'game2048',
+      name: '2048',
+      aliases: ['2048', 'game', 'puzzle', 'tiles'],
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="8" height="8" rx="1"></rect><rect x="13" y="3" width="8" height="8" rx="1"></rect><rect x="3" y="13" width="8" height="8" rx="1"></rect><rect x="13" y="13" width="8" height="8" rx="1"></rect></svg>'
     }
   ];
 
