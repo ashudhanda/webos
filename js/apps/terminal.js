@@ -45,18 +45,25 @@ const TerminalApp = (function() {
     const pathEl = container.querySelector('.term-path');
     const inputEl = container.querySelector('.term-input');
 
+    // getShortPath: show the prompt like a real shell — /home/ashu
+    // collapses to ~ so the prompt stays short and readable.
     function getShortPath(p) {
       if (p === '/home/ashu') return '~';
       if (p.startsWith('/home/ashu/')) return '~/' + p.slice('/home/ashu/'.length);
       return p;
     }
 
+    // updatePrompt: refresh both the prompt's path span and the window
+    // title after every cd so they always show where you are.
     function updatePrompt() {
       const shortP = getShortPath(cwd);
       pathEl.textContent = shortP;
       WM.setWindowTitle(winObj.id, `Terminal - ashu@moonos:${shortP}`);
     }
 
+    // print: append one output line and keep the terminal scrolled to the
+    // bottom. isRaw=true inserts trusted markup (command output links);
+    // plain text (command results) goes through textContent to stay safe.
     function print(html, isRaw = false) {
       const line = document.createElement('div');
       line.className = 'terminal-line';
@@ -69,6 +76,8 @@ const TerminalApp = (function() {
       appEl.scrollTop = appEl.scrollHeight;
     }
 
+    // printPromptEcho: echo the submitted command back as a fake prompt
+    // line, so the history above looks like a real shell session.
     function printPromptEcho(cmdText) {
       const line = document.createElement('div');
       line.className = 'terminal-prompt-row';
@@ -79,6 +88,8 @@ const TerminalApp = (function() {
       outputEl.appendChild(line);
     }
 
+    // escapeHtml: sanitize user input before it touches innerHTML so a
+    // command like 'echo <script>' can't inject markup into the page.
     function escapeHtml(str) {
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
