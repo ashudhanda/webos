@@ -56,30 +56,38 @@ const SettingsApp = (function() {
     }
 
     function renderAppearance() {
-      const currentTheme = document.documentElement.getAttribute('data-theme') || 'luna';
+      const current = document.documentElement.getAttribute('data-theme') || 'moon';
 
       const themes = [
-        { id: 'luna', name: 'Luna (Default)', bg: '#0b0e17', accent: '#9db8ff', dots: ['#9db8ff', '#dfe6f5', '#131a2b'] },
-        { id: 'nord', name: 'Nord', bg: '#242933', accent: '#88c0d0', dots: ['#88c0d0', '#eceff4', '#2e3440'] },
-        { id: 'gruvbox', name: 'Gruvbox', bg: '#1d2021', accent: '#fabd2f', dots: ['#fabd2f', '#ebdbb2', '#282828'] },
-        { id: 'everforest', name: 'Everforest', bg: '#232a2e', accent: '#a7c080', dots: ['#a7c080', '#d3c6aa', '#2d353b'] }
+        { id: 'moon', name: 'Moon', desc: 'Silver lunar glow, calm and focused.' },
+        { id: 'mars', name: 'Mars', desc: 'Warm red desert energy.' },
+        { id: 'earth', name: 'Earth', desc: 'Fresh blue-green living vibe.' },
+        { id: 'saturn', name: 'Saturn', desc: 'Golden ringed elegance.' }
       ];
 
+      const soundOn = window.ThemeFX ? window.ThemeFX.isSoundOn() : true;
+
       contentEl.innerHTML = `
-        <div class="settings-section-title">Color Theme</div>
-        <div class="settings-section-desc">Choose your preferred desktop aesthetic palette.</div>
+        <div class="settings-section-title">Appearance</div>
+        <div class="settings-section-desc">Pick a living planet theme &mdash; the desktop wallpaper animates and plays its own ambient sound.</div>
         <div class="theme-grid">
           ${themes.map(t => `
-            <div class="theme-card ${t.id === currentTheme ? 'active' : ''}" data-theme="${t.id}">
-              <div class="theme-preview" style="background: ${t.bg}">
-                <div class="theme-preview-dots">
-                  ${t.dots.map(d => `<span class="theme-dot" style="background: ${d}"></span>`).join('')}
-                </div>
-                <div style="height: 3px; width: 40%; background: ${t.accent}; border-radius: 2px;"></div>
+            <div class="theme-card ${t.id === current ? 'active' : ''}" data-theme="${t.id}">
+              <div class="planet-preview">
+                <img src="assets/themes/${t.id}.jpg" alt="${t.name} theme preview" loading="lazy">
+                <span class="planet-live">Live</span>
               </div>
               <div class="theme-card-name">${t.name}</div>
+              <div class="theme-card-desc">${t.desc}</div>
             </div>
           `).join('')}
+        </div>
+        <div class="sound-row">
+          <div class="sound-row-info">
+            <div class="sound-row-title">Ambient sound</div>
+            <div class="sound-row-desc">Each planet plays its own subtle space ambience.</div>
+          </div>
+          <button class="sound-toggle ${soundOn ? 'on' : ''}" id="sound-toggle" aria-label="Toggle ambient sound"></button>
         </div>
       `;
 
@@ -90,15 +98,26 @@ const SettingsApp = (function() {
           try {
             localStorage.setItem('moonos-theme', t);
           } catch (e) {}
-          Notify.show(`Theme changed to ${t}`, 'success');
+          if (window.ThemeFX) window.ThemeFX.apply(t);
+          Notify.show('Theme applied: ' + t, 'success');
           renderAppearance();
         });
       });
+
+      const soundToggle = contentEl.querySelector('#sound-toggle');
+      if (soundToggle) {
+        soundToggle.addEventListener('click', () => {
+          const on = !soundToggle.classList.contains('on');
+          soundToggle.classList.toggle('on', on);
+          if (window.ThemeFX) window.ThemeFX.setSoundEnabled(on);
+          Notify.show(on ? 'Ambient sound on' : 'Ambient sound off', 'success');
+        });
+      }
     }
 
     function renderWallpaper() {
       const currentWp = document.documentElement.getAttribute('data-wp') || 'default';
-      const currentTheme = document.documentElement.getAttribute('data-theme') || 'luna';
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'moon';
 
       const wallpapers = [
         { id: 'default', name: 'Default Gradient' },

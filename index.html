@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="luna">
+<html lang="en" data-theme="moon">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,14 +9,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/base.css?v=4" />
-    <link rel="stylesheet" href="css/themes.css?v=4" />
-    <link rel="stylesheet" href="css/panel.css?v=4" />
-    <link rel="stylesheet" href="css/windows.css?v=4" />
-    <link rel="stylesheet" href="css/terminal.css?v=4" />
-    <link rel="stylesheet" href="css/apps.css?v=4" />
-    <link rel="stylesheet" href="css/taskbar.css?v=4" />
-    <link rel="stylesheet" href="css/login.css?v=4" />
+    <link rel="stylesheet" href="css/base.css?v=5" />
+    <link rel="stylesheet" href="css/themes.css?v=5" />
+    <link rel="stylesheet" href="css/panel.css?v=5" />
+    <link rel="stylesheet" href="css/windows.css?v=5" />
+    <link rel="stylesheet" href="css/terminal.css?v=5" />
+    <link rel="stylesheet" href="css/apps.css?v=5" />
+    <link rel="stylesheet" href="css/taskbar.css?v=5" />
+    <link rel="stylesheet" href="css/login.css?v=5" />
   </head>
   <body>
 
@@ -117,7 +117,9 @@
 
     <div id="desktop-env" class="desktop-env hidden">
 
+      <audio id="theme-ambience" loop preload="auto"></audio>
       <div id="wallpaper" class="wallpaper">
+        <video id="wallpaper-video" class="wallpaper-video" muted loop playsinline autoplay preload="auto"></video>
         <div class="wallpaper-stars" aria-hidden="true"></div>
         <div class="wallpaper-moon" aria-hidden="true">
           <svg aria-hidden="true" viewBox="0 0 200 200" width="100%" height="100%">
@@ -481,35 +483,35 @@
     <div id="taskbar"></div>
 
 
-    <script defer src="js/core/fs.js?v=4"></script>
-    <script defer src="js/core/notify.js?v=4"></script>
-    <script defer src="js/core/wm.js?v=4"></script>
-    <script defer src="js/core/panel.js?v=4"></script>
-    <script defer src="js/core/taskbar.js?v=4"></script>
-    <script defer src="js/core/loginfx.js?v=4"></script>
-    <script defer src="js/core/boot.js?v=4"></script>
-    <script defer src="js/core/matrix.js?v=4"></script>
-    <script defer src="js/core/sound.js?v=4"></script>
-    <script defer src="js/apps/terminal.js?v=4"></script>
-    <script defer src="js/apps/files.js?v=4"></script>
-    <script defer src="js/apps/editor.js?v=4"></script>
-    <script defer src="js/apps/calc.js?v=4"></script>
-    <script defer src="js/apps/settings.js?v=4"></script>
-    <script defer src="js/apps/monitor.js?v=4"></script>
-    <script defer src="js/apps/notes.js?v=4"></script>
-    <script defer src="js/apps/snake.js?v=4"></script>
-    <script defer src="js/apps/mines.js?v=4"></script>
-    <script defer src="js/apps/music.js?v=4"></script>
-    <script defer src="js/apps/calendar.js?v=4"></script>
-    <script defer src="js/apps/tasks.js?v=4"></script>
-    <script defer src="js/apps/clock.js?v=4"></script>
-    <script defer src="js/apps/passgen.js?v=4"></script>
-    <script defer src="js/apps/voice.js?v=4"></script>
-    <script defer src="js/apps/aichat.js?v=4"></script>
-    <script defer src="js/apps/weather.js?v=4"></script>
-    <script defer src="js/apps/camera.js?v=4"></script>
-    <script defer src="js/apps/recorder.js?v=4"></script>
-    <script defer src="js/apps/paint.js?v=4"></script>
-    <script defer src="js/main.js?v=4"></script>
+    <script defer src="js/core/fs.js?v=5"></script>
+    <script defer src="js/core/notify.js?v=5"></script>
+    <script defer src="js/core/wm.js?v=5"></script>
+    <script defer src="js/core/panel.js?v=5"></script>
+    <script defer src="js/core/taskbar.js?v=5"></script>
+    <script defer src="js/core/loginfx.js?v=5"></script>
+    <script defer src="js/core/boot.js?v=5"></script>
+    <script defer src="js/core/matrix.js?v=5"></script>
+    <script defer src="js/core/sound.js?v=5"></script>
+    <script defer src="js/apps/terminal.js?v=5"></script>
+    <script defer src="js/apps/files.js?v=5"></script>
+    <script defer src="js/apps/editor.js?v=5"></script>
+    <script defer src="js/apps/calc.js?v=5"></script>
+    <script defer src="js/apps/settings.js?v=5"></script>
+    <script defer src="js/apps/monitor.js?v=5"></script>
+    <script defer src="js/apps/notes.js?v=5"></script>
+    <script defer src="js/apps/snake.js?v=5"></script>
+    <script defer src="js/apps/mines.js?v=5"></script>
+    <script defer src="js/apps/music.js?v=5"></script>
+    <script defer src="js/apps/calendar.js?v=5"></script>
+    <script defer src="js/apps/tasks.js?v=5"></script>
+    <script defer src="js/apps/clock.js?v=5"></script>
+    <script defer src="js/apps/passgen.js?v=5"></script>
+    <script defer src="js/apps/voice.js?v=5"></script>
+    <script defer src="js/apps/aichat.js?v=5"></script>
+    <script defer src="js/apps/weather.js?v=5"></script>
+    <script defer src="js/apps/camera.js?v=5"></script>
+    <script defer src="js/apps/recorder.js?v=5"></script>
+    <script defer src="js/apps/paint.js?v=5"></script>
+    <script defer src="js/main.js?v=5"></script>
   </body>
 </html>

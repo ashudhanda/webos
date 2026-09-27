@@ -1,7 +1,7 @@
 /* themes.css - switchable theme definitions */
 
-/* Luna Theme (Default) — glassmorphism edition */
-html[data-theme="luna"], :root {
+/* Moon Theme (Default) — silver-blue lunar glow */
+html[data-theme="moon"], :root {
   --bg-from: #04060d;
   --bg-to: #0d1526;
   --panel: rgba(10, 14, 24, 0.55);
@@ -9,94 +9,118 @@ html[data-theme="luna"], :root {
   --border: rgba(140, 180, 255, 0.16);
   --text: #e2eafb;
   --dim: #8b96b0;
-  --accent: #82b8ff;
-  --accent-2: #b79bff;
-  --accent-soft: rgba(130, 184, 255, 0.14);
-  --glow: 0 0 32px rgba(130, 184, 255, 0.16);
+  --accent: #9fc0ff;
+  --accent-2: #c4b5fd;
+  --accent-soft: rgba(159, 192, 255, 0.14);
+  --glow: 0 0 32px rgba(159, 192, 255, 0.16);
   --radius-win: 14px;
   --wallpaper-base: linear-gradient(165deg, #04060d, #0d1526);
   --wallpaper:
-    radial-gradient(640px 420px at 82% 10%, rgba(150, 120, 255, 0.13), transparent 62%),
-    radial-gradient(840px 520px at 10% 90%, rgba(90, 140, 255, 0.11), transparent 62%),
-    radial-gradient(500px 500px at 58% 42%, rgba(130, 184, 255, 0.07), transparent 65%),
+    radial-gradient(640px 420px at 82% 8%, rgba(150, 170, 255, 0.10), transparent 62%),
     linear-gradient(165deg, #04060d 0%, #0a1120 55%, #0d1526 100%);
 }
 
-/* Nord Theme */
-html[data-theme="nord"] {
-  --bg-from: #242933;
-  --bg-to: #2e3440;
-  --panel: rgba(46,52,64,.8);
-  --window: rgba(59,66,82,.97);
-  --border: rgba(216,222,233,.08);
-  --text: #eceff4;
-  --dim: #a7aebd;
-  --accent: #88c0d0;
-  --accent-soft: rgba(136,192,208,.14);
-  --wallpaper-base: linear-gradient(160deg, #242933, #2e3440);
-  --wallpaper: linear-gradient(160deg, #242933, #2e3440);
+/* Mars Theme — warm red desert glow */
+html[data-theme="mars"] {
+  --bg-from: #0d0505;
+  --bg-to: #241009;
+  --panel: rgba(24, 12, 8, 0.55);
+  --window: rgba(32, 16, 10, 0.48);
+  --border: rgba(255, 150, 110, 0.18);
+  --text: #fbe9df;
+  --dim: #b08d7c;
+  --accent: #ff9a66;
+  --accent-2: #ffc46b;
+  --accent-soft: rgba(255, 154, 102, 0.14);
+  --glow: 0 0 32px rgba(255, 140, 90, 0.18);
+  --radius-win: 14px;
+  --wallpaper-base: linear-gradient(165deg, #0d0505, #241009);
+  --wallpaper:
+    radial-gradient(640px 420px at 82% 8%, rgba(255, 130, 80, 0.10), transparent 62%),
+    linear-gradient(165deg, #0d0505 0%, #1c0d07 55%, #241009 100%);
 }
 
-/* Gruvbox Theme */
-html[data-theme="gruvbox"] {
-  --bg-from: #1d2021;
-  --bg-to: #282828;
-  --panel: rgba(40,40,40,.85);
-  --window: rgba(50,48,47,.97);
-  --border: rgba(235,219,178,.10);
-  --text: #ebdbb2;
-  --dim: #bdae93;
-  --accent: #fabd2f;
-  --accent-soft: rgba(250,189,47,.14);
-  --wallpaper-base: linear-gradient(160deg, #1d2021, #282828);
-  --wallpaper: linear-gradient(160deg, #1d2021, #282828);
+/* Earth Theme — blue-green living glow */
+html[data-theme="earth"] {
+  --bg-from: #030b0d;
+  --bg-to: #0a1f24;
+  --panel: rgba(8, 20, 24, 0.55);
+  --window: rgba(10, 28, 33, 0.48);
+  --border: rgba(110, 220, 200, 0.16);
+  --text: #e0f5ef;
+  --dim: #7fa8a0;
+  --accent: #5fd6b8;
+  --accent-2: #6bb8ff;
+  --accent-soft: rgba(95, 214, 184, 0.14);
+  --glow: 0 0 32px rgba(95, 214, 184, 0.16);
+  --radius-win: 14px;
+  --wallpaper-base: linear-gradient(165deg, #030b0d, #0a1f24);
+  --wallpaper:
+    radial-gradient(640px 420px at 82% 8%, rgba(100, 200, 255, 0.10), transparent 62%),
+    linear-gradient(165deg, #030b0d 0%, #08161a 55%, #0a1f24 100%);
 }
 
-/* Everforest Theme */
-html[data-theme="everforest"] {
-  --bg-from: #232a2e;
-  --bg-to: #2d353b;
-  --panel: rgba(45,53,59,.85);
-  --window: rgba(52,63,68,.97);
-  --border: rgba(211,198,170,.10);
-  --text: #d3c6aa;
-  --dim: #9da9a0;
-  --accent: #a7c080;
-  --accent-soft: rgba(167,192,128,.14);
-  --wallpaper-base: linear-gradient(160deg, #232a2e, #2d353b);
-  --wallpaper: linear-gradient(160deg, #232a2e, #2d353b);
+/* Saturn Theme — golden ringed glow */
+html[data-theme="saturn"] {
+  --bg-from: #0b0803;
+  --bg-to: #221a0c;
+  --panel: rgba(22, 17, 8, 0.55);
+  --window: rgba(30, 23, 10, 0.48);
+  --border: rgba(240, 200, 120, 0.18);
+  --text: #f8efdb;
+  --dim: #ad9a76;
+  --accent: #f0c96a;
+  --accent-2: #e8a86b;
+  --accent-soft: rgba(240, 201, 106, 0.14);
+  --glow: 0 0 32px rgba(240, 201, 106, 0.18);
+  --radius-win: 14px;
+  --wallpaper-base: linear-gradient(165deg, #0b0803, #221a0c);
+  --wallpaper:
+    radial-gradient(640px 420px at 82% 8%, rgba(240, 200, 120, 0.10), transparent 62%),
+    linear-gradient(165deg, #0b0803 0%, #191207 55%, #221a0c 100%);
 }
 
 /* Wallpaper variations per theme */
-html[data-wp="alt1"][data-theme="luna"] {
+html[data-wp="alt1"][data-theme="moon"] {
   --wallpaper:
-    radial-gradient(640px 420px at 18% 82%, rgba(130, 184, 255, 0.14), transparent 60%),
-    radial-gradient(700px 460px at 85% 15%, rgba(150, 120, 255, 0.10), transparent 62%),
-    linear-gradient(135deg, #05070e, #101a30);
+    radial-gradient(700px 460px at 50% 0%, rgba(150, 170, 255, 0.14), transparent 60%),
+    linear-gradient(180deg, #04060d, #0a1120, #101a30);
 }
-html[data-wp="alt2"][data-theme="luna"] {
+html[data-wp="alt2"][data-theme="moon"] {
   --wallpaper:
-    radial-gradient(700px 480px at 50% 0%, rgba(130, 184, 255, 0.12), transparent 60%),
+    radial-gradient(700px 460px at 50% 100%, rgba(120, 140, 255, 0.10), transparent 60%),
     linear-gradient(180deg, #04060d, #0c1425, #14203a);
 }
 
-html[data-wp="alt1"][data-theme="nord"] {
-  --wallpaper: radial-gradient(circle at 80% 20%, rgba(136,192,208,.2), transparent 40%), linear-gradient(145deg, #1e222a, #3b4252);
+html[data-wp="alt1"][data-theme="mars"] {
+  --wallpaper:
+    radial-gradient(700px 460px at 50% 0%, rgba(255, 130, 80, 0.14), transparent 60%),
+    linear-gradient(180deg, #0d0505, #1c0d07, #2e1409);
 }
-html[data-wp="alt2"][data-theme="nord"] {
-  --wallpaper: linear-gradient(180deg, #20242c, #2e3440, #434c5e);
-}
-
-html[data-wp="alt1"][data-theme="gruvbox"] {
-  --wallpaper: radial-gradient(circle at 75% 25%, rgba(250,189,47,.15), transparent 45%), linear-gradient(145deg, #141617, #32302f);
-}
-html[data-wp="alt2"][data-theme="gruvbox"] {
-  --wallpaper: linear-gradient(180deg, #181a1b, #282828, #3c3836);
+html[data-wp="alt2"][data-theme="mars"] {
+  --wallpaper:
+    radial-gradient(700px 460px at 50% 100%, rgba(255, 110, 70, 0.10), transparent 60%),
+    linear-gradient(180deg, #0d0505, #200f08, #33170b);
 }
 
-html[data-wp="alt1"][data-theme="everforest"] {
-  --wallpaper: radial-gradient(circle at 75% 25%, rgba(167,192,128,.15), transparent 45%), linear-gradient(145deg, #1a2023, #343f44);
+html[data-wp="alt1"][data-theme="earth"] {
+  --wallpaper:
+    radial-gradient(700px 460px at 50% 0%, rgba(100, 200, 255, 0.14), transparent 60%),
+    linear-gradient(180deg, #030b0d, #08161a, #0e2a33);
 }
-html[data-wp="alt2"][data-theme="everforest"] {
-  --wallpaper: linear-gradient(180deg, #1e2326, #2d353b, #3d484d);
+html[data-wp="alt2"][data-theme="earth"] {
+  --wallpaper:
+    radial-gradient(700px 460px at 50% 100%, rgba(95, 214, 184, 0.10), transparent 60%),
+    linear-gradient(180deg, #030b0d, #0a1a1e, #10302b);
+}
+
+html[data-wp="alt1"][data-theme="saturn"] {
+  --wallpaper:
+    radial-gradient(700px 460px at 50% 0%, rgba(240, 200, 120, 0.14), transparent 60%),
+    linear-gradient(180deg, #0b0803, #191207, #2b2010);
+}
+html[data-wp="alt2"][data-theme="saturn"] {
+  --wallpaper:
+    radial-gradient(700px 460px at 50% 100%, rgba(232, 168, 107, 0.10), transparent 60%),
+    linear-gradient(180deg, #0b0803, #1c1408, #332612);
 }

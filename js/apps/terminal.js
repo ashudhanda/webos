@@ -433,7 +433,7 @@ const TerminalApp = (function() {
         }
 
         case 'neofetch': {
-          const currTheme = document.documentElement.getAttribute('data-theme') || 'luna';
+          const currTheme = document.documentElement.getAttribute('data-theme') || 'moon';
           const asciiMoon = `    ___
  .-'   '-.
 /       .'
@@ -462,9 +462,9 @@ const TerminalApp = (function() {
         }
 
         case 'theme': {
-          const themes = ['luna', 'nord', 'gruvbox', 'everforest'];
+          const themes = ['moon', 'mars', 'earth', 'saturn'];
           if (!args[0]) {
-            const current = document.documentElement.getAttribute('data-theme') || 'luna';
+            const current = document.documentElement.getAttribute('data-theme') || 'moon';
             print(`available themes: ${themes.join(', ')}\ncurrent theme: ${current}`);
           } else {
             const targetTheme = args[0].toLowerCase();
@@ -473,6 +473,7 @@ const TerminalApp = (function() {
               try {
                 localStorage.setItem('moonos-theme', targetTheme);
               } catch (e) {}
+              if (window.ThemeFX) window.ThemeFX.apply(targetTheme);
               Notify.show(`theme set to ${targetTheme}`, 'success');
               print(`switched theme to ${targetTheme}`);
             } else {

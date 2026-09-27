@@ -290,6 +290,28 @@ button {
   overflow: hidden;
 }
 
+/* Animated planet video wallpaper (per theme) */
+.wallpaper-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Planet themes use the video wallpaper; hide the CSS star/moon art */
+html[data-theme="moon"] .wallpaper-stars,
+html[data-theme="mars"] .wallpaper-stars,
+html[data-theme="earth"] .wallpaper-stars,
+html[data-theme="saturn"] .wallpaper-stars,
+html[data-theme="moon"] .wallpaper-moon,
+html[data-theme="mars"] .wallpaper-moon,
+html[data-theme="earth"] .wallpaper-moon,
+html[data-theme="saturn"] .wallpaper-moon {
+  display: none;
+}
+
 /* Twinkling star field (pure CSS) */
 .wallpaper-stars {
   position: absolute;

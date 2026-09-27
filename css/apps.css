@@ -461,6 +461,129 @@
   text-transform: capitalize;
 }
 
+/* Planet theme cards — animated preview thumbnails */
+.planet-preview {
+  height: 76px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  position: relative;
+  background: #000;
+}
+
+.planet-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 300ms ease;
+}
+
+.theme-card:hover .planet-preview img {
+  transform: scale(1.1);
+}
+
+.planet-preview .planet-live {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  padding: 2px 7px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.planet-preview .planet-live::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ff5f5f;
+  animation: planet-live-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes planet-live-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.theme-card-desc {
+  font-size: 10.5px;
+  color: var(--dim);
+  line-height: 1.4;
+}
+
+/* Ambient sound toggle row */
+.sound-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-win);
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.15);
+  margin-top: 4px;
+}
+
+.sound-row-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sound-row-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.sound-row-desc {
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.sound-toggle {
+  flex-shrink: 0;
+  width: 46px;
+  height: 26px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  position: relative;
+  transition: background 150ms ease;
+}
+
+.sound-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 150ms ease;
+}
+
+.sound-toggle.on {
+  background: var(--accent);
+}
+
+.sound-toggle.on::after {
+  left: 22px;
+}
+
 /* Wallpaper choices */
 .wallpaper-grid {
   display: grid;

@@ -5,7 +5,7 @@ const Boot = (function() {
     '[    0.000000] moonOS 1.0 booting on web',
     '[    0.042131] moonwm: window manager started',
     '[    0.118445] fs: mounted /home/ashu (rw)',
-    '[    0.204882] themes: loaded luna, nord, gruvbox, everforest',
+    '[    0.204882] themes: loaded moon, mars, earth, saturn',
     '[    0.311509] net: connected to moon-net',
     '[    0.402773] sandbox: all systems nominal',
     '[    0.467001] welcome, ashu'
