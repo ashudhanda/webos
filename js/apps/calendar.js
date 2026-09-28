@@ -172,6 +172,9 @@ const CalendarApp = (function() {
       });
     }
 
+    // event titles are user-typed and rendered via innerHTML, so this
+    // escaping is what keeps typed input from injecting markup (XSS-safe
+    // by construction: run every title/time through it before display)
     function escapeHtml(s) {
       return String(s).replace(/[&<>"']/g, (c) => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
