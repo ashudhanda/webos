@@ -130,6 +130,9 @@
   }
 
   // ---------- hold to sign in ----------
+  // press-and-hold UX: sign-in only commits after a full 750ms hold;
+  // releasing early, sliding off the ring, or pointercancel aborts the
+  // timer (the .charging class drives the ring-fill progress animation)
   function wireHoldButton() {
     const btn = document.getElementById('login-hold-btn');
     const card = document.getElementById('login-user-card');
