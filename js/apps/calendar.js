@@ -24,6 +24,12 @@ const CalendarApp = (function() {
     });
   }
 
+  /**
+   * Build the event-bucket key for a date: "YYYY-MM-DD" (e.g. "2026-09-29").
+   * m is the Date getMonth() 0-based index, so +1 converts it to 1-12.
+   * Keep this format stable: it doubles as the localStorage grouping key
+   * and the data-key attribute on every calendar day cell.
+   */
   function dateKey(y, m, d) {
     return y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
   }
