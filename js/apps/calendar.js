@@ -92,7 +92,10 @@ const CalendarApp = (function() {
       titleEl.textContent = MONTHS[viewM] + ' ' + viewY;
       gridEl.innerHTML = '';
 
-      // monday-first offset
+      // fixed 6x7 grid (42 cells): leading/trailing cells are filled with
+      // the neighbouring month's days, styled as .other-month
+      // monday-first offset: getDay() is sunday-first, so +6 %7 remaps
+      // sunday->6, monday->0, ..., saturday->5
       const first = new Date(viewY, viewM, 1);
       let offset = (first.getDay() + 6) % 7;
       const daysInMonth = new Date(viewY, viewM + 1, 0).getDate();
