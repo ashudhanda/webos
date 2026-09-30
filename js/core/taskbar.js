@@ -324,6 +324,9 @@ const Taskbar = (function() {
         return;
       }
 
+      // search ranking: exact name-substring matches win first, then any
+      // alias-substring match (e.g. "sh" finds Terminal via 'sh'); results
+      // are capped at 5 so the popup stays compact
       currentSearchResults = apps.filter((app) => {
         if (app.name.toLowerCase().includes(query)) return true;
         return app.aliases.some(alias => alias.includes(query));
