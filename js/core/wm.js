@@ -1,4 +1,31 @@
-// wm.js - window manager, dragging, resizing, workspaces & alt-tab
+// wm.js - window manager: window lifecycle, drag/resize, aero snap,
+// workspaces & alt-tab.
+//
+// Model: every open window lives in the `windows` Map (id -> window object).
+// z-order is strictly "last focused wins" — focusing a window bumps a global
+// counter (highestZ, starting at 100) and assigns it as the window's z-index,
+// so windows never need re-sorting and the stacking order always matches
+// focus order.
+//
+// Each workspace renders into its own container (#windows-ws-0..3); windows
+// physically stay in their workspace's container, so switching workspaces
+// just hides the other containers. createWindow() enforces one instance per
+// app id: re-launching focuses (and un-minimizes / jumps to the window's
+// workspace) instead of opening a duplicate.
+//
+// Snap/restore: aero-snapping a window stashes its pre-snap inline geometry
+// in winObj.prevRect (only when it was NOT already snapped/maximized, so the
+// stored rect is always the true restore point); unsnapWindow() replays it.
+// Pending edge-detect state during a drag is tracked in `pendingSnap` and
+// committed on pointerup.
+//
+// Public API consumed by other modules:
+//   WM.createWindow(config)  - config: { id?, title, iconSvg?, width?, height?,
+//                                x?, y?, ws?, render(bodyEl, winObj)?,
+//                                onClose?, minWidth?, minHeight? }
+//   WM.closeWindow(id), WM.focusWindow(id), WM.minimizeWindow(id),
+//   WM.unminimizeWindow(id), WM.toggleMaximize(id), WM.getWindow(id),
+//   WM.setWorkspace(i)
 
 const WM = (function() {
   let highestZ = 100;
