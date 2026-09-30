@@ -220,6 +220,10 @@ const Taskbar = (function() {
     });
   }
 
+  // open an app with a three-tier fallback: reuse the existing window via
+  // the window manager (un-minimizing it first), otherwise delegate to the
+  // Apps registry, otherwise log as a last resort so a missing registry
+  // never throws. running dots refresh after every attempt.
   function launchOrFocusApp(id) {
     if (window.WM && WM.getWindow(id)) {
       const win = WM.getWindow(id);
