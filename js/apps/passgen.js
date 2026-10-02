@@ -30,14 +30,14 @@ const PassgenApp = (function() {
       <div class="passgen-app">
         <div class="passgen-out-wrap">
           <div class="passgen-out" title="generated password">press generate</div>
-          <button class="passgen-copy" title="copy to clipboard">copy</button>
+          <button class="passgen-copy" title="copy to clipboard" aria-label="copy to clipboard">copy</button>
         </div>
         <div class="passgen-strength">
           <div class="passgen-bar"><div class="passgen-fill"></div></div>
           <div class="passgen-label">strength — <b class="passgen-word">—</b> <span class="passgen-bits"></span></div>
         </div>
         <label class="passgen-row">length <b class="passgen-len-val">16</b>
-          <input type="range" class="passgen-len" min="8" max="64" value="16">
+          <input type="range" class="passgen-len" min="8" max="64" value="16" aria-label="password length">
         </label>
         <div class="passgen-toggles">
           <label><input type="checkbox" class="pg-lower" checked> a–z</label>
@@ -45,7 +45,7 @@ const PassgenApp = (function() {
           <label><input type="checkbox" class="pg-digits" checked> 0–9</label>
           <label><input type="checkbox" class="pg-symbols" checked> symbols</label>
         </div>
-        <button class="passgen-generate">generate</button>
+        <button class="passgen-generate" aria-label="generate password">generate</button>
         <div class="passgen-history-title">this session</div>
         <div class="passgen-history"></div>
       </div>
