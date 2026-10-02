@@ -20,7 +20,7 @@ same thing, shh), click the user card and you're in. no password.
   in the terminal shows up here instantly
 - **Text Editor** — opens files from the fs, autosaves as you type
 - **Calculator** — full keyboard support
-- **Settings** — 4 full themes (luna, nord, gruvbox, everforest) plus
+- **Settings** — 4 full themes (moon, mars, earth, saturn) plus
   extra wallpapers for each
 - **System Monitor** — fake but alive, htop style
 - **Sticky Notes** — quick sticky notes on the desktop, autosaved as you type
@@ -42,8 +42,6 @@ same thing, shh), click the user card and you're in. no password.
 - **Camera** — webcam preview with photo capture and PNG download
 - **Sound Recorder** — record from the mic, play back, save or delete clips
 - **Paint** — brush, eraser, shapes, colors, undo, export as PNG
-- **2048** — the sliding-tile puzzle, arrows/wasd or on-screen pad,
-  best score saved
 
 ## stuff you can do
 
