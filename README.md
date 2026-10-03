@@ -70,9 +70,10 @@ css and js — no npm, no bundler, nothing to install.
   taskbar, terminal, apps
 - js/main.js — boot glue, wires every module together at startup
 - js/core/ — the guts: wm (window manager), fs (virtual fs), boot,
-  panel, taskbar, sound, notify, matrix
+  loginfx, panel, taskbar, sound, notify, wallpaper, ambience, matrix
 - js/apps/ — one module per app: terminal, files, editor, calc,
-  settings, monitor, notes
+  settings, monitor, notes, snake, mines, music, calendar, tasks,
+  clock, passgen, voice, aichat, weather, camera, recorder, paint
 
 ## things that took me forever
 
