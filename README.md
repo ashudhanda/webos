@@ -54,7 +54,6 @@ same thing, shh), click the user card and you're in. no password.
 - 4 workspaces — ctrl+alt+left/right, or the dots in the top panel
 - alt+tab actually works
 - the bottom taskbar has a start menu and a working search (try "term")
-- right click the desktop for a small menu
 - super+L (or ctrl+alt+L) locks the screen. typing `exit` in the
   terminal does too, like a real os
 
