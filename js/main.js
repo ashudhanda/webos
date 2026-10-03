@@ -55,6 +55,9 @@ window.Apps = Apps;
 document.addEventListener('DOMContentLoaded', () => {
 
   try {
+    // THEME_MIGRATION: theme ids were renamed (luna->moon etc.), so translate
+    // any legacy name still saved in localStorage — returning visitors keep
+    // a working theme instead of falling through to the default.
     const THEME_MIGRATION = { luna: 'moon', nord: 'earth', gruvbox: 'saturn', everforest: 'mars' };
     let savedTheme = localStorage.getItem('moonos-theme') || 'moon';
     if (THEME_MIGRATION[savedTheme]) {
