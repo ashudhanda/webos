@@ -56,6 +56,8 @@ const TasksApp = (function() {
       } catch (e) {}
     }
 
+    // escapeHtml: task text is user input and rows are built with innerHTML,
+    // so a task like "<img onerror=...>" would run code. Escape first.
     function escapeHtml(s) {
       return String(s).replace(/[&<>"']/g, (c) => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
