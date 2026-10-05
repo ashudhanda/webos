@@ -8,7 +8,8 @@ moon themed. no install, no build step — open it and it boots.
 https://ashudhanda.github.io/webos/
 
 press enter on the boot screen, pick an entry in grub (both boot the
-same thing, shh), click the user card and you're in. no password.
+same thing, shh), then press-and-hold the "hold to sign in" ring (or just
+hit enter) and you're in. no password.
 
 ## what's inside
 
