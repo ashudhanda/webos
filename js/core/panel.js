@@ -56,6 +56,10 @@ const Panel = (function() {
     setInterval(update, 1000);
   }
 
+  // togglePopup: only one panel popup is ever open — opening another first
+  // closes the current one. Clicking the trigger of the already-open popup
+  // toggles it shut. Clicks anywhere outside a popup or its trigger button
+  // (see the document click handler in setupPopups) close everything.
   function togglePopup(popupEl, triggerBtn) {
     if (activePopup === popupEl) {
       closeAllPopups();
