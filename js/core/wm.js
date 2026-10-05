@@ -79,6 +79,11 @@ const WM = (function() {
     if (snapPreviewEl) snapPreviewEl.classList.add('hidden');
   }
 
+  // applySnap: aero snap. zone is 'left' | 'right' (window fills half the
+  // screen) or 'max' (delegates to toggleMaximize). The pre-snap geometry
+  // is saved once before the FIRST snap — skipping the save while already
+  // snapped/maximized keeps prevRect pointing at the true restore point,
+  // so unsnap brings the window back to where it was before any snapping.
   function applySnap(id, zone) {
     if (!windows.has(id)) return;
     const winObj = windows.get(id);
