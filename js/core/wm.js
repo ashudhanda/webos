@@ -566,6 +566,11 @@ const WM = (function() {
     });
   }
 
+  // closeAltTab: dismiss the switcher overlay. commit=true fires when the
+  // Alt key is released — focus moves to the highlighted window (it gets
+  // unminimized and we jump to its workspace if needed). commit=false
+  // fires on Escape and just closes the overlay, keeping the current
+  // window untouched.
   function closeAltTab(commit = true) {
     if (!isAltTabOpen) return;
     isAltTabOpen = false;
