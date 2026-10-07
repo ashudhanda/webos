@@ -137,7 +137,7 @@ const Taskbar = (function() {
 
     mountEl.innerHTML = `
       <div class="taskbar">
-        <button id="taskbar-start-btn" class="taskbar-start-btn" title="Start">
+        <button id="taskbar-start-btn" class="taskbar-start-btn" title="Start" aria-label="Start menu">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
@@ -150,12 +150,12 @@ const Taskbar = (function() {
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </span>
-          <input type="text" id="taskbar-search-input" class="taskbar-search-input" placeholder="type to search apps…" autocomplete="off" spellcheck="false" />
+          <input type="text" id="taskbar-search-input" class="taskbar-search-input" placeholder="type to search apps…" aria-label="Search apps" autocomplete="off" spellcheck="false" />
         </div>
 
         <div class="taskbar-pinned-apps">
           ${pinnedApps.map(app => `
-            <button class="taskbar-app-btn" data-app="${app.id}" data-tooltip="${app.name}">
+            <button class="taskbar-app-btn" data-app="${app.id}" data-tooltip="${app.name}" aria-label="${app.name}">
               ${app.icon}
               <span class="taskbar-app-dot"></span>
             </button>
