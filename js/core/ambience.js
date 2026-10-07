@@ -83,7 +83,11 @@ window.Ambience = (() => {
     try {
       handle.gain.gain.cancelScheduledValues(t);
       handle.gain.gain.setTargetAtTime(0.0001, t, FADE_TC);
+      // Stop the source 1.6s out — by then the ~1s crossfade has made it
+      // inaudible, so nothing clicks when the loop is cut.
       handle.source.stop(t + 1.6);
+      // Disconnect only after 2s: gives the scheduled stop time to actually
+      // fire, and frees the nodes/garbage only once they're silent.
       setTimeout(function () {
         try { handle.source.disconnect(); } catch (e) {}
         try { handle.gain.disconnect(); } catch (e) {}
