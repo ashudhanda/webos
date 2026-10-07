@@ -96,6 +96,9 @@ const ClockApp = (function() {
 
     const timers = [];
 
+    // Run fn immediately, then on a repeating interval. The returned timer
+    // id goes into the shared `timers` list so the window-close cleanup can
+    // clear every interval in one pass.
     function every(ms, fn) {
       fn();
       const t = setInterval(fn, ms);
@@ -156,6 +159,8 @@ const ClockApp = (function() {
       } else {
         swRunning = true;
         swStartAt = Date.now();
+        // 31ms ≈ 32fps: fast enough for a smooth centisecond readout, but
+        // slow enough to not re-render the DOM every single animation frame.
         swTick = setInterval(swRender, 31);
         timers.push(swTick);
         swStart.textContent = 'stop';
