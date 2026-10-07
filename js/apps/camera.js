@@ -10,6 +10,9 @@ const CameraApp = (function() {
 
   // Open the camera (if needed), wait for the stream, capture one photo.
   // Resolves true when a photo was captured, false otherwise.
+  // Polls every 250ms (cheap, still responsive); the 10s timeout plus the
+  // window-exists check bail out if permission is never granted or the user
+  // closes the window mid-capture.
   function capturePhoto() {
     return new Promise((resolve) => {
       if (!window.Apps || !window.WM) { resolve(false); return; }
