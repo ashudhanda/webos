@@ -115,7 +115,10 @@ const VoiceApp = (function() {
       statusEl.textContent = t;
     }
 
-    function findApp(want) {
+  // findApp: match a spoken phrase to an app id via the APP_NAMES aliases.
+  // Matches when the phrase equals, contains, or is contained in an alias,
+  // so "music studio", "music", "piano", and "the piano" all resolve.
+  function findApp(want) {
       const w = want.toLowerCase().trim();
       for (const [id, names] of Object.entries(APP_NAMES)) {
         if (names.some(n => w === n || w.includes(n) || n.includes(w))) {
@@ -125,7 +128,8 @@ const VoiceApp = (function() {
       return null;
     }
 
-    function appLabel(id) {
+  // appLabel: friendly display name for an app id — its first alias.
+  function appLabel(id) {
       const names = APP_NAMES[id];
       return names ? names[0] : id;
     }
@@ -204,7 +208,10 @@ const VoiceApp = (function() {
       return `${a} ${opWord} ${b} is ${pretty}.`;
     }
 
-    function wordToNum(s) {
+  // wordToNum: turn a spoken number into a number — digits ("12"), single
+  // words ("forty"), and compound phrases ("twenty one") via the WORD_NUMS
+  // lookup. Returns null for anything that isn't a number.
+  function wordToNum(s) {
       s = s.toLowerCase().trim();
       if (/^-?\d+(\.\d+)?$/.test(s)) return parseFloat(s);
       if (WORD_NUMS[s] !== undefined) return WORD_NUMS[s];
