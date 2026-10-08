@@ -296,6 +296,10 @@ const VoiceApp = (function() {
       speak(reply);
     }
 
+    // startListening: open the speech recognizer and keep the session alive —
+    // onend restarts the recognizer automatically while the listening flag
+    // holds, so the mic stays hot across pauses. Only stopListening() ends
+    // the session (mic toggle, goodbye command, or window cleanup).
     function startListening() {
       if (!supported || listening) return;
       try {
@@ -325,6 +329,8 @@ const VoiceApp = (function() {
       }
     }
 
+    // stopListening: leave a listening session. The flag clears first so the
+    // auto-restart in onend can't re-arm the recognizer behind us.
     function stopListening() {
       listening = false;
       micBtn.classList.remove('listening');
