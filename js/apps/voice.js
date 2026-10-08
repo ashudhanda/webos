@@ -271,13 +271,13 @@ const VoiceApp = (function() {
         if (math !== null) {
           reply = math;
         } else if (/\btime\b/.test(cmd)) {
-        const t = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-        reply = `It is ${t}.`;
-      } else if (/\b(date|day|today)\b/.test(cmd)) {
-        const d = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-        reply = `Today is ${d}.`;
-      } else if (/\bjoke\b/.test(cmd)) {
-        reply = JOKES[Math.floor(Math.random() * JOKES.length)];
+          const t = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+          reply = `It is ${t}.`;
+        } else if (/\b(date|day|today)\b/.test(cmd)) {
+          const d = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+          reply = `Today is ${d}.`;
+        } else if (/\bjoke\b/.test(cmd)) {
+          reply = JOKES[Math.floor(Math.random() * JOKES.length)];
       } else if (/what can you do|help|commands/.test(cmd)) {
         reply = 'I can open and close apps ("open snake", "close music"), take a photo, do quick math like "sum of 9 and 5", tell the time and date, or tell a joke.';
       } else if (/^(hi|hello|hey)\b/.test(cmd)) {
