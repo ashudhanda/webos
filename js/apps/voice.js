@@ -36,6 +36,10 @@ const VoiceApp = (function() {
     'My computer and I have a great relationship. It does what I say. Eventually. After three restarts.'
   ];
 
+  // open: create the Voice Assistant window. The mic button is disabled when
+  // the browser has no SpeechRecognition — typing commands still works via
+  // initVoice. onClose runs the cleanup fn initVoice returns, so the mic
+  // and speech queue are released together with the window.
   function open() {
     let cleanupFn = null;
     WM.createWindow({
@@ -55,6 +59,8 @@ const VoiceApp = (function() {
     });
   }
 
+  // speak: voice a reply aloud. The queue is cancelled first so rapid-fire
+  // replies don't pile up; silently no-ops where speechSynthesis is missing.
   function speak(text) {
     try {
       if (!('speechSynthesis' in window)) return;
