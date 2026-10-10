@@ -29,6 +29,11 @@ const Apps = (function() {
     paint: PaintApp
   };
 
+  // launch: looks up appName in the module registry and opens it.
+  // options deep-links into apps that accept them: files and editor
+  // take {path} (used by desktop icons and search results), settings
+  // passes its options straight through. Every other app ignores
+  // options and just opens a fresh window.
   function launch(appName, options) {
     const app = registry[appName];
     if (app && typeof app.open === 'function') {
