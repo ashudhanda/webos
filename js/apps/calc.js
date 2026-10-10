@@ -65,6 +65,11 @@ const CalcApp = (function() {
       resEl.textContent = currentInput;
     }
 
+    // handleInput: feeds one key through the input state machine.
+    // currentInput holds the number being typed (or 'error'), prevExpr
+    // holds the pending "operand operator" waiting for a second operand,
+    // and resetOnNext means the next digit starts a fresh number instead
+    // of appending (set right after an operator or equals).
     function handleInput(key) {
       if (key >= '0' && key <= '9') {
         if (currentInput === '0' || currentInput === 'error' || resetOnNext) {
