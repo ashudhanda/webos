@@ -67,7 +67,7 @@ css and js — no npm, no bundler, nothing to install.
 
 - index.html — boot screen, login/lock screens, desktop shell markup
 - css/ — one stylesheet per layer: base, themes, panel, windows,
-  taskbar, terminal, apps
+  taskbar, terminal, apps, login
 - js/main.js — boot glue, wires every module together at startup
 - js/core/ — the guts: wm (window manager), fs (virtual fs), boot,
   loginfx, panel, taskbar, sound, notify, wallpaper, ambience, matrix
