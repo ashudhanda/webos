@@ -174,6 +174,9 @@ const FS = (function() {
     return item.node.content || '';
   }
 
+  // write: create or overwrite a file at pathStr. Only the final segment
+  // is new — the parent dir must already exist (echo > /new/dir fails
+  // unless you mkdir first). Throws when the parent path is missing.
   function write(pathStr, content = '', cwd = HOME_PATH) {
     const absPath = resolve(pathStr, cwd);
     const parts = absPath.split('/').filter(Boolean);
@@ -196,6 +199,9 @@ const FS = (function() {
     return true;
   }
 
+  // mkdir: create one directory level. No -p flag — the parent must
+  // already exist and the name must be free, matching the terminal's
+  // plain mkdir command.
   function mkdir(pathStr, cwd = HOME_PATH) {
     const absPath = resolve(pathStr, cwd);
     const parts = absPath.split('/').filter(Boolean);
@@ -222,6 +228,8 @@ const FS = (function() {
     return true;
   }
 
+  // rm: delete a file. Refuses directories with the same error bash
+  // gives without -r, and protects / and the home dir from removal.
   function rm(pathStr, cwd = HOME_PATH) {
     const item = getNode(pathStr, cwd);
     if (!item) throw new Error('no such file or directory');
@@ -239,6 +247,8 @@ const FS = (function() {
     return true;
   }
 
+  // rmdir: remove a directory (empty or not — there is no recursive
+  // rm -r here). Refuses files and guards / and the home dir.
   function rmdir(pathStr, cwd = HOME_PATH) {
     const item = getNode(pathStr, cwd);
     if (!item) throw new Error('no such file or directory');
@@ -250,6 +260,9 @@ const FS = (function() {
     return true;
   }
 
+  // rename: rename a file or directory inside its current parent.
+  // newName is just the new name, not a path (no '/' allowed), and the
+  // destination must not already exist.
   function rename(oldPathStr, newName, cwd = HOME_PATH) {
     const item = getNode(oldPathStr, cwd);
     if (!item) throw new Error('no such file or directory');
