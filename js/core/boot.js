@@ -1,4 +1,14 @@
-// boot.js - boot sequence, login & lock screens
+// boot.js - boot sequence, login & lock screens.
+//
+// Boot is a tiny state machine: prompt -> grub -> log -> login -> desktop.
+//   prompt: "press enter to boot" splash; click or Enter -> startGrub()
+//   grub: fake GRUB menu; auto-continues after 1.2s, Enter, or a menu click
+//     -> startKernelLog()
+//   log: KERNEL_LINES typed one every 45ms; Enter, Esc, or click anywhere
+//     -> skipToLogin()
+//   login: the user card; click -> signIn() -> desktop
+// Every trigger is guarded by bootState, so overlapping inputs can't fire
+// twice — e.g. the 1.2s grub auto-timer racing an Enter keypress.
 
 const Boot = (function() {
   const KERNEL_LINES = [
