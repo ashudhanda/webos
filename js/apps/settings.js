@@ -1,4 +1,11 @@
-// settings.js - system settings app for appearance (planet themes) & system info
+// settings.js - system settings app for appearance (planet themes) & system info.
+//
+// Theme contract: renderAppearance reads the current theme from the
+// <html> data-theme attribute, writes the new choice back onto it, and
+// mirrors it in localStorage under 'moonos-theme' so it survives refresh.
+// window.ThemeFX.apply(t) then swaps the animated wallpaper and ambient
+// sound to match — all three stay in sync, so a reload never lands on a
+// mismatched theme + wallpaper combo.
 
 const SettingsApp = (function() {
   function open(options = {}) {
