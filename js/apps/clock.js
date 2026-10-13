@@ -217,6 +217,10 @@ const ClockApp = (function() {
       tmFill.style.width = Math.max(0, Math.min(100, pct)) + '%';
     }
 
+    // beep: three 880Hz sine pings when the countdown finishes. The
+    // AudioContext is created lazily on first beep and resume()d if
+    // suspended — browsers gate audio behind a user gesture, so creating
+    // it at module load would start suspended and stay silent.
     function beep() {
       try {
         if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
