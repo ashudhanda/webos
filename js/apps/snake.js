@@ -6,6 +6,9 @@ const SnakeApp = (function() {
   const COLS = 20;
   const ROWS = 20;
 
+  // open: create the Snake window. render() returns a cleanup fn that the
+  // window manager calls onClose — stops the game timer and drops the
+  // keydown listener so a closed game never keeps ticking.
   function open() {
     let cleanupFn = null;
     WM.createWindow({
@@ -65,6 +68,8 @@ const SnakeApp = (function() {
     const CELL = canvas.width / COLS;
     let snake, dir, pendingDir, food, score, running, paused, timer;
 
+    // reset: drop the snake back to its 3-segment start heading right,
+    // zero the score and spawn a fresh food pellet.
     function reset() {
       snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
       dir = { x: 1, y: 0 };
@@ -76,6 +81,8 @@ const SnakeApp = (function() {
       placeFood();
     }
 
+    // placeFood: pick a random empty cell for the food pellet, retrying
+    // until it doesn't overlap the snake's body.
     function placeFood() {
       while (true) {
         const f = {
@@ -94,6 +101,9 @@ const SnakeApp = (function() {
       return Math.max(70, 140 - score * 2);
     }
 
+    // step: one game tick — move the head one cell along pendingDir, die
+    // on wall/self collision, grow (+10) on food, then re-arm itself with
+    // setTimeout so the speed() curve can shrink the delay each run.
     function step() {
       dir = pendingDir;
       const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
@@ -207,6 +217,8 @@ const SnakeApp = (function() {
       arrowright: { x: 1, y: 0 }, d: { x: 1, y: 0 }
     };
 
+    // onKey: steer with arrows/wasd. 180-degree reversals are ignored
+    // (they'd be instant suicide), 'p' toggles pause, enter/space starts.
     function onKey(e) {
       const k = e.key.toLowerCase();
       if (KEYMAP[k]) {
@@ -240,6 +252,8 @@ const SnakeApp = (function() {
     reset();
     draw();
 
+    // cleanup: called by the window manager on close — stop the timer
+    // and detach the keydown listener so no dead game keeps running.
     function cleanup() {
       stop();
       appEl.removeEventListener('keydown', onKey);
