@@ -301,7 +301,8 @@ const Panel = (function() {
     if (window.Notify) Notify.show('Icons arranged', 'success');
   }
 
-  function setupDesktopContextMenu() {    const desktopEnv = document.getElementById('desktop-env');
+  function setupDesktopContextMenu() {
+    const desktopEnv = document.getElementById('desktop-env');
     const ctxMenu = document.getElementById('desktop-ctx-menu');
 
     if (!desktopEnv || !ctxMenu) return;
