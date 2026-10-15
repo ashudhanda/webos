@@ -8,6 +8,9 @@
 // mismatched theme + wallpaper combo.
 
 const SettingsApp = (function() {
+  // open: create the Settings window. options.tab deep-links straight to
+  // a tab — the desktop context menu's "change theme" entry uses
+  // {tab: 'appearance'} to land on the theme cards.
   function open(options = {}) {
     const initialTab = options.tab || 'appearance';
     WM.createWindow({
@@ -22,6 +25,8 @@ const SettingsApp = (function() {
     });
   }
 
+  // initSettings: build the two-tab shell (Appearance / About), wire the
+  // sidebar buttons to switchTab, then show the requested initial tab.
   function initSettings(container, initialTab) {
     let activeTab = initialTab;
 
@@ -43,6 +48,8 @@ const SettingsApp = (function() {
 
     const contentEl = container.querySelector('.settings-content');
 
+    // switchTab: highlight the active sidebar button and re-render the
+    // content pane for the chosen tab.
     function switchTab(tabName) {
       activeTab = tabName;
       container.querySelectorAll('.settings-tab-btn').forEach((btn) => {
@@ -56,6 +63,10 @@ const SettingsApp = (function() {
       }
     }
 
+    // renderAppearance: draw the planet theme cards and the ambient-sound
+    // toggle. clicking a card writes the theme to <html> data-theme,
+    // persists it, then calls ThemeFX.apply so wallpaper + ambience flip
+    // together with the palette. re-renders after to move the active mark.
     function renderAppearance() {
       const current = document.documentElement.getAttribute('data-theme') || 'moon';
 
@@ -116,6 +127,8 @@ const SettingsApp = (function() {
       }
     }
 
+    // renderAbout: static "about this OS" panel — version banner, the
+    // fake kernel spec, and who made it. no interactivity beyond looking.
     function renderAbout() {
       contentEl.innerHTML = `
         <div class="about-box">
