@@ -207,6 +207,9 @@ const TerminalApp = (function() {
       lastTabTime = Date.now();
     }
 
+    // getLCP: longest common prefix of the tab-completion candidates.
+    // powers the "partial completion" step — a single tab press inserts
+    // everything the matches agree on, e.g. cat doc<tab> -> documents/.
     function getLCP(arr) {
       if (!arr.length) return '';
       let prefix = arr[0];
@@ -219,6 +222,10 @@ const TerminalApp = (function() {
       return prefix;
     }
 
+    // executeCommand: the shell's dispatch loop. echoes the command back,
+    // records it in history, then tokenizes (quote-aware, splits > and >>)
+    // and routes the first token to the matching case in the big switch.
+    // output redirection is applied to the command's printed output after.
     function executeCommand(raw) {
       const trimmed = raw.trim();
       printPromptEcho(raw);
