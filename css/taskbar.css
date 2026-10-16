@@ -1,4 +1,10 @@
 
+/* taskbar.css - styles for the bottom taskbar shell (see js/core/taskbar.js):
+   the taskbar layout and its auto-hide / hover-peek behavior in
+   fullscreen, the start button, the app search box, the pinned app
+   buttons with their running indicators and tooltips, the start menu,
+   the search results popup, and the bottom-edge reveal zone. */
+
 .taskbar {
   position: fixed;
   bottom: 10px;
