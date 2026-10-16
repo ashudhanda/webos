@@ -135,6 +135,10 @@ const Taskbar = (function() {
   // reachable via start menu / search / terminal so the bar never overflows
   const PINNED_IDS = ['terminal', 'files', 'editor', 'notes', 'aichat', 'settings'];
 
+  // init: build the taskbar DOM (start button, search box, pinned app
+  // buttons), the start menu and search results popup, wire all their
+  // events, then keep the running indicators fresh — a 300ms poll checks
+  // the window manager so the dots always reflect the open apps.
   function init() {
     const mountEl = document.getElementById('taskbar');
     if (!mountEl) return;
