@@ -1,3 +1,9 @@
+// taskbar.js - bottom taskbar shell: pinned app launchers with running
+// indicators, the start menu, a searchable app list (name + alias match),
+// and the bottom-edge reveal zone for the auto-hidden taskbar in
+// fullscreen. All markup + event wiring lives here; window state comes
+// from window.WM and window.Apps. main.js calls Taskbar.init().
+
 const Taskbar = (function() {
   const apps = [
     {
