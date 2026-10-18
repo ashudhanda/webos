@@ -43,7 +43,7 @@ const WeatherApp = (function() {
     container.innerHTML = `
       <div class="weather-app">
         <div class="weather-search-row">
-          <input class="weather-search" type="text" placeholder="Search city..." />
+          <input class="weather-search" type="text" placeholder="Search city..." aria-label="Search city" />
           <button class="weather-go">Go</button>
         </div>
         <div class="weather-results"></div>
