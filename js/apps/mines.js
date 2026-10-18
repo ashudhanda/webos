@@ -171,6 +171,8 @@ const MinesApp = (function() {
       }
     }
 
+    // board cells were appended row-by-row into a DocumentFragment, so
+    // child index y*cols+x maps (x,y) grid coordinates to the DOM cell
     function cellEl(x, y) {
       return boardEl.children[y * cols + x];
     }
