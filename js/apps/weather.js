@@ -58,6 +58,9 @@ const WeatherApp = (function() {
     const resultsEl = container.querySelector('.weather-results');
     const bodyEl = container.querySelector('.weather-body');
 
+    // weekday from a bare "YYYY-MM-DD" date: parsing it at midnight
+    // shifts the day back in timezones behind UTC (e.g. US), so parse
+    // at noon local time to keep the weekday correct everywhere.
     function fmtDay(iso) {
       try {
         return new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short' });
