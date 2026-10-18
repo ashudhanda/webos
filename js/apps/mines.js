@@ -217,6 +217,9 @@ const MinesApp = (function() {
       checkWin();
     }
 
+    // flood fill uses an explicit stack instead of recursion: clicking
+    // an empty region on the 30x16 expert board can touch hundreds of
+    // cells, which would overflow the call stack with a recursive call.
     function flood(sx, sy) {
       const stack = [[sx, sy]];
       while (stack.length) {
