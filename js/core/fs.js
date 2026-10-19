@@ -1,4 +1,4 @@
-// fs.js - virtual file system with localstorage persistence
+// fs.js - virtual file system with localStorage persistence
 
 const FS = (function() {
   const STORAGE_KEY = 'moonos-fs';
