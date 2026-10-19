@@ -58,6 +58,14 @@ hit enter) and you're in. no password.
 - super+L (or ctrl+alt+L) locks the screen. typing `exit` in the
   terminal does too, like a real os
 
+## keyboard shortcuts
+
+- **enter** — boot from the boot screen; esc skips the kernel log too
+- **alt+tab** — switch between open windows (hold alt, tap tab)
+- **ctrl+alt+← / ctrl+alt+→** — switch workspaces
+- **super+L** (or ctrl+alt+L) — lock the screen
+- **esc** — close menus and popups
+
 ## running it locally
 
 clone the repo, open index.html with live server. that's it. plain html,
