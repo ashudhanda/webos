@@ -641,8 +641,10 @@ const WM = (function() {
       }
 
       // Super + L or Meta + L for lock screen
-      // Super + L or Ctrl + Alt + L for lock screen.
-      if (e.key === 'l' && (e.metaKey || e.ctrlKey && e.altKey)) {
+      // Super + L or Ctrl + Alt + L for lock screen. The parens are
+      // deliberate: && binds tighter than ||, so this reads as
+      // metaKey || (ctrlKey && altKey) — super alone, or ctrl+alt together.
+      if (e.key === 'l' && (e.metaKey || (e.ctrlKey && e.altKey))) {
         e.preventDefault();
         Boot.lock();
       }
