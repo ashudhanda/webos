@@ -31,7 +31,7 @@ const TasksApp = (function() {
     container.innerHTML = `
       <div class="tasks-app">
         <form class="tasks-add">
-          <input type="text" class="tasks-input" placeholder="what needs doing?" maxlength="120" autocomplete="off">
+          <input type="text" class="tasks-input" placeholder="what needs doing?" maxlength="120" autocomplete="off" aria-label="New task">
           <button type="submit" class="tasks-add-btn">add</button>
         </form>
         <div class="tasks-filters">
