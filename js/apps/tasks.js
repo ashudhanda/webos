@@ -50,6 +50,14 @@ const TasksApp = (function() {
     const countEl = container.querySelector('.tasks-count');
     const form = container.querySelector('.tasks-add');
 
+    // empty-state copy per filter — a small lookup reads cleaner than a
+    // nested ternary and keeps the copy in one place.
+    const emptyCopy = {
+      done: 'nothing done yet',
+      active: 'all clear 🎉',
+      all: 'no tasks — add one above'
+    };
+
     function save() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
@@ -83,10 +91,7 @@ const TasksApp = (function() {
       clearBtn.style.display = tasks.some(t => t.done) ? '' : 'none';
 
       if (!items.length) {
-        listEl.innerHTML = `<div class="tasks-empty">${
-          filter === 'done' ? 'nothing done yet' :
-          filter === 'active' ? 'all clear 🎉' : 'no tasks — add one above'
-        }</div>`;
+        listEl.innerHTML = `<div class="tasks-empty">${emptyCopy[filter] || emptyCopy.all}</div>`;
         return;
       }
 
