@@ -136,7 +136,9 @@ const WM = (function() {
 
   function createWindow(config) {
     // config: { id, title, iconSvg, width, height, x, y, ws, render(bodyEl), onClose, minWidth, minHeight }
-    const id = config.id || 'app-' + Math.random().toString(36).substr(2, 6);
+    // String.prototype.substr is deprecated — slice(start, end) produces
+    // the same 6 chars from the random base-36 token ("0.xxxxxx...")
+    const id = config.id || 'app-' + Math.random().toString(36).slice(2, 8);
 
     // single instance per app rule
     if (windows.has(id)) {
@@ -639,6 +641,7 @@ const WM = (function() {
       }
 
       // Super + L or Meta + L for lock screen
+      // Super + L or Ctrl + Alt + L for lock screen.
       if (e.key === 'l' && (e.metaKey || e.ctrlKey && e.altKey)) {
         e.preventDefault();
         Boot.lock();
