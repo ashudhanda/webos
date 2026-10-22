@@ -107,6 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
   window.ThemeFX.apply(document.documentElement.getAttribute('data-theme') || 'moon');
 
 
+  // Boot order matters: the window manager starts first because the
+  // panel, taskbar and boot screen all query WM for open windows.
+  // NotesApp restores desktop notes next, and the desktop icons come
+  // last so their click handlers find every menu already in the DOM.
   WM.init();
   Panel.init();
   if (window.Taskbar) Taskbar.init();
