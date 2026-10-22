@@ -250,6 +250,12 @@ const Taskbar = (function() {
     updateRunningDots();
   }
 
+  // updateRunningDots: lights the dot under each pinned icon while its app
+  // window is open. Asks the window manager first, but falls back to a
+  // direct DOM check (#win-<id>) so the dots stay truthful even if WM is
+  // late to load or missing. init() also polls this every 300ms — the
+  // taskbar never observes window opens/closes directly, so polling is
+  // how it catches windows launched from the terminal or panel menus.
   function updateRunningDots() {
     const buttons = document.querySelectorAll('.taskbar-app-btn');
     buttons.forEach((btn) => {
@@ -262,6 +268,11 @@ const Taskbar = (function() {
     });
   }
 
+  // setupEvents: wires everything the taskbar does — start button toggles
+  // the start menu (start-menu items launch apps or open the About page in
+  // settings), pinned buttons launch-or-focus apps, the search box filters
+  // the app list live with arrow-key navigation + Enter to launch, Esc
+  // closes any open popup globally, and clicks outside a popup dismiss it.
   function setupEvents() {
     const startBtn = document.getElementById('taskbar-start-btn');
     const startMenu = document.getElementById('start-menu');
