@@ -55,6 +55,8 @@ hit enter) and you're in. no password.
 - 4 workspaces — ctrl+alt+left/right, or the dots in the top panel
 - alt+tab actually works
 - the bottom taskbar has a start menu and a working search (try "term")
+- **fullscreen mode** — maximize any window and the taskbar auto-hides;
+  move the pointer to the bottom edge to peek it back
 - super+L (or ctrl+alt+L) locks the screen. typing `exit` in the
   terminal does too, like a real os
 
