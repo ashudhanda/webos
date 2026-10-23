@@ -1,6 +1,6 @@
 // matrix.js - matrix-rain easter egg: a full-screen katakana rain overlay
-// rendered on a canvas at ~15fps. Any key or click dismisses it; the rain
-// color reads the theme's --accent so it matches the active theme.
+// rendered on a canvas at ~15fps. Enter/Escape or any click dismisses it;
+// the rain color reads the theme's --accent so it matches the active theme.
 
 const Matrix = (function() {
   const chars = 'アイウエオカキクケコサシスセソ0123456789'.split('');
