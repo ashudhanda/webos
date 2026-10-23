@@ -1,4 +1,10 @@
-// fs.js - virtual file system with localStorage persistence
+// fs.js - virtual file system with localStorage persistence.
+//
+// The whole tree is plain JSON under one localStorage key ('moonos-fs'):
+// dirs are { type: 'dir', children: {...} } and files are
+// { type: 'file', content: '...' }. Every API function takes a path plus
+// an optional cwd that defaults to HOME_PATH (/home/ashu), so callers
+// can pass bare relative paths like the terminal does.
 
 const FS = (function() {
   const STORAGE_KEY = 'moonos-fs';
