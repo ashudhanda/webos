@@ -73,6 +73,12 @@ const PaintApp = (function() {
     let snapshot = null;
     const undoStack = [];
 
+    // Undo keeps full-canvas data-URL snapshots, capped at UNDO_LIMIT:
+    // cheap for this small fixed-size canvas, but each entry is a whole
+    // PNG, so the cap is what keeps memory bounded. Shape tools reuse the
+    // same idea live: pointerdown saves a getImageData snapshot and every
+    // pointermove restores it before drawing the preview shape, so only
+    // the final stroke is kept when the pointer is released.
     function pushUndo() {
       try {
         undoStack.push(canvas.toDataURL());
