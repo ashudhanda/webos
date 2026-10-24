@@ -144,6 +144,7 @@ const MusicApp = (function() {
         const key = document.createElement('button');
         key.className = 'piano-white';
         key.setAttribute('data-midi', midi);
+        key.setAttribute('aria-label', noteName(midi));
         const kbd = Object.keys(KEYMAP).find(k => KEYMAP[k] === semitone);
         key.innerHTML = `<span class="piano-name">${noteName(midi)}</span>${kbd ? `<span class="piano-kbd">${kbd.toUpperCase()}</span>` : ''}`;
         key.addEventListener('pointerdown', (e) => {
@@ -161,6 +162,7 @@ const MusicApp = (function() {
           const b = document.createElement('button');
           b.className = 'piano-black';
           b.setAttribute('data-midi', bMidi);
+          b.setAttribute('aria-label', noteName(bMidi));
           b.style.left = `calc(${(i + 1) * (100 / 14)}% - 14px)`;
           const bk = Object.keys(KEYMAP).find(k => KEYMAP[k] === semitone + 1);
           b.innerHTML = bk ? `<span class="piano-kbd">${bk.toUpperCase()}</span>` : '';
