@@ -66,10 +66,10 @@ const MonitorApp = (function() {
           <table class="process-table">
             <thead>
               <tr>
-                <th style="width: 60px">PID</th>
-                <th>Name</th>
-                <th style="width: 80px">CPU %</th>
-                <th style="width: 90px">Memory</th>
+                <th scope="col" style="width: 60px">PID</th>
+                <th scope="col">Name</th>
+                <th scope="col" style="width: 80px">CPU %</th>
+                <th scope="col" style="width: 90px">Memory</th>
               </tr>
             </thead>
             <tbody id="proc-tbody"></tbody>
