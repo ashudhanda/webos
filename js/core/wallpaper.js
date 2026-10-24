@@ -94,6 +94,9 @@
 
   // ---------------------------------------------------------------- helpers
 
+  // FNV-1a hash: turns a theme name into a stable 32-bit seed, so
+  // buildScene() generates the same stars/nebulae/features on every
+  // load for a given theme (deterministic scene, no layout jumps).
   function hashStr(s) {
     var h = 2166136261;
     for (var i = 0; i < s.length; i++) {
@@ -103,6 +106,8 @@
     return h >>> 0;
   }
 
+  // Small fast seeded PRNG (mulberry32): one rng() stream per scene
+  // keeps star/nebula/feature placement reproducible from hashStr().
   function mulberry32(seed) {
     var a = seed >>> 0;
     return function () {
