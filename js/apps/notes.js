@@ -42,9 +42,9 @@ const NotesApp = (function() {
 
     el.innerHTML = `
       <div class="note-grip">
-        <button class="note-del" title="Delete">&times;</button>
+        <button class="note-del" title="Delete" aria-label="Delete note">&times;</button>
       </div>
-      <textarea class="note-text" placeholder="write something..." spellcheck="false"></textarea>
+      <textarea class="note-text" placeholder="write something..." spellcheck="false" aria-label="Note text"></textarea>
     `;
 
     layer().appendChild(el);
