@@ -36,7 +36,7 @@ const EditorApp = (function() {
       <div class="editor-app">
         <div class="editor-main">
           <div class="editor-gutter" aria-hidden="true"></div>
-          <textarea class="editor-textarea" spellcheck="false" placeholder="Start typing..."></textarea>
+          <textarea class="editor-textarea" spellcheck="false" placeholder="Start typing..." aria-label="Editor text"></textarea>
         </div>
         <div class="editor-statusbar">
           <span class="editor-stat-info">Ln 1, Col 1</span>
