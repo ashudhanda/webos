@@ -97,6 +97,8 @@ const MonitorApp = (function() {
       `).join('');
     }
 
+    // Bar widths are display-only normalizers, not measured limits:
+    // 16 cores, 16 GB and 512 MB just keep typical devices mid-scale.
     function tick() {
       // real CPU core count (static per device)
       const cores = navigator.hardwareConcurrency || 0;
