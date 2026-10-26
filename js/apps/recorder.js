@@ -78,6 +78,9 @@ const RecorderApp = (function() {
       return stream;
     }
 
+    // Try Opus-in-WebM first (best size/quality for speech), then fall back
+    // through the other containers this browser reports as supported.
+    // Returning '' means "let MediaRecorder pick its own default".
     function pickMime() {
       const candidates = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg'];
       if (window.MediaRecorder && MediaRecorder.isTypeSupported) {
