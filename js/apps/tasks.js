@@ -84,7 +84,11 @@ const TasksApp = (function() {
       countEl.textContent = activeCount === 1 ? '1 left' : activeCount + ' left';
 
       container.querySelectorAll('.tasks-filter').forEach((b) => {
-        b.classList.toggle('active', b.getAttribute('data-filter') === filter);
+        const isActive = b.getAttribute('data-filter') === filter;
+        b.classList.toggle('active', isActive);
+        // aria-pressed mirrors the active class so screen readers also
+        // know which filter is selected (the class alone is invisible)
+        b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
       });
 
       const clearBtn = container.querySelector('.tasks-clear');
