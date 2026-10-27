@@ -79,7 +79,9 @@ const PassgenApp = (function() {
         fillEl.style.width = '0%';
         return '';
       }
-      // rejection sampling: avoid modulo bias
+      // rejection sampling: avoid modulo bias. len * 2 draws give enough
+      // headroom that rejection almost never exhausts the buffer before
+      // reaching the requested length (see the fallback below)
       const rand = new Uint32Array(len * 2);
       crypto.getRandomValues(rand);
       const limit = Math.floor(4294967296 / chars.length) * chars.length;
