@@ -40,6 +40,8 @@ const Sound = (function() {
     }
 
     gain.gain.setValueAtTime(gainVal * vol(), a.currentTime);
+    // exponential ramps cannot target 0, so fade to 0.0001 (inaudible)
+    // instead of silence — targeting 0 would throw a RangeError
     gain.gain.exponentialRampToValueAtTime(0.0001, a.currentTime + dur);
 
     osc.connect(gain);
