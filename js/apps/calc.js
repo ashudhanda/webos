@@ -25,7 +25,7 @@ const CalcApp = (function() {
       <div class="calc-app" tabindex="0">
         <div class="calc-display">
           <div class="calc-expr"></div>
-          <div class="calc-result">0</div>
+          <div class="calc-result" aria-live="polite">0</div>
         </div>
         <div class="calc-grid">
           <button class="calc-btn action" data-key="C">C</button>
