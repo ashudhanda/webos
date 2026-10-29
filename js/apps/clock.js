@@ -58,10 +58,10 @@ const ClockApp = (function() {
   function initClock(container) {
     container.innerHTML = `
       <div class="clock-app">
-        <div class="clock-tabs">
-          <button class="clock-tab active" data-tab="world">world</button>
-          <button class="clock-tab" data-tab="stopwatch">stopwatch</button>
-          <button class="clock-tab" data-tab="timer">timer</button>
+        <div class="clock-tabs" role="tablist">
+          <button class="clock-tab active" role="tab" aria-selected="true" data-tab="world">world</button>
+          <button class="clock-tab" role="tab" aria-selected="false" data-tab="stopwatch">stopwatch</button>
+          <button class="clock-tab" role="tab" aria-selected="false" data-tab="timer">timer</button>
         </div>
 
         <div class="clock-pane clock-world active">
@@ -109,9 +109,10 @@ const ClockApp = (function() {
     // ---- tabs ----
     container.querySelectorAll('.clock-tab').forEach((tab) => {
       tab.addEventListener('click', () => {
-        container.querySelectorAll('.clock-tab').forEach(t => t.classList.remove('active'));
+        container.querySelectorAll('.clock-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
         container.querySelectorAll('.clock-pane').forEach(p => p.classList.remove('active'));
         tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
         container.querySelector('.clock-' + tab.getAttribute('data-tab')).classList.add('active');
       });
     });
