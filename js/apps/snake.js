@@ -43,7 +43,7 @@ const SnakeApp = (function() {
           <button class="snake-btn snake-restart-btn" title="restart">restart</button>
         </div>
         <div class="snake-board-wrap">
-          <canvas class="snake-canvas" width="400" height="400"></canvas>
+          <canvas class="snake-canvas" width="400" height="400" role="img" aria-label="Snake game board"></canvas>
           <div class="snake-overlay">
             <div class="snake-overlay-title">snake</div>
             <div class="snake-overlay-sub">arrows / wasd to move</div>
