@@ -106,7 +106,7 @@ const WeatherApp = (function() {
       bodyEl.innerHTML = `
         <div class="weather-now">
           <div class="weather-city">${escapeHtml(place.name)}${place.country ? ', ' + escapeHtml(place.country) : ''}</div>
-          <div class="weather-emoji">${emoji}</div>
+          <div class="weather-emoji" aria-hidden="true">${emoji}</div>
           <div class="weather-temp">${Math.round(cur.temperature_2m)}°C</div>
           <div class="weather-desc">${desc}</div>
           <div class="weather-meta">
@@ -118,7 +118,7 @@ const WeatherApp = (function() {
           ${days.map(x => `
             <div class="weather-day">
               <div class="wd-day">${x.day}</div>
-              <div class="wd-emoji">${x.emoji}</div>
+              <div class="wd-emoji" aria-hidden="true">${x.emoji}</div>
               <div class="wd-temp">${x.max}° / ${x.min}°</div>
             </div>`).join('')}
         </div>
