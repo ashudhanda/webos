@@ -25,7 +25,7 @@ const Notify = (function() {
     }
 
     toast.innerHTML = `
-      <div class="toast-icon">${iconSvg}</div>
+      <div class="toast-icon" aria-hidden="true">${iconSvg}</div>
       <div class="toast-text">${message}</div>
     `;
 
