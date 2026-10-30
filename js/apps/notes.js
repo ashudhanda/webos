@@ -95,6 +95,9 @@ const NotesApp = (function() {
       if (!dragging) return;
       let nx = origX + (e.clientX - startX);
       let ny = origY + (e.clientY - startY);
+      // Clamp the note inside the usable desktop: 32px of top clearance
+      // keeps the grip below the menu bar, and 48px at the bottom keeps
+      // it above the taskbar, so a note can never be dragged out of reach.
       nx = Math.max(0, Math.min(nx, window.innerWidth - el.offsetWidth));
       ny = Math.max(32, Math.min(ny, window.innerHeight - el.offsetHeight - 48));
       el.style.left = nx + 'px';
