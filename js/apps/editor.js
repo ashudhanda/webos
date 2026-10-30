@@ -41,7 +41,7 @@ const EditorApp = (function() {
         <div class="editor-statusbar">
           <span class="editor-stat-info">Ln 1, Col 1</span>
           <span class="editor-stat-words">0 words</span>
-          <span class="editor-status-state editor-status-saved">Saved</span>
+          <span class="editor-status-state editor-status-saved" aria-live="polite">Saved</span>
         </div>
       </div>
     `;
