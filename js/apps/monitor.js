@@ -37,7 +37,7 @@ const MonitorApp = (function() {
               <span class="metric-label">CPU Cores (real)</span>
               <span class="metric-value" id="cores-val-text">—</span>
             </div>
-            <div class="metric-bar-bg">
+            <div class="metric-bar-bg" aria-hidden="true">
               <div class="metric-bar-fill" id="cores-bar-fill" style="width: 0%"></div>
             </div>
           </div>
@@ -46,7 +46,7 @@ const MonitorApp = (function() {
               <span class="metric-label">Device Memory (real)</span>
               <span class="metric-value" id="mem-val-text">—</span>
             </div>
-            <div class="metric-bar-bg">
+            <div class="metric-bar-bg" aria-hidden="true">
               <div class="metric-bar-fill" id="mem-bar-fill" style="width: 0%"></div>
             </div>
           </div>
@@ -55,7 +55,7 @@ const MonitorApp = (function() {
               <span class="metric-label">JS Heap (live)</span>
               <span class="metric-value" id="heap-val-text">—</span>
             </div>
-            <div class="metric-bar-bg">
+            <div class="metric-bar-bg" aria-hidden="true">
               <div class="metric-bar-fill" id="heap-bar-fill" style="width: 0%"></div>
             </div>
           </div>
