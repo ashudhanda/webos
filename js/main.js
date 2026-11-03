@@ -365,6 +365,15 @@ function setupDesktopIcons() {
       e.stopPropagation();
       openDesktopIcon(icon);
     });
+
+    // Icons are focusable (tabindex + role=button in markup) but had no
+    // keyboard path: Enter/Space now opens, matching the double-click.
+    icon.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openDesktopIcon(icon);
+      }
+    });
   }
 
   document.querySelectorAll('.desktop-icon').forEach(wireDesktopIcon);
