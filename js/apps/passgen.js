@@ -89,11 +89,16 @@ const PassgenApp = (function() {
       for (let i = 0; i < rand.length && pw.length < len; i++) {
         if (rand[i] < limit) pw += chars[rand[i] % chars.length];
       }
-      // extremely unlikely fallback if rejection ate too much
+      // Extremely unlikely fallback if rejection ate too much: keep
+        // rejection-sampling (never a bare % on the byte) so the fallback
+        // path stays bias-free like the main loop above.
+      const byteLimit = Math.floor(256 / chars.length) * chars.length;
       while (pw.length < len) {
-        const b = new Uint8Array(1);
+        const b = new Uint8Array(8);
         crypto.getRandomValues(b);
-        pw += chars[b[0] % chars.length];
+        for (let j = 0; j < b.length && pw.length < len; j++) {
+          if (b[j] < byteLimit) pw += chars[b[j] % chars.length];
+        }
       }
 
       outEl.textContent = pw;
