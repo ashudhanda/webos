@@ -132,7 +132,9 @@ const TasksApp = (function() {
       e.preventDefault();
       const text = input.value.trim();
       if (!text) return;
-      tasks.unshift({ id: 't-' + Date.now(), text, done: false });
+      // Date.now() alone collides when two tasks are added within the same
+      // millisecond (delete filters by id, so it would remove both).
+      tasks.unshift({ id: 't-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8), text, done: false });
       save();
       input.value = '';
       render();
