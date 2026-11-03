@@ -166,7 +166,10 @@ const ClockApp = (function() {
         timers.push(swTick);
         swStart.textContent = 'stop';
       }
-      swLap.disabled = !swRunning && swElapsed === 0;
+      // Lap only means something while running: the old condition left
+      // the button enabled while paused (elapsed > 0) even though its
+      // click handler ignores clicks when not running.
+      swLap.disabled = !swRunning;
       swRender();
     });
 
