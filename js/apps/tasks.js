@@ -26,6 +26,12 @@ const TasksApp = (function() {
     } catch (e) {
       tasks = [];
     }
+    // A valid JSON value is not necessarily a task list: a stray string or
+    // object in storage used to crash render() (tasks.filter is not a
+    // function), and entries without string text rendered as "undefined".
+    // Keep only well-formed entries so one bad write can't brick the app.
+    if (!Array.isArray(tasks)) tasks = [];
+    tasks = tasks.filter(t => t && typeof t.text === 'string');
     let filter = 'all';
 
     container.innerHTML = `
