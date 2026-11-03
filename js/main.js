@@ -37,9 +37,7 @@ const Apps = (function() {
   function launch(appName, options) {
     const app = registry[appName];
     if (app && typeof app.open === 'function') {
-      if (appName === 'files' && options && options.path) {
-        app.open(options.path);
-      } else if (appName === 'editor' && options && options.path) {
+      if ((appName === 'files' || appName === 'editor') && options && options.path) {
         app.open(options.path);
       } else if (appName === 'settings' && options) {
         app.open(options);
