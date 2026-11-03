@@ -87,6 +87,11 @@ const CalcApp = (function() {
         }
       } else if (['+', '-', '*', '/'].includes(key)) {
         if (currentInput === 'error') currentInput = '0';
+        // Chaining: 2 + 3 + 4 must be 9, not 7. If a pending operation
+        // already has its second operand typed (resetOnNext is false),
+        // fold it first; a bare operator swap (pressed twice in a row)
+        // just replaces the operator, as before.
+        if (prevExpr && !resetOnNext) evaluate();
         prevExpr = currentInput + ' ' + (key === '*' ? '×' : key === '/' ? '÷' : key === '-' ? '−' : '+');
         resetOnNext = true;
       } else if (key === '=') {
