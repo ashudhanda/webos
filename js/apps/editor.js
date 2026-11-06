@@ -124,6 +124,7 @@ const EditorApp = (function() {
         const end = textarea.selectionEnd;
         textarea.value = textarea.value.substring(0, start) + '  ' + textarea.value.substring(end);
         textarea.selectionStart = textarea.selectionEnd = start + 2;
+        updateCursorInfo();
         updateGutter();
         updateWordCount();
         scheduleAutosave();
