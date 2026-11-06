@@ -90,11 +90,15 @@ const EditorApp = (function() {
           FS.write(currentPath, textarea.value);
           stateEl.textContent = 'Saved';
           stateEl.className = 'editor-status-state editor-status-saved';
-          Notify.show(`Saved ${currentPath.split('/').pop()}`, 'info');
         } catch (e) {
           stateEl.textContent = 'Save error';
           stateEl.className = 'editor-status-state editor-status-unsaved';
+          return;
         }
+        // Notify lives outside the try: if it is missing, a throw here
+        // used to land in the catch above and report "Save error" even
+        // though the file had just saved fine.
+        if (window.Notify) Notify.show(`Saved ${currentPath.split('/').pop()}`, 'info');
       }, 500);
     }
 
