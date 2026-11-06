@@ -27,7 +27,11 @@ const NotesApp = (function() {
   }
 
   function save() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+    // localStorage can throw (private mode, quota full) — a failed
+    // autosave must not break typing or dragging.
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+    } catch (e) {}
   }
 
   function layer() {
@@ -76,7 +80,7 @@ const NotesApp = (function() {
       el.remove();
       notes = notes.filter(n => n.id !== note.id);
       save();
-      Notify.show('note deleted');
+      if (window.Notify) Notify.show('note deleted');
     });
 
     el.addEventListener('pointerdown', () => {
