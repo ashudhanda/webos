@@ -173,9 +173,12 @@ const SnakeApp = (function() {
       }
     }
 
+    // gameOver: only a score strictly above the old best earns the
+    // "new best!" line (a tie does not).
     function gameOver() {
       stop();
-      if (score > high) {
+      const newBest = score > high;
+      if (newBest) {
         high = score;
         highVal.textContent = String(high);
         try {
@@ -183,7 +186,7 @@ const SnakeApp = (function() {
         } catch (e) {}
       }
       overlayTitle.textContent = 'game over';
-      overlaySub.textContent = 'score ' + score + (score >= high && score > 0 ? ' — new best!' : '');
+      overlaySub.textContent = 'score ' + score + (newBest && score > 0 ? ' — new best!' : '');
       startBtn.textContent = 'play again';
       overlay.classList.remove('hidden');
     }
