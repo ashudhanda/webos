@@ -119,6 +119,13 @@ const SnakeApp = (function() {
       if (head.x === food.x && head.y === food.y) {
         score += 10;
         scoreVal.textContent = String(score);
+        // Board full: no free cell is left for placeFood to pick, and
+        // its retry loop would spin forever — a full board is a win.
+        if (snake.length >= COLS * ROWS) {
+          draw();
+          gameOver(true);
+          return;
+        }
         placeFood();
       } else {
         snake.pop();
@@ -173,9 +180,10 @@ const SnakeApp = (function() {
       }
     }
 
-    // gameOver: only a score strictly above the old best earns the
-    // "new best!" line (a tie does not).
-    function gameOver() {
+    // gameOver(won): the board-full win reports a win, any other end
+    // reports the score — and only a score strictly above the old best
+    // earns the "new best!" line (a tie does not).
+    function gameOver(won) {
       stop();
       const newBest = score > high;
       if (newBest) {
@@ -185,8 +193,13 @@ const SnakeApp = (function() {
           localStorage.setItem(STORAGE_KEY, String(high));
         } catch (e) {}
       }
-      overlayTitle.textContent = 'game over';
-      overlaySub.textContent = 'score ' + score + (newBest && score > 0 ? ' — new best!' : '');
+      if (won) {
+        overlayTitle.textContent = 'you win!';
+        overlaySub.textContent = 'board cleared — score ' + score;
+      } else {
+        overlayTitle.textContent = 'game over';
+        overlaySub.textContent = 'score ' + score + (newBest && score > 0 ? ' — new best!' : '');
+      }
       startBtn.textContent = 'play again';
       overlay.classList.remove('hidden');
     }
