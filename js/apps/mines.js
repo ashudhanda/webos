@@ -62,7 +62,6 @@ const MinesApp = (function() {
     let revealedCount;
     let flagCount;
     let over;
-    let won;
     let timer;
     let seconds;
     let currentDiff = 'beginner';
@@ -87,7 +86,6 @@ const MinesApp = (function() {
       revealedCount = 0;
       flagCount = 0;
       over = false;
-      won = false;
       seconds = 0;
       stopTimer();
       timeEl.textContent = '0';
@@ -271,8 +269,10 @@ const MinesApp = (function() {
             cell.revealed = true;
             paintCell(x, y);
           } else if (!cell.mine && cell.flagged) {
-            // wrong flag
+            // wrong flag — clear the flagged styling too, or the cell
+            // keeps looking like a live flag under the ❌
             const el = cellEl(x, y);
+            el.classList.remove('flagged');
             el.textContent = '❌';
           }
         }
@@ -292,7 +292,6 @@ const MinesApp = (function() {
       if (over) return;
       if (revealedCount === cols * rows - mineCount) {
         over = true;
-        won = true;
         stopTimer();
         // auto-flag remaining mines
         for (let y = 0; y < rows; y++) {
