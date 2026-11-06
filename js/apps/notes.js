@@ -11,7 +11,15 @@ const NotesApp = (function() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        notes = JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        // A corrupt or hand-edited value must not break boot: keep only
+        // well-formed entries, drop anything else instead of crashing
+        // init()'s forEach on a non-array or a note missing its fields.
+        if (Array.isArray(parsed)) {
+          notes = parsed.filter((n) => n && typeof n.id === 'string' &&
+            typeof n.text === 'string' &&
+            Number.isFinite(n.x) && Number.isFinite(n.y));
+        }
       }
     } catch (err) {
       notes = [];
@@ -23,11 +31,13 @@ const NotesApp = (function() {
   }
 
   function layer() {
+    const env = document.getElementById('desktop-env');
+    if (!env) return null;
     let el = document.getElementById('notes-layer');
     if (!el) {
       el = document.createElement('div');
       el.id = 'notes-layer';
-      document.getElementById('desktop-env').appendChild(el);
+      env.appendChild(el);
     }
     return el;
   }
@@ -47,7 +57,9 @@ const NotesApp = (function() {
       <textarea class="note-text" placeholder="write something..." spellcheck="false" aria-label="Note text"></textarea>
     `;
 
-    layer().appendChild(el);
+    const host = layer();
+    if (!host) return;
+    host.appendChild(el);
 
     const grip = el.querySelector('.note-grip');
     const del = el.querySelector('.note-del');
