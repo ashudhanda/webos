@@ -19,6 +19,7 @@ const EditorApp = (function() {
     let currentPath = filePath;
     let initialContent = '';
     let saveTimeout = null;
+    let savedToastShown = false; // toast once per session — the status bar already says Saved on every autosave
 
     try {
       if (FS.exists(currentPath)) {
@@ -97,8 +98,13 @@ const EditorApp = (function() {
         }
         // Notify lives outside the try: if it is missing, a throw here
         // used to land in the catch above and report "Save error" even
-        // though the file had just saved fine.
-        if (window.Notify) Notify.show(`Saved ${currentPath.split('/').pop()}`, 'info');
+        // though the file had just saved fine. Shown only once per
+        // session — autosave fires on every pause in typing, and a toast
+        // per save would spam the notification stack.
+        if (window.Notify && !savedToastShown) {
+          savedToastShown = true;
+          Notify.show(`Saved ${currentPath.split('/').pop()}`, 'info');
+        }
       }, 500);
     }
 
