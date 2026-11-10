@@ -598,14 +598,7 @@ const WM = (function() {
   }
 
   function setupGlobalShortcuts() {
-    let altPressed = false;
-
     window.addEventListener('keydown', (e) => {
-      // track alt key
-      if (e.key === 'Alt') {
-        altPressed = true;
-      }
-
       // Alt+Tab handling
       if (e.altKey && e.key === 'Tab') {
         e.preventDefault();
@@ -652,7 +645,6 @@ const WM = (function() {
 
     window.addEventListener('keyup', (e) => {
       if (e.key === 'Alt') {
-        altPressed = false;
         if (isAltTabOpen) {
           closeAltTab(true);
         }
