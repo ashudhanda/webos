@@ -481,7 +481,7 @@ const TerminalApp = (function() {
                 localStorage.setItem('moonos-theme', targetTheme);
               } catch (e) {}
               if (window.ThemeFX) window.ThemeFX.apply(targetTheme);
-              Notify.show(`theme set to ${targetTheme}`, 'success');
+              if (window.Notify) Notify.show(`theme set to ${targetTheme}`, 'success');
               print(`switched theme to ${targetTheme}`);
             } else {
               print(`<span class="term-error">theme: unknown theme '${escapeHtml(targetTheme)}'. Choose from: ${themes.join(', ')}</span>`, true);
@@ -539,11 +539,11 @@ const TerminalApp = (function() {
 
               if (['terminal', 'files', 'editor', 'calc', 'settings', 'monitor'].includes(pkg.toLowerCase())) {
                 print(`Setting up ${escapeHtml(pkg)}... Done.`);
-                Notify.show(`Installed ${pkg}`, 'success');
+                if (window.Notify) Notify.show(`Installed ${pkg}`, 'success');
                 Apps.launch(pkg.toLowerCase());
               } else {
                 print(`done. ${escapeHtml(pkg)} is probably not real, but it's installed now.`);
-                Notify.show(`Installed ${pkg}`, 'info');
+                if (window.Notify) Notify.show(`Installed ${pkg}`, 'info');
               }
             }, 1500);
           } else {
