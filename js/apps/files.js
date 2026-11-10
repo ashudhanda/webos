@@ -280,7 +280,14 @@ const FilesApp = (function() {
       input.focus();
       input.select();
 
+      // commit runs once: Enter fires it from keydown AND the input's
+      // blur fires right after, and a second rename of the old name
+      // throws "no such file" — which used to surface as a bogus error
+      // toast right after a successful rename
+      let committed = false;
       function commit() {
+        if (committed) return;
+        committed = true;
         const newName = input.value.trim();
         if (newName && newName !== oldName) {
           try {
