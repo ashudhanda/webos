@@ -166,7 +166,10 @@ const PassgenApp = (function() {
     });
     container.querySelector('.passgen-generate').addEventListener('click', generate);
     container.querySelector('.passgen-copy').addEventListener('click', () => {
-      copyText(outEl.textContent === 'press generate' ? '' : outEl.textContent);
+      // don't copy the placeholder/status text — only a real password
+      const shown = outEl.textContent;
+      const copyable = (shown === 'press generate' || shown === 'pick at least one set') ? '' : shown;
+      copyText(copyable);
     });
 
     renderHistory();
