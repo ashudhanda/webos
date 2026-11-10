@@ -196,6 +196,12 @@ const FS = (function() {
       throw new Error('parent directory does not exist');
     }
 
+    // refuse to clobber a directory: echo hi > Documents used to silently
+    // replace the whole directory (and everything inside it) with a file
+    if (parentItem.node.children[fileName] && parentItem.node.children[fileName].type === 'dir') {
+      throw new Error('is a directory');
+    }
+
     parentItem.node.children[fileName] = {
       type: 'file',
       content: content
@@ -272,6 +278,10 @@ const FS = (function() {
   function rename(oldPathStr, newName, cwd = HOME_PATH) {
     const item = getNode(oldPathStr, cwd);
     if (!item) throw new Error('no such file or directory');
+    // root has no parent (item.parent is null) and the home dir anchors
+    // the editor/terminal defaults — renaming either crashed or broke
+    // the OS, so both are refused like rm/rmdir already refuse them
+    if (!item.parent || item.path === HOME_PATH) throw new Error('cannot rename system path');
     if (!newName || newName.includes('/')) throw new Error('invalid name');
     if (item.parent.children[newName]) throw new Error('destination already exists');
 
