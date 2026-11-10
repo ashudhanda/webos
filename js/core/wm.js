@@ -143,15 +143,23 @@ const WM = (function() {
     // single instance per app rule
     if (windows.has(id)) {
       const existing = windows.get(id);
-      if (existing.minimized) {
-        unminimizeWindow(id);
+      if (existing.closing) {
+        // re-launched while the 120ms close animation is still running:
+        // drop the dying window now so a fresh one opens instead of
+        // focusing a window that vanishes a moment later
+        if (existing.el.parentNode) existing.el.parentNode.removeChild(existing.el);
+        windows.delete(id);
+      } else {
+        if (existing.minimized) {
+          unminimizeWindow(id);
+        }
+        // switch to its workspace if needed
+        if (existing.workspace !== currentWorkspace) {
+          setWorkspace(existing.workspace);
+        }
+        focusWindow(id);
+        return existing;
       }
-      // switch to its workspace if needed
-      if (existing.workspace !== currentWorkspace) {
-        setWorkspace(existing.workspace);
-      }
-      focusWindow(id);
-      return existing;
     }
 
     const wsIndex = typeof config.ws === 'number' ? config.ws : currentWorkspace;
@@ -480,6 +488,7 @@ const WM = (function() {
       winObj.onClose();
     }
 
+    winObj.closing = true; // createWindow treats a closing window as gone (see single-instance check)
     winObj.el.classList.add('closing');
     Sound.close();
     setTimeout(() => {
