@@ -523,7 +523,10 @@ const WM = (function() {
 
   // Workspaces implementation
   function setWorkspace(index) {
-    if (index < 0 || index >= TOTAL_WORKSPACES) return;
+    // a malformed workspace dot (missing data-ws) parses to NaN, and NaN
+    // slips past the range check below (every comparison is false), which
+    // used to corrupt currentWorkspace and break all workspace switching
+    if (!Number.isInteger(index) || index < 0 || index >= TOTAL_WORKSPACES) return;
     currentWorkspace = index;
 
     const strip = document.getElementById('workspaces-strip');
