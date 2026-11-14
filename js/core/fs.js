@@ -66,7 +66,16 @@ const FS = (function() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        root = JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // a saved value that parses but isn't a directory tree (a string,
+        // a file node, a dir without children) used to load fine and then
+        // crash every later write — treat it as corrupt and reseed
+        if (parsed && parsed.type === 'dir' && parsed.children && typeof parsed.children === 'object') {
+          root = parsed;
+        } else {
+          root = JSON.parse(JSON.stringify(defaultTree));
+          save();
+        }
       } else {
         root = JSON.parse(JSON.stringify(defaultTree));
         save();
