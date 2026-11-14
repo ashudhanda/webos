@@ -102,7 +102,9 @@ const FS = (function() {
     if (!pathStr || pathStr.trim() === '') return cwd;
 
     let p = pathStr.trim();
-    if (p.startsWith('~')) {
+    // expand ~ only for the home dir itself or ~/... — "~foo" used to
+    // become /home/ashufoo instead of the literal name "~foo"
+    if (p === '~' || p.startsWith('~/')) {
       p = HOME_PATH + p.slice(1);
     } else if (!p.startsWith('/')) {
       p = cwd + '/' + p;
