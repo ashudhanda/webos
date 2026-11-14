@@ -42,14 +42,12 @@ const Apps = (function() {
       if (window.Notify) Notify.show('Unknown app: ' + appName, 'error');
       return;
     }
-    {
-      if ((appName === 'files' || appName === 'editor') && options && options.path) {
-        app.open(options.path);
-      } else if (appName === 'settings' && options) {
-        app.open(options);
-      } else {
-        app.open();
-      }
+    if ((appName === 'files' || appName === 'editor') && options && options.path) {
+      app.open(options.path);
+    } else if (appName === 'settings' && options) {
+      app.open(options);
+    } else {
+      app.open();
     }
   }
 
