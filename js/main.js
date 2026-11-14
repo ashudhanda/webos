@@ -36,7 +36,13 @@ const Apps = (function() {
   // options and just opens a fresh window.
   function launch(appName, options) {
     const app = registry[appName];
-    if (app && typeof app.open === 'function') {
+    if (!app || typeof app.open !== 'function') {
+      // an unknown app id (typo in a desktop icon or a stale shortcut)
+      // used to fail silently — say so instead of doing nothing
+      if (window.Notify) Notify.show('Unknown app: ' + appName, 'error');
+      return;
+    }
+    {
       if ((appName === 'files' || appName === 'editor') && options && options.path) {
         app.open(options.path);
       } else if (appName === 'settings' && options) {
