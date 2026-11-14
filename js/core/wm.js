@@ -485,7 +485,13 @@ const WM = (function() {
     const winObj = windows.get(id);
 
     if (typeof winObj.onClose === 'function') {
-      winObj.onClose();
+      try {
+        winObj.onClose();
+      } catch (err) {
+        // a throwing onClose used to abort the whole close (no closing
+        // class, no removal timer) and wedge the window open forever
+        console.error('window onClose failed for ' + id, err);
+      }
     }
 
     winObj.closing = true; // createWindow treats a closing window as gone (see single-instance check)
