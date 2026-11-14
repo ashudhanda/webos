@@ -189,7 +189,7 @@ const WM = (function() {
       <div class="win-titlebar">
         <div class="win-title-left">
           <span class="win-icon">${config.iconSvg || ''}</span>
-          <span class="win-title">${config.title || 'Window'}</span>
+          <span class="win-title"></span>
         </div>
         <div class="win-controls">
           <button class="win-btn minimize" title="Minimize">
@@ -206,6 +206,10 @@ const WM = (function() {
       <div class="win-body" id="body-${id}"></div>
       <div class="win-resize-grip" title="Resize"></div>
     `;
+
+    // set the title as text, not HTML: a title containing markup (e.g. a
+    // file name with < >) used to be parsed as HTML and break the titlebar
+    winEl.querySelector('.win-title').textContent = config.title || 'Window';
 
     parentContainer.appendChild(winEl);
 
@@ -585,8 +589,10 @@ const WM = (function() {
       item.className = `alttab-item ${index === altTabSelectedIndex ? 'selected' : ''}`;
       item.innerHTML = `
         <div class="alttab-item-icon">${win.iconSvg || ''}</div>
-        <div class="alttab-item-title">${win.title}</div>
+        <div class="alttab-item-title"></div>
       `;
+      // same rule as the titlebar: the title is text, never HTML
+      item.querySelector('.alttab-item-title').textContent = win.title;
       list.appendChild(item);
     });
   }
