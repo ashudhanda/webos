@@ -237,6 +237,12 @@ const Taskbar = (function() {
   function launchOrFocusApp(id) {
     if (window.WM && WM.getWindow(id)) {
       const win = WM.getWindow(id);
+      // the window may live on another workspace: switch there first, or
+      // the un-minimize/focus below happens on a hidden container and the
+      // user sees nothing change
+      if (typeof WM.getCurrentWorkspace === 'function' && win.workspace !== WM.getCurrentWorkspace()) {
+        WM.setWorkspace(win.workspace);
+      }
       if (win.minimized) {
         WM.unminimizeWindow(id);
       } else {
