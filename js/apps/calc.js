@@ -28,30 +28,30 @@ const CalcApp = (function() {
           <div class="calc-result" aria-live="polite">0</div>
         </div>
         <div class="calc-grid">
-          <button class="calc-btn action" data-key="C">C</button>
-          <button class="calc-btn action" data-key="plusminus">&plusmn;</button>
-          <button class="calc-btn action" data-key="%">%</button>
-          <button class="calc-btn op" data-key="/">&divide;</button>
+          <button class="calc-btn action" data-key="C" aria-label="Clear">C</button>
+          <button class="calc-btn action" data-key="plusminus" aria-label="Toggle sign">&plusmn;</button>
+          <button class="calc-btn action" data-key="%" aria-label="Percent">%</button>
+          <button class="calc-btn op" data-key="/" aria-label="Divide">&divide;</button>
 
           <button class="calc-btn num" data-key="7">7</button>
           <button class="calc-btn num" data-key="8">8</button>
           <button class="calc-btn num" data-key="9">9</button>
-          <button class="calc-btn op" data-key="*">&times;</button>
+          <button class="calc-btn op" data-key="*" aria-label="Multiply">&times;</button>
 
           <button class="calc-btn num" data-key="4">4</button>
           <button class="calc-btn num" data-key="5">5</button>
           <button class="calc-btn num" data-key="6">6</button>
-          <button class="calc-btn op" data-key="-">&minus;</button>
+          <button class="calc-btn op" data-key="-" aria-label="Subtract">&minus;</button>
 
           <button class="calc-btn num" data-key="1">1</button>
           <button class="calc-btn num" data-key="2">2</button>
           <button class="calc-btn num" data-key="3">3</button>
-          <button class="calc-btn op" data-key="+">+</button>
+          <button class="calc-btn op" data-key="+" aria-label="Add">+</button>
 
           <button class="calc-btn num" data-key="0">0</button>
           <button class="calc-btn num" data-key=".">.</button>
-          <button class="calc-btn action" data-key="backspace">&#9003;</button>
-          <button class="calc-btn equals" data-key="=">=</button>
+          <button class="calc-btn action" data-key="backspace" aria-label="Backspace">&#9003;</button>
+          <button class="calc-btn equals" data-key="=" aria-label="Equals">=</button>
         </div>
       </div>
     `;
