@@ -48,7 +48,7 @@ const MinesApp = (function() {
         </div>
         <div class="mines-hud">
           <div class="mines-counter">🚩 <b class="mines-flags">10</b></div>
-          <div class="mines-status">click a square to start</div>
+          <div class="mines-status" aria-live="polite">click a square to start</div>
           <div class="mines-counter">⏱ <b class="mines-time">0</b>s</div>
         </div>
         <div class="mines-board-wrap">
