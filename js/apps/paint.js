@@ -27,19 +27,19 @@ const PaintApp = (function() {
       <div class="paint-app">
         <div class="paint-toolbar">
           <div class="paint-tools">
-            <button class="paint-tool active" data-tool="brush" title="Brush">🖌️</button>
-            <button class="paint-tool" data-tool="eraser" title="Eraser">🧽</button>
-            <button class="paint-tool" data-tool="line" title="Line">📏</button>
-            <button class="paint-tool" data-tool="rect" title="Rectangle">▭</button>
-            <button class="paint-tool" data-tool="circle" title="Circle">⚪</button>
+            <button class="paint-tool active" data-tool="brush" title="Brush" aria-label="Brush">🖌️</button>
+            <button class="paint-tool" data-tool="eraser" title="Eraser" aria-label="Eraser">🧽</button>
+            <button class="paint-tool" data-tool="line" title="Line" aria-label="Line">📏</button>
+            <button class="paint-tool" data-tool="rect" title="Rectangle" aria-label="Rectangle">▭</button>
+            <button class="paint-tool" data-tool="circle" title="Circle" aria-label="Circle">⚪</button>
           </div>
           <div class="paint-palette">
-            ${PALETTE.map(c => `<button class="paint-swatch" data-color="${c}" style="background:${c}" title="${c}"></button>`).join('')}
-            <input type="color" class="paint-custom" value="#3b82f6" title="Custom color" />
+            ${PALETTE.map(c => `<button class="paint-swatch" data-color="${c}" style="background:${c}" title="${c}" aria-label="Color ${c}"></button>`).join('')}
+            <input type="color" class="paint-custom" value="#3b82f6" title="Custom color" aria-label="Custom color" />
           </div>
           <div class="paint-size-wrap">
             <span>Size</span>
-            <input type="range" class="paint-size" min="1" max="40" value="5" />
+            <input type="range" class="paint-size" min="1" max="40" value="5" aria-label="Brush size" />
           </div>
           <div class="paint-actions">
             <button class="paint-undo" title="Undo">↩ Undo</button>
@@ -48,7 +48,7 @@ const PaintApp = (function() {
           </div>
         </div>
         <div class="paint-canvas-wrap">
-          <canvas class="paint-canvas"></canvas>
+          <canvas class="paint-canvas" role="img" aria-label="Paint canvas"></canvas>
         </div>
       </div>
     `;
