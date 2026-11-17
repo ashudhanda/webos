@@ -2,6 +2,9 @@
 
 const Notify = (function() {
   const container = document.getElementById('notifications-container');
+  // MAX_TOASTS: a burst of notifications drops the oldest toast instead
+  // of stacking off-screen without bound.
+  const MAX_TOASTS = 4;
 
   // show: pop a toast notification. message is html-inserted into the
   // toast body; type picks the icon ('info' | 'success' | 'error').
@@ -30,6 +33,9 @@ const Notify = (function() {
     `;
 
     container.appendChild(toast);
+    while (container.children.length > MAX_TOASTS) {
+      container.removeChild(container.children[0]);
+    }
 
     Sound.notify();
 
