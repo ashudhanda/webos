@@ -111,13 +111,12 @@ const CalcApp = (function() {
           }
         }
       } else if (key === '%') {
+        // parseFloat never throws on a string, so no try/catch is needed:
+        // currentInput is numeric by construction, and a NaN would only
+        // come from a non-numeric input, which the state machine never
+        // produces.
         if (currentInput !== 'error') {
-          try {
-            const val = parseFloat(currentInput);
-            currentInput = String(val / 100);
-          } catch (e) {
-            currentInput = 'error';
-          }
+          currentInput = String(parseFloat(currentInput) / 100);
         }
       } else if (key === 'backspace') {
         if (currentInput === 'error' || resetOnNext) {
@@ -151,7 +150,9 @@ const CalcApp = (function() {
         // eval the sanitized arithmetic string
         const result = Function('"use strict"; return (' + expr + ')')();
 
-        if (!isFinite(result) || isNaN(result)) {
+        // isFinite is false for NaN and ±Infinity alike, so one check
+        // covers both the 1/0 and the 0/0 cases.
+        if (!isFinite(result)) {
           currentInput = 'error';
         } else {
           currentInput = String(Math.round(result * 100000000) / 100000000);
