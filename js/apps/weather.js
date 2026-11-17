@@ -24,6 +24,12 @@ const WeatherApp = (function() {
     return CODES[code] || ['Unknown', '🌡️'];
   }
 
+  // num: round a possibly-missing API number for display — a partial
+  // response (field absent) shows '—' instead of NaN/undefined.
+  function num(x) {
+    return Number.isFinite(x) ? Math.round(x) : '—';
+  }
+
   function open() {
     WM.createWindow({
       id: 'weather',
@@ -98,8 +104,8 @@ const WeatherApp = (function() {
         return {
           day: i === 0 ? 'Today' : fmtDay(t),
           emoji: ee, desc: dd,
-          max: Math.round((daily.temperature_2m_max || [])[i]),
-          min: Math.round((daily.temperature_2m_min || [])[i])
+          max: num((daily.temperature_2m_max || [])[i]),
+          min: num((daily.temperature_2m_min || [])[i])
         };
       });
 
@@ -107,11 +113,11 @@ const WeatherApp = (function() {
         <div class="weather-now">
           <div class="weather-city">${escapeHtml(place.name)}${place.country ? ', ' + escapeHtml(place.country) : ''}</div>
           <div class="weather-emoji" aria-hidden="true">${emoji}</div>
-          <div class="weather-temp">${Math.round(cur.temperature_2m)}°C</div>
+          <div class="weather-temp">${num(cur.temperature_2m)}°C</div>
           <div class="weather-desc">${desc}</div>
           <div class="weather-meta">
-            <span>💧 ${cur.relative_humidity_2m}%</span>
-            <span>💨 ${Math.round(cur.wind_speed_10m)} km/h</span>
+            <span>💧 ${num(cur.relative_humidity_2m)}%</span>
+            <span>💨 ${num(cur.wind_speed_10m)} km/h</span>
           </div>
         </div>
         <div class="weather-week">
