@@ -64,6 +64,11 @@ const WeatherApp = (function() {
     const resultsEl = container.querySelector('.weather-results');
     const bodyEl = container.querySelector('.weather-body');
 
+    // reqSeq: every search/load bumps this; a response whose number is no
+    // longer the latest is stale (a slower earlier request finishing
+    // after a newer one) and must not overwrite the newer result.
+    let reqSeq = 0;
+
     // weekday from a bare "YYYY-MM-DD" date: parsing it at midnight
     // shifts the day back in timezones behind UTC (e.g. US), so parse
     // at noon local time to keep the weekday correct everywhere.
@@ -76,6 +81,7 @@ const WeatherApp = (function() {
     }
 
     async function loadWeather(place) {
+      const myReq = ++reqSeq;
       bodyEl.innerHTML = '<div class="weather-empty">Loading...</div>';
       const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + place.latitude +
         '&longitude=' + place.longitude +
@@ -86,11 +92,13 @@ const WeatherApp = (function() {
         const res = await fetch(url);
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const d = await res.json();
+        if (myReq !== reqSeq) return;
         renderWeather(place, d);
         try {
           localStorage.setItem(LS_KEY, JSON.stringify(place));
         } catch (e) {}
       } catch (e) {
+        if (myReq !== reqSeq) return;
         bodyEl.innerHTML = '<div class="weather-empty">Could not load weather. Check your internet.</div>';
       }
     }
@@ -138,12 +146,14 @@ const WeatherApp = (function() {
     async function search(q) {
       q = q.trim();
       if (!q) return;
+      const myReq = ++reqSeq;
       resultsEl.innerHTML = '<div class="weather-results-loading">Searching...</div>';
       try {
         const res = await fetch('https://geocoding-api.open-meteo.com/v1/search?name=' +
           encodeURIComponent(q) + '&count=5&language=en&format=json');
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const d = await res.json();
+        if (myReq !== reqSeq) return;
         const list = d.results || [];
         if (list.length === 0) {
           resultsEl.innerHTML = '<div class="weather-results-loading">No cities found.</div>';
@@ -162,6 +172,7 @@ const WeatherApp = (function() {
           resultsEl.appendChild(b);
         });
       } catch (e) {
+        if (myReq !== reqSeq) return;
         resultsEl.innerHTML = '<div class="weather-results-loading">Search failed. Check your internet.</div>';
       }
     }
