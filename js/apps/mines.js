@@ -8,7 +8,11 @@ const MinesApp = (function() {
     expert: { cols: 30, rows: 16, mines: 99, label: 'expert 30×16 · 99' }
   };
 
+  // open: create the Minesweeper window. render() returns a cleanup fn
+  // that the window manager calls onClose — stops the game timer so a
+  // closed game never keeps ticking on detached elements.
   function open() {
+    let cleanupFn = null;
     WM.createWindow({
       id: 'mines',
       title: 'Minesweeper',
@@ -18,7 +22,10 @@ const MinesApp = (function() {
       minHeight: 420,
       iconSvg: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8"></circle><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="5" y1="5" x2="8" y2="8"></line><line x1="16" y1="16" x2="19" y2="19"></line><line x1="19" y1="5" x2="16" y2="8"></line><line x1="8" y1="16" x2="5" y2="19"></line></svg>',
       render: (bodyEl) => {
-        initMines(bodyEl);
+        cleanupFn = initMines(bodyEl);
+      },
+      onClose: () => {
+        if (cleanupFn) cleanupFn();
       }
     });
   }
@@ -333,6 +340,10 @@ const MinesApp = (function() {
     container.querySelector('.mines-new').addEventListener('click', () => newGame(currentDiff));
 
     newGame('beginner');
+
+    // cleanup: called by the window manager on close — stop the game
+    // timer so a closed game never keeps ticking on detached elements.
+    return () => stopTimer();
   }
 
   return {
