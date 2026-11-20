@@ -32,6 +32,12 @@ const TasksApp = (function() {
     // Keep only well-formed entries so one bad write can't brick the app.
     if (!Array.isArray(tasks)) tasks = [];
     tasks = tasks.filter(t => t && typeof t.text === 'string');
+    // Entries saved before ids existed have id === undefined, and the
+    // delete handler filters by id — deleting one such task removed every
+    // id-less task at once. Give each one a unique id on load.
+    tasks.forEach((t) => {
+      if (!t.id) t.id = 't-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+    });
     let filter = 'all';
 
     container.innerHTML = `
