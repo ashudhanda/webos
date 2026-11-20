@@ -107,6 +107,10 @@ const AIChatApp = (function() {
       const q = inputEl.value.trim();
       if (!q || busy) return;
       busy = true;
+      // disable the input + send while the reply is pending: Enter was
+      // silently ignored during busy, with nothing on screen saying why
+      inputEl.disabled = true;
+      sendBtn.disabled = true;
       inputEl.value = '';
       addMsg('user', q);
       pushHistory('user', q);
@@ -124,6 +128,8 @@ const AIChatApp = (function() {
       }
       logEl.scrollTop = logEl.scrollHeight;
       busy = false;
+      inputEl.disabled = false;
+      sendBtn.disabled = false;
       inputEl.focus();
     }
 
