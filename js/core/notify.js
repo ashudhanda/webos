@@ -37,7 +37,10 @@ const Notify = (function() {
       container.removeChild(container.children[0]);
     }
 
-    Sound.notify();
+    // Sound is a separate module (sound.js loads after this one): if it
+    // failed to load, an unguarded call here threw and killed the toast
+    // that was being shown — a silent toast beats a broken one.
+    if (window.Sound && typeof Sound.notify === 'function') Sound.notify();
 
     // trigger slide in on next frame
     requestAnimationFrame(() => {
