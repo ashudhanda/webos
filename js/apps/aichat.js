@@ -75,6 +75,10 @@ const AIChatApp = (function() {
 
     function pushHistory(role, text) {
       history.push({ role, text });
+      // saveHistory slices to 40 for storage, but the in-memory array
+      // kept growing for the whole session — trim it here too so a long
+      // chat doesn't hold an unbounded list in memory.
+      if (history.length > 40) history = history.slice(-40);
       saveHistory(history);
     }
 
