@@ -84,7 +84,7 @@ const SettingsApp = (function() {
         <div class="settings-section-desc">Pick a living planet theme &mdash; the desktop wallpaper animates and plays its own ambient sound.</div>
         <div class="theme-grid">
           ${themes.map(t => `
-            <div class="theme-card ${t.id === current ? 'active' : ''}" data-theme="${t.id}">
+            <div class="theme-card ${t.id === current ? 'active' : ''}" data-theme="${t.id}" tabindex="0" role="button" aria-label="Apply ${t.name} theme" aria-pressed="${t.id === current}">
               <div class="planet-preview">
                 <img src="assets/themes/${t.id}.jpg" alt="${t.name} theme preview" loading="lazy">
                 <span class="planet-live">Live</span>
@@ -103,16 +103,25 @@ const SettingsApp = (function() {
         </div>
       `;
 
+      // applyTheme: shared by click and keyboard — the cards are divs,
+      // so Enter/Space need an explicit keydown path to match the click.
+      function applyTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        try {
+          localStorage.setItem('moonos-theme', t);
+        } catch (e) {}
+        if (window.ThemeFX) window.ThemeFX.apply(t);
+        Notify.show('Theme applied: ' + t, 'success');
+        renderAppearance();
+      }
+
       contentEl.querySelectorAll('.theme-card').forEach((card) => {
-        card.addEventListener('click', () => {
-          const t = card.getAttribute('data-theme');
-          document.documentElement.setAttribute('data-theme', t);
-          try {
-            localStorage.setItem('moonos-theme', t);
-          } catch (e) {}
-          if (window.ThemeFX) window.ThemeFX.apply(t);
-          Notify.show('Theme applied: ' + t, 'success');
-          renderAppearance();
+        card.addEventListener('click', () => applyTheme(card.getAttribute('data-theme')));
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            applyTheme(card.getAttribute('data-theme'));
+          }
         });
       });
 
