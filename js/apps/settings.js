@@ -111,7 +111,7 @@ const SettingsApp = (function() {
           localStorage.setItem('moonos-theme', t);
         } catch (e) {}
         if (window.ThemeFX) window.ThemeFX.apply(t);
-        Notify.show('Theme applied: ' + t, 'success');
+        if (window.Notify) Notify.show('Theme applied: ' + t, 'success');
         renderAppearance();
       }
 
@@ -131,7 +131,7 @@ const SettingsApp = (function() {
           const on = !soundToggle.classList.contains('on');
           soundToggle.classList.toggle('on', on);
           if (window.ThemeFX) window.ThemeFX.setSoundEnabled(on);
-          Notify.show(on ? 'Ambient sound on' : 'Ambient sound off', 'success');
+          if (window.Notify) Notify.show(on ? 'Ambient sound on' : 'Ambient sound off', 'success');
         });
       }
     }
