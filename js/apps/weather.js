@@ -69,6 +69,19 @@ const WeatherApp = (function() {
     // after a newer one) and must not overwrite the newer result.
     let reqSeq = 0;
 
+    // fetchWithTimeout: fetch that gives up after ms instead of hanging
+    // forever — without it a stalled network left "Loading..." on screen
+    // with no way out except closing the window.
+    async function fetchWithTimeout(url, ms) {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), ms);
+      try {
+        return await fetch(url, { signal: ctrl.signal });
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
     // weekday from a bare "YYYY-MM-DD" date: parsing it at midnight
     // shifts the day back in timezones behind UTC (e.g. US), so parse
     // at noon local time to keep the weekday correct everywhere.
@@ -89,7 +102,7 @@ const WeatherApp = (function() {
         '&daily=weather_code,temperature_2m_max,temperature_2m_min' +
         '&timezone=auto&forecast_days=7';
       try {
-        const res = await fetch(url);
+        const res = await fetchWithTimeout(url, 15000);
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const d = await res.json();
         if (myReq !== reqSeq) return;
@@ -149,8 +162,8 @@ const WeatherApp = (function() {
       const myReq = ++reqSeq;
       resultsEl.innerHTML = '<div class="weather-results-loading">Searching...</div>';
       try {
-        const res = await fetch('https://geocoding-api.open-meteo.com/v1/search?name=' +
-          encodeURIComponent(q) + '&count=5&language=en&format=json');
+        const res = await fetchWithTimeout('https://geocoding-api.open-meteo.com/v1/search?name=' +
+          encodeURIComponent(q) + '&count=5&language=en&format=json', 15000);
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const d = await res.json();
         if (myReq !== reqSeq) return;
