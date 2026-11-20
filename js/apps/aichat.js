@@ -40,11 +40,11 @@ const AIChatApp = (function() {
       <div class="aichat-app">
         <div class="aichat-head">
           <div class="aichat-title">AI Assistant</div>
-          <button class="aichat-clear" title="Clear conversation">Clear</button>
+          <button class="aichat-clear" title="Clear conversation" aria-label="Clear conversation">Clear</button>
         </div>
         <div class="aichat-log"></div>
         <div class="aichat-input-row">
-          <input class="aichat-input" type="text" placeholder="Ask anything..." />
+          <input class="aichat-input" type="text" placeholder="Ask anything..." aria-label="Message the AI assistant" />
           <button class="aichat-send">Send</button>
         </div>
         <div class="aichat-note">Free AI API - needs internet. Answers may take a few seconds.</div>
