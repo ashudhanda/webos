@@ -41,6 +41,17 @@ const CalendarApp = (function() {
     } catch (e) {
       events = {};
     }
+    // A hand-edited or corrupt value can parse fine without being the
+    // date->events map this code expects (a number, a string, an array):
+    // assigning events[date] on a primitive throws in strict mode and
+    // breaks the whole app, so reset anything that isn't a plain object.
+    if (!events || typeof events !== 'object' || Array.isArray(events)) {
+      events = {};
+    }
+    // Monotonic suffix so two events added in the same millisecond still
+    // get distinct ids — Date.now() alone collided, and the delete filter
+    // (e.id !== ev.id) then removed both events at once.
+    let evSeq = 0;
 
     const now = new Date();
     let viewY = now.getFullYear();
@@ -185,7 +196,7 @@ const CalendarApp = (function() {
       e.preventDefault();
       const title = input.value.trim();
       if (!title) return;
-      const ev = { id: 'ev-' + Date.now(), title, time: timeInput.value || '' };
+      const ev = { id: 'ev-' + Date.now() + '-' + (evSeq++), title, time: timeInput.value || '' };
       if (!events[selected]) events[selected] = [];
       events[selected].push(ev);
       save();
