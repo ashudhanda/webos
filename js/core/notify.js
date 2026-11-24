@@ -6,9 +6,11 @@ const Notify = (function() {
   // of stacking off-screen without bound.
   const MAX_TOASTS = 4;
 
-  // show: pop a toast notification. message is html-inserted into the
-  // toast body; type picks the icon ('info' | 'success' | 'error').
-  // slides in on the next animation frame, auto dismisses after 3s.
+  // show: pop a toast notification. message is inserted as TEXT into
+  // the toast body (never HTML — callers pass file names, package names
+  // and other user-influenced strings); type picks the icon
+  // ('info' | 'success' | 'error'). slides in on the next animation
+  // frame, auto dismisses after 3s.
   function show(message, type = 'info') {
     if (!container) return;
 
@@ -27,10 +29,20 @@ const Notify = (function() {
       iconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
     }
 
-    toast.innerHTML = `
-      <div class="toast-icon" aria-hidden="true">${iconSvg}</div>
-      <div class="toast-text">${message}</div>
-    `;
+    // The icon is a static literal per type (safe to inline), but the
+    // message is user-influenced (file names, package names, app names
+    // from other modules) — it must go in as text, never HTML, or a
+    // crafted name like '"><img src=x onerror=...>' would execute here.
+    const iconWrap = document.createElement('div');
+    iconWrap.className = 'toast-icon';
+    iconWrap.setAttribute('aria-hidden', 'true');
+    iconWrap.innerHTML = iconSvg;
+    toast.appendChild(iconWrap);
+
+    const textEl = document.createElement('div');
+    textEl.className = 'toast-text';
+    textEl.textContent = message;
+    toast.appendChild(textEl);
 
     container.appendChild(toast);
     while (container.children.length > MAX_TOASTS) {
