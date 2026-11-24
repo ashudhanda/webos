@@ -118,10 +118,13 @@ const VoiceApp = (function() {
   // findApp: match a spoken phrase to an app id via the APP_NAMES aliases.
   // Matches when the phrase equals, contains, or is contained in an alias,
   // so "music studio", "music", "piano", and "the piano" all resolve.
+  // The contained-in-alias direction needs a phrase of 3+ characters:
+  // without it a bare "a" matched "terminal" (it contains 'a') and
+  // "open s" opened Files — single letters are not app names.
   function findApp(want) {
       const w = want.toLowerCase().trim();
       for (const [id, names] of Object.entries(APP_NAMES)) {
-        if (names.some(n => w === n || w.includes(n) || n.includes(w))) {
+        if (names.some(n => w === n || w.includes(n) || (w.length >= 3 && n.includes(w)))) {
           return id;
         }
       }
@@ -215,12 +218,15 @@ const VoiceApp = (function() {
       s = s.toLowerCase().trim();
       if (/^-?\d+(\.\d+)?$/.test(s)) return parseFloat(s);
       if (WORD_NUMS[s] !== undefined) return WORD_NUMS[s];
-      // "twenty one" style
+      // "twenty one" style — but "hundred" multiplies instead of adding:
+      // "one hundred" is 100, not 1 + 100 = 101, and "two hundred fifty"
+      // is 250, not 2 + 100 + 50 = 152.
       const parts = s.split(/[\s-]+/);
       let total = 0, ok = true;
       for (const p of parts) {
         if (WORD_NUMS[p] === undefined) { ok = false; break; }
-        total += WORD_NUMS[p];
+        if (p === 'hundred') total = (total || 1) * 100;
+        else total += WORD_NUMS[p];
       }
       return ok && parts.length ? total : null;
     }
