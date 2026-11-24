@@ -6,6 +6,10 @@ const NotesApp = (function() {
   const STORAGE_KEY = 'moonos-notes';
   let notes = [];
   let topZ = 1;
+  // Monotonic suffix so two notes created in the same millisecond still
+  // get distinct ids — Date.now() alone collided, and the delete filter
+  // (n.id !== note.id) then removed both notes at once.
+  let uidSeq = 0;
 
   function load() {
     try {
@@ -134,7 +138,7 @@ const NotesApp = (function() {
 
   function open() {
     const note = {
-      id: 'note-' + Date.now(),
+      id: 'note-' + Date.now() + '-' + (uidSeq++),
       x: 120 + (notes.length % 5) * 36,
       y: 90 + (notes.length % 5) * 36,
       text: ''
