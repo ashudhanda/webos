@@ -7,9 +7,16 @@ const Sound = (function() {
 
   // ctx: lazily create the shared AudioContext and resume it if the browser
   // suspended it (autoplay policy) so the first boot sound always plays.
+  // Creation can throw where no audio device exists — callers must get
+  // silence, not an exception, so a failed context returns null and
+  // tone() no-ops instead of crashing the boot/login path.
   function ctx() {
     if (!actx) {
-      actx = new (window.AudioContext || window.webkitAudioContext)();
+      try {
+        actx = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        return null;
+      }
     }
     if (actx.state === 'suspended') {
       actx.resume();
@@ -29,6 +36,7 @@ const Sound = (function() {
   function tone(freq, dur, gainVal, slideTo) {
     if (vol() === 0) return;
     const a = ctx();
+    if (!a) return;
 
     const osc = a.createOscillator();
     const gain = a.createGain();
