@@ -128,10 +128,20 @@ const FilesApp = (function() {
             ? '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>'
             : '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>';
 
-          card.innerHTML = `
-            <div class="file-icon">${iconSvg}</div>
-            <div class="file-name" title="${item.name}">${item.name}</div>
-          `;
+          // File names are user-controlled (rename accepts anything but
+          // '/'), so the name goes in as text — interpolating it into
+          // innerHTML let a crafted name like '"><img src=x onerror=...>'
+          // execute markup. The icon is a static literal, safe to inline.
+          const iconWrap = document.createElement('div');
+          iconWrap.className = 'file-icon';
+          iconWrap.innerHTML = iconSvg;
+          card.appendChild(iconWrap);
+
+          const nameEl = document.createElement('div');
+          nameEl.className = 'file-name';
+          nameEl.textContent = item.name;
+          nameEl.title = item.name;
+          card.appendChild(nameEl);
 
           // single click select
           card.addEventListener('click', (e) => {
@@ -163,7 +173,15 @@ const FilesApp = (function() {
           contentEl.appendChild(card);
         });
       } catch (err) {
-        contentEl.innerHTML = `<div class="files-empty"><span>${err.message}</span></div>`;
+        // err.message can carry a file name (e.g. "name: is a directory"),
+        // so it goes in as text, never HTML — see the card rendering above.
+        contentEl.innerHTML = '';
+        const errWrap = document.createElement('div');
+        errWrap.className = 'files-empty';
+        const errText = document.createElement('span');
+        errText.textContent = err.message;
+        errWrap.appendChild(errText);
+        contentEl.appendChild(errWrap);
       }
     }
 
