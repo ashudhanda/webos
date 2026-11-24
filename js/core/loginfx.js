@@ -46,7 +46,7 @@
 
   // ---------- starfield ----------
   function sizeCanvas() {
-    if (!canvas) return;
+    if (!canvas || !ctx) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.floor(window.innerWidth * dpr);
     canvas.height = Math.floor(window.innerHeight * dpr);
@@ -82,7 +82,7 @@
   }
 
   function drawFrame(now) {
-    if (!running) return;
+    if (!running || !ctx) return;
     const w = window.innerWidth, h = window.innerHeight;
     ctx.clearRect(0, 0, w, h);
 
@@ -166,15 +166,22 @@
     });
   }
 
+  // The Enter-to-sign-in handler lives on document, so it must be a
+  // named function: init() runs again after every sign-out, and the
+  // anonymous version re-registered on each init() — after two logins
+  // one Enter fired card.click() twice. teardown() removes it.
+  let keyHandler = null;
   function wireKeyboard() {
-    document.addEventListener('keydown', function onKey(e) {
+    if (keyHandler) return;
+    keyHandler = function onKey(e) {
       const screen = document.getElementById('login-screen');
       if (!screen || screen.classList.contains('hidden')) return;
       if (e.key === 'Enter') {
         const card = document.getElementById('login-user-card');
         if (card) card.click();
       }
-    });
+    };
+    document.addEventListener('keydown', keyHandler);
   }
 
   // ---------- public ----------
@@ -201,7 +208,10 @@
     }
     nextMeteorAt = performance.now() + 3500;
     window.addEventListener('mousemove', onMouseMove);
-    rafId = requestAnimationFrame(drawFrame);
+    // No canvas (or a 2d context the browser refused) means no starfield:
+    // starting the loop anyway threw on ctx.clearRect in the first frame
+    // and killed the animation — the clock and hold button still work.
+    if (ctx) rafId = requestAnimationFrame(drawFrame);
   }
 
   function teardown() {
@@ -210,6 +220,10 @@
     rafId = 0;
     if (clockTimer) clearInterval(clockTimer);
     clockTimer = 0;
+    if (keyHandler) {
+      document.removeEventListener('keydown', keyHandler);
+      keyHandler = null;
+    }
     window.removeEventListener('resize', sizeCanvas);
     window.removeEventListener('mousemove', onMouseMove);
     stars = [];
