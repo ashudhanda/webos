@@ -179,11 +179,18 @@ const PaintApp = (function() {
       size = parseInt(e.target.value, 10) || 5;
     });
 
+    // Undo restores are async (Image decode), so two fast clicks used to
+    // race: the older snapshot could load after the newer one and resurrect
+    // a state the user had already undone past. Only the latest requested
+    // undo is allowed to draw; superseded loads are dropped.
+    let undoSeq = 0;
     container.querySelector('.paint-undo').addEventListener('click', () => {
       const prev = undoStack.pop();
       if (!prev) return;
+      const seq = ++undoSeq;
       const img = new Image();
       img.onload = () => {
+        if (seq !== undoSeq) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0);
       };
