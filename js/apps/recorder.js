@@ -59,6 +59,7 @@ const RecorderApp = (function() {
     let timerId = null;
     let startTs = 0;
     let recCount = 0;
+    let closed = false; // set by cleanup: onStopped must not touch detached DOM
 
     function setStatus(t, recording) {
       statusEl.textContent = t;
@@ -127,6 +128,10 @@ const RecorderApp = (function() {
     function onStopped() {
       clearInterval(timerId);
       timerId = null;
+      // Closing the window mid-recording stops the recorder, which fires
+      // onStopped asynchronously: skip the DOM work (and the object URL,
+      // which would otherwise leak) when the window is already gone.
+      if (closed) { recorder = null; return; }
       startBtn.disabled = false;
       stopBtn.disabled = true;
       setStatus('ready', false);
@@ -190,6 +195,7 @@ const RecorderApp = (function() {
     }
 
     return function cleanup() {
+      closed = true;
       try { if (recorder && recorder.state !== 'inactive') recorder.stop(); } catch (e) {}
       clearInterval(timerId);
       if (stream) {
