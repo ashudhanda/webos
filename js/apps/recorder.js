@@ -92,6 +92,11 @@ const RecorderApp = (function() {
     }
 
     startBtn.addEventListener('click', async () => {
+      // Disable up front: ensureStream() awaits mic permission, and a
+      // second click in that window used to start a second MediaRecorder
+      // that overwrote `recorder` and was never stopped.
+      if (startBtn.disabled) return;
+      startBtn.disabled = true;
       msgEl.textContent = '';
       try {
         const s = await ensureStream();
@@ -105,10 +110,10 @@ const RecorderApp = (function() {
         recorder.start();
         startTs = Date.now();
         timerId = setInterval(tick, 250);
-        startBtn.disabled = true;
         stopBtn.disabled = false;
         setStatus('recording...', true);
       } catch (e) {
+        startBtn.disabled = false;
         msgEl.textContent = e && e.name === 'NotAllowedError'
           ? 'Microphone permission denied. Allow mic access and try again.'
           : 'Could not access the microphone on this device.';
