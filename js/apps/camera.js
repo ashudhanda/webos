@@ -76,6 +76,7 @@ const CameraApp = (function() {
 
     let stream = null;
     let photoCount = 0;
+    let closed = false; // set by cleanup: a pending getUserMedia must not leak tracks
 
     function updateCount() {
       countEl.textContent = photoCount + (photoCount === 1 ? ' photo' : ' photos');
@@ -87,11 +88,19 @@ const CameraApp = (function() {
         return;
       }
       try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 }, audio: false });
+        const s = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 }, audio: false });
+        // The window may have closed while permission was pending: stop the
+        // fresh tracks at once instead of leaving the camera light on.
+        if (closed) {
+          s.getTracks().forEach(t => { try { t.stop(); } catch (e) {} });
+          return;
+        }
+        stream = s;
         video.srcObject = stream;
         msgEl.style.display = 'none';
         captureBtn.disabled = false;
       } catch (e) {
+        if (closed) return;
         msgEl.textContent = e && e.name === 'NotAllowedError'
           ? 'Camera permission denied. Allow camera access and reopen the app.'
           : 'No camera found on this device.';
@@ -136,6 +145,7 @@ const CameraApp = (function() {
     activeReady = () => !!stream && !captureBtn.disabled;
 
     return function cleanup() {
+      closed = true;
       if (stream) {
         stream.getTracks().forEach(t => { try { t.stop(); } catch (e) {} });
         stream = null;
