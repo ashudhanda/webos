@@ -86,24 +86,38 @@ const MusicApp = (function() {
 
     let audio = null;
     let master = null;
+    let audioFailed = false; // no AudioContext on this browser, or it threw: stay silent, never retry
     let baseMidi = 60; // C4
     let octave = 4;
     const live = new Map();   // midi -> { osc, gain }
     let demoTimers = [];
 
+    // Returns true once audio is usable. The constructor can throw (no
+    // audio device, blocked context), so a bare `new AudioContext()` here
+    // used to crash every key press and the demo on such machines.
     function ensureAudio() {
       if (audio) {
         if (audio.state === 'suspended') audio.resume().catch(() => {});
-        return;
+        return true;
       }
-      audio = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioFailed) return false;
+      const Ctor = window.AudioContext || window.webkitAudioContext;
+      if (!Ctor) { audioFailed = true; return false; }
+      try {
+        audio = new Ctor();
+      } catch (e) {
+        audio = null;
+        audioFailed = true;
+        return false;
+      }
       master = audio.createGain();
       master.gain.value = volSlider.value / 100 * 0.5;
       master.connect(audio.destination);
+      return true;
     }
 
     function noteOn(midi) {
-      ensureAudio();
+      if (!ensureAudio()) return;
       if (live.has(midi)) return;
       const osc = audio.createOscillator();
       const gain = audio.createGain();
