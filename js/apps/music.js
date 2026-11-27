@@ -222,7 +222,11 @@ const MusicApp = (function() {
       });
     }
 
-    const held = new Set();
+    // key -> midi note it started, so releasing a key still silences the
+    // note it actually played even if the octave changed while it was held
+    // (baseMidi moved, so the old code released a different note and the
+    // first one rang on forever).
+    const held = new Map();
     function onKeyDown(e) {
       if (e.repeat) return;
       const k = e.key.toLowerCase();
@@ -233,7 +237,7 @@ const MusicApp = (function() {
       if (KEYMAP[k] !== undefined) {
         e.preventDefault();
         const midi = baseMidi + KEYMAP[k];
-        held.add(k);
+        held.set(k, midi);
         noteOn(midi);
       }
     }
@@ -241,8 +245,8 @@ const MusicApp = (function() {
     function onKeyUp(e) {
       const k = e.key.toLowerCase();
       if (KEYMAP[k] !== undefined && held.has(k)) {
+        noteOff(held.get(k));
         held.delete(k);
-        noteOff(baseMidi + KEYMAP[k]);
       }
     }
 
